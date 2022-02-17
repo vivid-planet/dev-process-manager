@@ -8,7 +8,6 @@ export const start = async (apps: AppDefinition[]) => {
   let shuttingDown = false;
 
   function startProcess(app: AppDefinition) {
-
     console.log("starting " + app.script);
     const p = spawn("bash", ["-c", app.script]);
     p.stdout.on('data', data => {
@@ -45,7 +44,6 @@ export const start = async (apps: AppDefinition[]) => {
   server.listen(".pm.sock");
   server.on('connection', (s) => {
     s.on('data', async (command) => {
-      //console.log("received command", command.toString());
       const cmd = command.toString();
       if (cmd == "logs" || cmd.startsWith("logs ")) {
         const name = cmd != "logs" ? cmd.substring(5) : null; // null means all
@@ -110,9 +108,7 @@ export const start = async (apps: AppDefinition[]) => {
         console.error("Unknown command", cmd);
       }
     });
-
   });
-
 
   apps.forEach(app => {
     startProcess(app);
