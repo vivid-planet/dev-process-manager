@@ -1,6 +1,7 @@
 import { spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
+import { unlinkSync } from "fs";
 
 export const start = async (pmConfigFilePath: string) => {
   const { apps }: { apps: AppDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
@@ -40,6 +41,10 @@ export const start = async (pmConfigFilePath: string) => {
     });
     processes[app.name] = p;
   }
+
+  try {
+    unlinkSync("./.pm.sock");
+  } catch (e) { }
 
   const server = createServer();
   server.listen(".pm.sock");
