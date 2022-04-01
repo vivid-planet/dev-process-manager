@@ -19,7 +19,7 @@ module.exports = {
     apps: [
         {
              name: "api",
-             script: "npm --prefix api install && dotenv -- wait-on -l tcp:$POSTGRESQL_PORT && npm run --prefix api fixtures:dev && npm --prefix api run start:dev",
+             script: "npm run start",
         },
         ...
     ],
@@ -33,14 +33,14 @@ Update dev script in package.json
 
 ```json
   ...
-  "dev": "dotenv -- node <path-to-dev-process-manager>/lib/index.js start dev-pm.config.js",
+  "start": "node <path-to-dev-process-manager>/lib/index.js start dev-pm.config.js",
   ...
 ```
 
 ## Commands
 
 ### Start
-Either use the package.json script and run `npm run dev`
+Either use the package.json script and run `npm run start`
 or start with:
 ```console
 $ node <path-to-dev-process-manager>/lib/index.js start <path-to-dev-pm.config.js>
