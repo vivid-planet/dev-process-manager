@@ -1,7 +1,7 @@
 import { spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
-import { unlinkSync } from "fs";
+import { existsSync } from "fs";
 
 export const start = async (pmConfigFilePath: string) => {
   const { apps }: { apps: AppDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
@@ -43,7 +43,10 @@ export const start = async (pmConfigFilePath: string) => {
   }
 
   try {
-    unlinkSync("./.pm.sock");
+    if (existsSync("./.pm.sock")) {
+      console.log("Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.");
+      return;
+    }
   } catch (e) { }
 
   const server = createServer();
