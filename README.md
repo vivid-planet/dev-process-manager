@@ -9,10 +9,10 @@ $ npm run build
 
 ## Usage
 
-Add `pm.config.js` file to the project root.
+Add `dev-pm.config.js` file to the project root.
 This file defines all available apps, which should be started by dev-process-manager.
 
-### pm.config.js
+### dev-pm.config.js
 
 ```javascript
 module.exports = {
@@ -33,7 +33,7 @@ Update dev script in package.json
 
 ```json
   ...
-  "dev": "dotenv -- node <path-to-dev-process-manager>/lib/index.js start pm.config.js",
+  "dev": "dotenv -- node <path-to-dev-process-manager>/lib/index.js start dev-pm.config.js",
   ...
 ```
 
@@ -43,7 +43,7 @@ Update dev script in package.json
 Either use the package.json script and run `npm run dev`
 or start with:
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js start <path-to-pm.config.js>
+$ node <path-to-dev-process-manager>/lib/index.js start <path-to-dev-pm.config.js>
 ```
 
 ### Shutdown
