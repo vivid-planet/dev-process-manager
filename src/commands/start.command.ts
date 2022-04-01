@@ -14,7 +14,7 @@ export const start = async (pmConfigFilePathOverride?: string) => {
   let shuttingDown = false;
 
   function startProcess(app: AppDefinition) {
-    console.log(`${colors.bgGreen.bold.black(" DPM ")} starting: ${app.script}`);
+    console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${app.script}`);
     const p = spawn("bash", ["-c", app.script], { detached: true });
     p.stdout.on('data', data => {
       process.stdout.write(data);
@@ -34,14 +34,14 @@ export const start = async (pmConfigFilePathOverride?: string) => {
     });
     p.on('close', () => {
       if (!shuttingDown) {
-        console.log(`${colors.bgRed.bold.black(" DPM ")} process stopped ${app.name}, restarting...`);
+        console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${app.name}, restarting...`);
         startProcess(app);
       }
     })
     p.on('error', (err) => {
       // TODO handle
       console.error(err);
-      console.log(`${colors.bgRed.bold.black(" DPM ")} Failed starting process  ${app.name}`);
+      console.log(`${colors.bgRed.bold.black(" dev-pm ")} Failed starting process  ${app.name}`);
     });
     processes[app.name] = p;
   }
@@ -73,23 +73,23 @@ export const start = async (pmConfigFilePathOverride?: string) => {
         const name = cmd.substring(8);
         const p = processes[name];
         if (!p) {
-          console.log(`${colors.bgYellow.bold.black(" DPM ")} unknown name  ${name}`);
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown name  ${name}`);
           s.end();
           return;
         }
 
         if (!p.killed) {
-          console.log(`${colors.bgYellow.bold.black(" DPM ")} killing ${name}`);
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} killing ${name}`);
           p.kill("SIGINT");
           while (!p.killed) {
-            console.log(`${colors.bgYellow.bold.black(" DPM ")} waiting for killed`);
+            console.log(`${colors.bgYellow.bold.black(" dev-pm ")} waiting for killed`);
             await new Promise(r => setTimeout(r, 100));
           }
         }
 
         const app = apps.find(i => i.name == name);
         if (!app) {
-          console.log(`${colors.bgYellow.bold.black(" DPM ")} unknown name  ${name}`);
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown name  ${name}`);
           s.end();
           return;
         }
@@ -118,7 +118,7 @@ export const start = async (pmConfigFilePathOverride?: string) => {
       } else if (cmd == "shutdown") {
         shutdown(s);
       } else {
-        console.log(`${colors.bgYellow.bold.black(" DPM ")} unknown command ${cmd}`);
+        console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown command ${cmd}`);
       }
     });
   });
@@ -139,14 +139,14 @@ export const start = async (pmConfigFilePathOverride?: string) => {
 
   events.forEach((eventName) => {
     process.on(eventName, (...args) => {
-      console.log(`${colors.bgRed.bold.black(" DPM ")} unhandled error event "${eventName}" was called with args: ${args.join(',')}`);
+      console.log(`${colors.bgRed.bold.black(" dev-pm ")} unhandled error event "${eventName}" was called with args: ${args.join(',')}`);
       shutdown();
     });
   });
 
 
   const shutdown = async (s?: Socket) => {
-    console.log(`${colors.bgGreen.bold.black(" DPM ")} shutting down`);
+    console.log(`${colors.bgGreen.bold.black(" dev-pm ")} shutting down`);
     shuttingDown = true;
     await Promise.all(Object.values(processes).map(async p => {
       if (p.pid) {
