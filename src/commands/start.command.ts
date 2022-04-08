@@ -42,12 +42,10 @@ export const start = async (pmConfigFilePath: string) => {
     processes[app.name] = p;
   }
 
-  try {
-    if (existsSync("./.pm.sock")) {
-      console.log("Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.");
-      return;
-    }
-  } catch (e) { }
+  if (existsSync("./.pm.sock")) {
+    console.log("Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.");
+    return;
+  }
 
   const server = createServer();
   server.listen(".pm.sock");
