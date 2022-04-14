@@ -11,7 +11,7 @@ export const start = async (pmConfigFilePath: string) => {
 
   function startProcess(app: AppDefinition) {
     console.log("starting " + app.script);
-    const p = spawn("bash", ["-c", app.script]);
+    const p = spawn("bash", ["-c", app.script], { detached: true });
     p.stdout.on('data', data => {
       process.stdout.write(data);
       logSockets.forEach(s => {
@@ -30,6 +30,7 @@ export const start = async (pmConfigFilePath: string) => {
     });
     p.on('close', code => {
       if (!shuttingDown) {
+        console.log('DEBUG code:', code);
         console.error("process stopped", app.name, ", restarting");
         startProcess(app);
       }
@@ -100,7 +101,7 @@ export const start = async (pmConfigFilePath: string) => {
             running: !p.killed
           }
         });
-        console.log("sending status reponse", response);
+        console.log("sending status response", response);
         s.write(JSON.stringify(response));
         s.end();
       } else if (cmd == "shutdown") {
@@ -123,7 +124,7 @@ export const start = async (pmConfigFilePath: string) => {
     shutdown();
   });
 
-  const events = ["beforeExit", "disconnected", "message", "rejectionHandled", "uncaughtException", "exit", "SIGABRT", "SIGHUP", "SIGPWR", "SIGQUIT"];
+  const events = ["beforeExit", "disconnected", "message", "rejectionHandled", "uncaughtException", "SIGABRT", "SIGHUP", "SIGPWR", "SIGQUIT"];
 
   events.forEach((eventName) => {
     process.on(eventName, (...args) => {
@@ -138,77 +139,11 @@ export const start = async (pmConfigFilePath: string) => {
     shuttingDown = true;
     await Promise.all(Object.values(processes).map(async p => {
       if (p.pid) {
-        const list: { [key: string]: string[] } = await getChildProcesses(p.pid.toString(), { [p.pid]: [] }, { [p.pid]: 1 });
-        killProcesses(list);
+        process.kill(-p.pid);
       }
     }));
     server.close();
     s?.destroy();
     process.exit();
-  }
-
-  const killProcesses = (tree: { [key: string]: string[] }) => {
-    const killed: { [key: string]: number } = {};
-    Object.keys(tree).map((pid) => {
-      tree[pid].map((childPid) => {
-        if (!killed[childPid]) {
-          killPid(childPid);
-          killed[childPid] = 1;
-        }
-        if (!killed[pid]) {
-          killPid(pid);
-          killed[pid] = 1;
-        }
-      })
-    })
-    return;
-  }
-
-  const killPid = (pid: string) => {
-    try {
-      process.kill(parseInt(pid, 10), "SIGINT");
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  const getChildProcesses = async (parentPid: string, tree: { [key: string]: string[] }, pidsToProcess: { [key: string]: number }): Promise<{ [key: string]: string[] }> => {
-    return new Promise((resolve, reject) => {
-      const ps = spawn('pgrep', ['-P', parentPid]);
-      let allData = "";
-
-      const onClose = (code: unknown) => {
-        delete pidsToProcess[parentPid];
-        if (code != 0) {
-          if (Object.keys(pidsToProcess).length === 0) {
-            resolve(tree);
-          }
-          return tree;
-        }
-
-        const pids = allData.match(/\d+/g) || [];
-        if (pids.length === 0) {
-          return resolve(tree);
-        }
-        pids.forEach(function (pid) {
-          tree[parentPid].push(pid);
-          tree[pid] = [];
-          pidsToProcess[pid] = 1;
-          resolve(getChildProcesses(pid, tree, pidsToProcess));
-        })
-      };
-
-      ps.on('error', function (err) {
-        console.error(err);
-        reject(err);
-      });
-
-      ps.stdout.on('data', function (data) {
-        data = data.toString('ascii');
-        allData += data;
-      })
-
-      ps.on('close', onClose);
-    })
   }
 }
