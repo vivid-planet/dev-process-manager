@@ -28,9 +28,8 @@ export const start = async (pmConfigFilePath: string) => {
         }
       });
     });
-    p.on('close', code => {
+    p.on('close', () => {
       if (!shuttingDown) {
-        console.log('DEBUG code:', code);
         console.error("process stopped", app.name, ", restarting");
         startProcess(app);
       }
