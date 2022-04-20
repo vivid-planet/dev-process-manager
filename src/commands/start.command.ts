@@ -1,4 +1,4 @@
-import { spawn, ChildProcess } from "child_process";
+import { execSync, spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
 import { existsSync } from "fs";
@@ -15,7 +15,8 @@ export const start = async (pmConfigFilePathOverride?: string) => {
 
   function startProcess(app: AppDefinition) {
     console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${app.script}`);
-    const p = spawn("bash", ["-c", app.script], { detached: true });
+    const NPM_PATH = execSync("npm bin").toString().trim();
+    const p = spawn("bash", ["-c", app.script], { detached: true, env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` } });
     p.stdout.on('data', data => {
       process.stdout.write(data);
       logSockets.forEach(s => {
