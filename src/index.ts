@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { start, shutdown, status, logs, restart } from "./commands";
 
 const program = new Command();
-program.command("start <pmConfigFilePath>")
+program.command("start [pmConfigFilePath]")
   .action((pmConfigFilePath) => {
     start(pmConfigFilePath);
   });
