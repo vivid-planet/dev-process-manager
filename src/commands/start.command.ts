@@ -1,4 +1,4 @@
-import { spawn, ChildProcess } from "child_process";
+import { execSync, spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
 
@@ -9,7 +9,8 @@ export const start = async (apps: AppDefinition[]) => {
 
   function startProcess(app: AppDefinition) {
     console.log("starting " + app.script);
-    const p = spawn("bash", ["-c", app.script]);
+    const NPM_PATH = execSync("npm bin").toString().trim();
+    const p = spawn("bash", ["-c", app.script], { env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` } });
     p.stdout.on('data', data => {
       process.stdout.write(data);
       logSockets.forEach(s => {
