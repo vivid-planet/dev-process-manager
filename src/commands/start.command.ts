@@ -3,7 +3,8 @@ import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
 import { existsSync } from "fs";
 
-export const start = async (pmConfigFilePath: string) => {
+export const start = async (pmConfigFilePathOverride?: string) => {
+  const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js"
   const { apps }: { apps: AppDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
   const processes: { [key: string]: ChildProcess } = {};
   const logSockets: { socket: Socket, name: string | null; }[] = [];

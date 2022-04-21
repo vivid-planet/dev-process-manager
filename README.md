@@ -29,13 +29,16 @@ module.exports = {
 
 Update dev script in package.json
 
+
 ### package.json
 
 ```json
   ...
-  "start": "node <path-to-dev-process-manager>/lib/index.js start dev-pm.config.js",
+  "start": "node <path-to-dev-process-manager>/lib/index.js start",
   ...
 ```
+
+The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
 
 ## Commands
 
@@ -43,7 +46,7 @@ Update dev script in package.json
 Either use the package.json script and run `npm run start`
 or start with:
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js start <path-to-dev-pm.config.js>
+$ node <path-to-dev-process-manager>/lib/index.js start [path-to-dev-pm.config.js]
 ```
 
 ### Shutdown
