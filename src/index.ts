@@ -1,11 +1,10 @@
 import { Command } from 'commander';
 import { start, shutdown, status, logs, restart } from "./commands";
-import eco from "./ecosystem.config";
 
 const program = new Command();
-program.command("start")
-  .action(() => {
-    start(eco.apps);
+program.command("start [pmConfigFilePath]")
+  .action((pmConfigFilePath) => {
+    start(pmConfigFilePath);
   });
 
 program.command("logs [name]")

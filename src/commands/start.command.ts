@@ -1,20 +1,23 @@
 import { spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
+import { existsSync } from "fs";
 
-export const start = async (apps: AppDefinition[]) => {
+export const start = async (pmConfigFilePathOverride?: string) => {
+  const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js"
+  const { apps }: { apps: AppDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
   const processes: { [key: string]: ChildProcess } = {};
   const logSockets: { socket: Socket, name: string | null; }[] = [];
   let shuttingDown = false;
 
   function startProcess(app: AppDefinition) {
     console.log("starting " + app.script);
-    const p = spawn("bash", ["-c", app.script]);
+    const p = spawn("bash", ["-c", app.script], { detached: true });
     p.stdout.on('data', data => {
       process.stdout.write(data);
       logSockets.forEach(s => {
         if (!s.name || s.name == app.name) {
-          s.socket.write(data);
+          s.socket.write(`${s.name}: ${data}`);
         }
       });
     });
@@ -22,11 +25,11 @@ export const start = async (apps: AppDefinition[]) => {
       process.stderr.write(data);
       logSockets.forEach(s => {
         if (!s.name || s.name == app.name) {
-          s.socket.write(data);
+          s.socket.write(`${s.name}: ${data}`);
         }
       });
     });
-    p.on('close', code => {
+    p.on('close', () => {
       if (!shuttingDown) {
         console.error("process stopped", app.name, ", restarting");
         startProcess(app);
@@ -38,6 +41,11 @@ export const start = async (apps: AppDefinition[]) => {
       console.error("Failed starting process", app.name);
     });
     processes[app.name] = p;
+  }
+
+  if (existsSync("./.pm.sock")) {
+    console.log("Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.");
+    return;
   }
 
   const server = createServer();
@@ -93,17 +101,11 @@ export const start = async (apps: AppDefinition[]) => {
             running: !p.killed
           }
         });
-        console.log("sending status reponse", response);
+        console.log("sending status response", response);
         s.write(JSON.stringify(response));
         s.end();
       } else if (cmd == "shutdown") {
-        console.log("shutting down");
-        shuttingDown = true;
-        Object.values(processes).forEach(p => {
-          if (!p.killed) p.kill("SIGINT");
-        })
-        server.close();
-        process.exit();
+        shutdown(s);
       } else {
         console.error("Unknown command", cmd);
       }
@@ -115,15 +117,33 @@ export const start = async (apps: AppDefinition[]) => {
   });
 
   process.on("SIGINT", function () {
-    console.log("shutting down")
-    server.close();
-    shuttingDown = true;
-    for (const name in processes) {
-      const p = processes[name];
-      if (!p.killed) {
-        console.log("killing " + name);
-        p.kill("SIGINT");
-      }
-    }
+    shutdown();
   });
+
+  process.on("SIGTERM", function () {
+    shutdown();
+  });
+
+  const events = ["beforeExit", "disconnected", "message", "rejectionHandled", "uncaughtException", "SIGABRT", "SIGHUP", "SIGPWR", "SIGQUIT"];
+
+  events.forEach((eventName) => {
+    process.on(eventName, (...args) => {
+      console.log('Unhandled error event ' + eventName + ' was called with args : ' + args.join(','));
+      shutdown();
+    });
+  });
+
+
+  const shutdown = async (s?: Socket) => {
+    console.log("shutting down");
+    shuttingDown = true;
+    await Promise.all(Object.values(processes).map(async p => {
+      if (p.pid) {
+        process.kill(-p.pid);
+      }
+    }));
+    server.close();
+    s?.destroy();
+    process.exit();
+  }
 }
