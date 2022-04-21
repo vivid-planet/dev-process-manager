@@ -23,6 +23,8 @@
     "lib/**/*"
   ],
   "dependencies": {
+    "cli-table3": "^0.6.1",
+    "colors": "^1.4.0",
     "commander": "^9.0.0",
     "ts-node": "^10.4.0"
   },

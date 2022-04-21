@@ -2,6 +2,9 @@ import { spawn, ChildProcess } from "child_process";
 import { Socket, createServer, createConnection } from "net";
 import { AppDefinition } from "../app-definition.type";
 import { existsSync } from "fs";
+import { unlinkSync } from "fs";
+import CLITable from 'cli-table3';
+import colors from 'colors';
 
 export const start = async (pmConfigFilePathOverride?: string) => {
   const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js"
@@ -11,7 +14,7 @@ export const start = async (pmConfigFilePathOverride?: string) => {
   let shuttingDown = false;
 
   function startProcess(app: AppDefinition) {
-    console.log("starting " + app.script);
+    console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${app.script}`);
     const p = spawn("bash", ["-c", app.script], { detached: true });
     p.stdout.on('data', data => {
       process.stdout.write(data);
@@ -31,14 +34,14 @@ export const start = async (pmConfigFilePathOverride?: string) => {
     });
     p.on('close', () => {
       if (!shuttingDown) {
-        console.error("process stopped", app.name, ", restarting");
+        console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${app.name}, restarting...`);
         startProcess(app);
       }
     })
     p.on('error', (err) => {
       // TODO handle
       console.error(err);
-      console.error("Failed starting process", app.name);
+      console.log(`${colors.bgRed.bold.black(" dev-pm ")} Failed starting process  ${app.name}`);
     });
     processes[app.name] = p;
   }
@@ -70,23 +73,23 @@ export const start = async (pmConfigFilePathOverride?: string) => {
         const name = cmd.substring(8);
         const p = processes[name];
         if (!p) {
-          console.error("Unknown name");
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown name  ${name}`);
           s.end();
           return;
         }
 
         if (!p.killed) {
-          console.log("killing " + name);
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} killing ${name}`);
           p.kill("SIGINT");
           while (!p.killed) {
-            console.log("waiting for killed");
+            console.log(`${colors.bgYellow.bold.black(" dev-pm ")} waiting for killed`);
             await new Promise(r => setTimeout(r, 100));
           }
         }
 
         const app = apps.find(i => i.name == name);
         if (!app) {
-          console.error("Unknown name");
+          console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown name  ${name}`);
           s.end();
           return;
         }
@@ -98,16 +101,24 @@ export const start = async (pmConfigFilePathOverride?: string) => {
           const p = processes[name];
           return {
             name,
-            running: !p.killed
+            running: !p.killed,
+            pid: p.pid,
           }
         });
-        console.log("sending status response", response);
-        s.write(JSON.stringify(response));
+
+        const table = new CLITable({
+          head: [colors.blue.bold("Application"), colors.blue.bold("Status"), colors.bold.blue("PID")],
+          colWidths: [100, 20, 20]
+        });
+        response.forEach((item) => {
+          table.push([item.name, item.running ? colors.green("Running") : colors.red("Stopped"), item.pid?.toString()])
+        })
+        s.write(table.toString());
         s.end();
       } else if (cmd == "shutdown") {
         shutdown(s);
       } else {
-        console.error("Unknown command", cmd);
+        console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown command ${cmd}`);
       }
     });
   });
@@ -128,14 +139,14 @@ export const start = async (pmConfigFilePathOverride?: string) => {
 
   events.forEach((eventName) => {
     process.on(eventName, (...args) => {
-      console.log('Unhandled error event ' + eventName + ' was called with args : ' + args.join(','));
+      console.log(`${colors.bgRed.bold.black(" dev-pm ")} unhandled error event "${eventName}" was called with args: ${args.join(',')}`);
       shutdown();
     });
   });
 
 
   const shutdown = async (s?: Socket) => {
-    console.log("shutting down");
+    console.log(`${colors.bgGreen.bold.black(" dev-pm ")} shutting down`);
     shuttingDown = true;
     await Promise.all(Object.values(processes).map(async p => {
       if (p.pid) {
