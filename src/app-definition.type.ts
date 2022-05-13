@@ -1,4 +1,4 @@
 export interface AppDefinition {
-  name: string;
-  script: string;
+    name: string;
+    script: string;
 }
