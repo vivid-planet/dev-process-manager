@@ -1,5 +1,5 @@
 {
-    "name": "dev-process-manager",
+    "name": "@comet/dev-process-manager",
     "packageManager": "yarn@3.2.0",
     "license": "BSD-2-Clause",
     "version": "1.0.0",
@@ -20,6 +20,10 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/vivid-planet/dev-process-manager"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org",
+        "access": "public"
     },
     "author": "Vivid Planet Software GmbH <office@vivid-planet.com> (https://www.vivid-planet.com/)",
     "bugs": {

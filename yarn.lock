@@ -76,6 +76,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@comet/dev-process-manager@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@comet/dev-process-manager@workspace:."
+  dependencies:
+    "@comet/eslint-config": ^2.0.1-canary.100.0
+    "@types/node": ^14.0.0
+    cli-table3: ^0.6.1
+    colors: ^1.4.0
+    commander: ^9.0.0
+    eslint: ^8.0.0
+    husky: ^8.0.0
+    lint-staged: ^12.0.0
+    prettier: ^2.0.0
+    ts-node: ^10.4.0
+    typescript: ^4.5.5
+    yarn-run-all: ^3.0.0
+  bin:
+    dev-process-manager: lib/index.js
+  languageName: unknown
+  linkType: soft
+
 "@comet/eslint-config@npm:^2.0.1-canary.100.0":
   version: 2.0.1-canary.100.0
   resolution: "@comet/eslint-config@npm:2.0.1-canary.100.0"
@@ -1321,27 +1342,6 @@ __metadata:
   checksum: 46fe6e83e2cb1d85ba50bd52803c68be9bd953282fa7096f51fc29edd5d67ff84ff753c51966061e5ba7cb5e47ef6d36a91924eddb7f3f3483b1c560f77a0020
   languageName: node
   linkType: hard
-
-"dev-process-manager@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "dev-process-manager@workspace:."
-  dependencies:
-    "@comet/eslint-config": ^2.0.1-canary.100.0
-    "@types/node": ^14.0.0
-    cli-table3: ^0.6.1
-    colors: ^1.4.0
-    commander: ^9.0.0
-    eslint: ^8.0.0
-    husky: ^8.0.0
-    lint-staged: ^12.0.0
-    prettier: ^2.0.0
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
-    yarn-run-all: ^3.0.0
-  bin:
-    dev-process-manager: lib/index.js
-  languageName: unknown
-  linkType: soft
 
 "diff@npm:^4.0.1":
   version: 4.0.2
