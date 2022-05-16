@@ -23,4 +23,8 @@ program.command("shutdown").action(() => {
     shutdown();
 });
 
+program.command("stop").action(() => {
+    shutdown();
+});
+
 program.parse(process.argv);
