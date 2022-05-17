@@ -26,19 +26,6 @@ module.exports = {
 
 ```
 
-Update script in package.json
-
-
-### package.json
-
-```json
-  ...
-  "start": "dev-process-manager start",
-  ...
-```
-
-The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
-
 ## Commands
 
 ### Start
@@ -47,6 +34,8 @@ or start with:
 ```console
 $ npx dev-process-manager start [path-to-dev-pm.config.js]
 ```
+
+The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
 
 ### Stop
 
