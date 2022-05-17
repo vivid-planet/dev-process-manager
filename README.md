@@ -49,11 +49,11 @@ or start with:
 $ node <path-to-dev-process-manager>/lib/index.js start [path-to-dev-pm.config.js]
 ```
 
-### Shutdown
+### Stop
 
-Shutdown all running apps
+Stop all running apps
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js shutdown
+$ npx dev-process-manager stop
 ```
 
 ### Restart
