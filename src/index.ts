@@ -21,7 +21,7 @@ program.command("restart <name>").action((name) => {
     restart(name);
 });
 
-program.command("shutdown").action(() => {
+program.command("stop").action(() => {
     shutdown();
 });
 

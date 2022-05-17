@@ -48,11 +48,11 @@ or start with:
 $ npx dev-process-manager start [path-to-dev-pm.config.js]
 ```
 
-### Shutdown
+### Stop
 
-Shutdown all running apps
+Stop all running apps
 ```console
-$ npx dev-process-manager shutdown
+$ npx dev-process-manager stop
 ```
 
 ### Restart
