@@ -19,10 +19,6 @@ program.command("restart <name>").action((name) => {
     restart(name);
 });
 
-program.command("shutdown").action(() => {
-    shutdown();
-});
-
 program.command("stop").action(() => {
     shutdown();
 });
