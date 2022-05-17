@@ -3,8 +3,7 @@
 ## Installation
 
 ```console
-$ npm install
-$ npm run build
+$ npm install @comet/dev-process-manager
 ```
 
 ## Usage
@@ -27,14 +26,14 @@ module.exports = {
 
 ```
 
-Update dev script in package.json
+Update script in package.json
 
 
 ### package.json
 
 ```json
   ...
-  "start": "node <path-to-dev-process-manager>/lib/index.js start",
+  "start": "dev-process-manager start",
   ...
 ```
 
@@ -46,7 +45,7 @@ The path to the config file can be specified in an optional parameter. "dev-pm.c
 Either use the package.json script and run `npm run start`
 or start with:
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js start [path-to-dev-pm.config.js]
+$ npx dev-process-manager start [path-to-dev-pm.config.js]
 ```
 
 ### Stop
@@ -61,7 +60,7 @@ $ npx dev-process-manager stop
 Restart a previously started apps
 
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js restart <app-name>
+$ npx dev-process-manager restart <app-name>
 ```
 
 
@@ -69,12 +68,12 @@ $ node <path-to-dev-process-manager>/lib/index.js restart <app-name>
 Lists running apps
 
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js status
+$ npx dev-process-manager status
 ```
 
 ### Logs
 Prints logs of either a specific app or all running apps in real time.
 
 ```console
-$ node <path-to-dev-process-manager>/lib/index.js logs [app-name]
+$ npx dev-process-manager logs [app-name]
 ```

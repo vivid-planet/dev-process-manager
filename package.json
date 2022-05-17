@@ -10,7 +10,7 @@
         "lib/**/*"
     ],
     "scripts": {
-        "postinstall": "husky install",
+        "prepare": "husky install",
         "lint": "run-p lint:eslint lint:tsc",
         "lint:eslint": "eslint src/",
         "lint:tsc": "tsc",

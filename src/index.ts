@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 
 import { logs, restart, shutdown, start, status } from "./commands";
