@@ -1,5 +1,7 @@
 # @comet/dev-process-manager
 
+dev-process-manager is a Node.js process manager for local development environments that need multiple processes. It can be easily integrated into existing Node.js projects.
+
 ## Installation
 
 ```console
@@ -26,19 +28,6 @@ module.exports = {
 
 ```
 
-Update script in package.json
-
-
-### package.json
-
-```json
-  ...
-  "start": "dev-process-manager start",
-  ...
-```
-
-The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
-
 ## Commands
 
 ### Start
@@ -47,6 +36,8 @@ or start with:
 ```console
 $ npx dev-process-manager start [path-to-dev-pm.config.js]
 ```
+
+The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
 
 ### Stop
 
