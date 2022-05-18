@@ -1,6 +1,6 @@
 # @comet/dev-process-manager
 
-dev-process-manager is a process manager for Node.js applications in the development environment. It can be easily integrated into existing Node.js projects.
+dev-process-manager is a Node.js process manager for local development environments that need multiple processes. It can be easily integrated into existing Node.js projects.
 
 ## Installation
 
