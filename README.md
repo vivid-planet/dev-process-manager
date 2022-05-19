@@ -11,13 +11,13 @@ $ npm install @comet/dev-process-manager
 ## Usage
 
 Add `dev-pm.config.js` file to the project root.
-This file defines all available apps, which should be started by dev-process-manager.
+This file defines all available scripts, which should be started by dev-process-manager.
 
 ### dev-pm.config.js
 
 ```javascript
 module.exports = {
-    apps: [
+    scripts: [
         {
              name: "api",
              script: "npm run start",
@@ -41,30 +41,30 @@ The path to the config file can be specified in an optional parameter. "dev-pm.c
 
 ### Stop
 
-Stop all running apps
+Stop all running scripts
 ```console
 $ npx dev-process-manager stop
 ```
 
 ### Restart
 
-Restart a previously started apps
+Restart a previously started scripts
 
 ```console
-$ npx dev-process-manager restart <app-name>
+$ npx dev-process-manager restart <script-name>
 ```
 
 
 ### Status
-Lists running apps
+Lists running scripts
 
 ```console
 $ npx dev-process-manager status
 ```
 
 ### Logs
-Prints logs of either a specific app or all running apps in real time.
+Prints logs of either a specific script or all running scripts in real time.
 
 ```console
-$ npx dev-process-manager logs [app-name]
+$ npx dev-process-manager logs [script-name]
 ```
