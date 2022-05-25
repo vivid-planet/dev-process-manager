@@ -4,23 +4,23 @@ import colors from "colors";
 import { existsSync } from "fs";
 import { createServer, Socket } from "net";
 
-import { AppDefinition } from "../app-definition.type";
+import { ScriptDefinition } from "../script-definition.type";
 
 export const start = async (pmConfigFilePathOverride?: string): Promise<void> => {
     const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js";
-    const { apps }: { apps: AppDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
+    const { scripts }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
     const processes: { [key: string]: ChildProcess } = {};
     const logSockets: { socket: Socket; name: string | null }[] = [];
     let shuttingDown = false;
 
-    function startProcess(app: AppDefinition): void {
-        console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${app.script}`);
+    function startProcess(script: ScriptDefinition): void {
+        console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${script.script}`);
         const NPM_PATH = execSync("npm bin").toString().trim();
-        const p = spawn("bash", ["-c", app.script], { detached: true, env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` } });
+        const p = spawn("bash", ["-c", script.script], { detached: true, env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` } });
         p.stdout.on("data", (data) => {
             process.stdout.write(data);
             logSockets.forEach((s) => {
-                if (!s.name || s.name == app.name) {
+                if (!s.name || s.name == script.name) {
                     s.socket.write(`${s.name}: ${data}`);
                 }
             });
@@ -28,23 +28,23 @@ export const start = async (pmConfigFilePathOverride?: string): Promise<void> =>
         p.stderr.on("data", (data) => {
             process.stderr.write(data);
             logSockets.forEach((s) => {
-                if (!s.name || s.name == app.name) {
+                if (!s.name || s.name == script.name) {
                     s.socket.write(`${s.name}: ${data}`);
                 }
             });
         });
         p.on("close", () => {
             if (!shuttingDown) {
-                console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${app.name}, restarting...`);
-                startProcess(app);
+                console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${script.name}, restarting...`);
+                startProcess(script);
             }
         });
         p.on("error", (err) => {
             // TODO handle
             console.error(err);
-            console.log(`${colors.bgRed.bold.black(" dev-pm ")} Failed starting process  ${app.name}`);
+            console.log(`${colors.bgRed.bold.black(" dev-pm ")} Failed starting process  ${script.name}`);
         });
-        processes[app.name] = p;
+        processes[script.name] = p;
     }
 
     if (existsSync("./.pm.sock")) {
@@ -61,7 +61,7 @@ export const start = async (pmConfigFilePathOverride?: string): Promise<void> =>
             const cmd = command.toString();
             if (cmd == "logs" || cmd.startsWith("logs ")) {
                 const name = cmd != "logs" ? cmd.substring(5) : null; // null means all
-                if (name && !apps.find((app) => app.name === name)) {
+                if (name && !scripts.find((script) => script.name === name)) {
                     console.error("Unknown name");
                 } else {
                     logSockets.push({ socket: s, name });
@@ -90,13 +90,13 @@ export const start = async (pmConfigFilePathOverride?: string): Promise<void> =>
                     }
                 }
 
-                const app = apps.find((i) => i.name == name);
-                if (!app) {
+                const script = scripts.find((i) => i.name == name);
+                if (!script) {
                     console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown name  ${name}`);
                     s.end();
                     return;
                 }
-                startProcess(app);
+                startProcess(script);
                 s.end();
             } else if (cmd == "status") {
                 const response = Object.keys(processes).map((name) => {
@@ -109,7 +109,7 @@ export const start = async (pmConfigFilePathOverride?: string): Promise<void> =>
                 });
 
                 const table = new CLITable({
-                    head: [colors.blue.bold("Application"), colors.blue.bold("Status"), colors.bold.blue("PID")],
+                    head: [colors.blue.bold("Script"), colors.blue.bold("Status"), colors.bold.blue("PID")],
                     colWidths: [100, 20, 20],
                 });
                 response.forEach((item) => {
@@ -125,8 +125,8 @@ export const start = async (pmConfigFilePathOverride?: string): Promise<void> =>
         });
     });
 
-    apps.forEach((app) => {
-        startProcess(app);
+    scripts.forEach((script) => {
+        startProcess(script);
     });
 
     process.on("SIGINT", function () {
