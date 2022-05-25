@@ -46,7 +46,7 @@ jobs:
             - name: Publish stable release
               if: ${{ github.ref_type == 'tag' }}
               run: |
-                  npm --no-git-tag-version version ${{ github.ref_name }}
+                  npm --allow-same-version --no-git-tag-version version ${{ github.ref_name }}
                   npm publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
