@@ -6,10 +6,9 @@ import { logs, restart, shutdown, start, status } from "./commands";
 
 const program = new Command();
 
-
 program
     .command("start [pmConfigFilePath]")
-    .option('--only <scripts...>', 'Only run specified scripts')
+    .option("--only <scripts...>", "Only run specified scripts")
     .action((pmConfigFilePath, options) => {
         start(pmConfigFilePath, options);
     });
