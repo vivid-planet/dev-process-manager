@@ -39,6 +39,13 @@ $ npx dev-process-manager start [path-to-dev-pm.config.js]
 
 The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
 
+#### Options
+Only start specified scripts. Accepts one or more script names.
+```console
+$ npx dev-process-manager start --only api admin
+```
+
+
 ### Stop
 
 Stop all running processes
