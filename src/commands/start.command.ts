@@ -20,7 +20,8 @@ export const start = async (pmConfigFilePathOverride?: string, options?: { only?
             if (foundScript) {
                 scriptsToStart.push(foundScript);
             } else {
-                console.log(`${colors.bgRed.bold.black(" dev-pm ")} Script ${scriptName} not found in dev-pm config`);
+                console.error(`${colors.bgRed.bold.black(" dev-pm ")} Script ${scriptName} not found in dev-pm config`);
+                process.exit(1);
             }
         });
     } else {
