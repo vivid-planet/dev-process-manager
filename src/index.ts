@@ -3,15 +3,16 @@
 import { Command } from "commander";
 
 import { logs, restart, shutdown, start, status } from "./commands";
+import { startDaemon } from "./commands/start-daemon.command";
 
 const program = new Command();
 
 program
-    .command("start [pmConfigFilePath]")
+    .command("start")
     .option("--only <scripts...>", "Only start specified scripts")
     .option("--onlyGroup <groups...>", "Only start scripts in specified group")
-    .action((pmConfigFilePath, options) => {
-        start(pmConfigFilePath, options);
+    .action((options) => {
+        start(options);
     });
 
 program.command("logs [name]").action((name) => {
@@ -28,6 +29,10 @@ program.command("restart <name>").action((name) => {
 
 program.command("stop").action(() => {
     shutdown();
+});
+
+program.command("start-daemon").action(() => {
+    startDaemon();
 });
 
 program.parse(process.argv);

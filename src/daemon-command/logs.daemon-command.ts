@@ -1,6 +1,7 @@
 import colors from "colors";
 import { Socket } from "net";
-import { Daemon } from "src/commands/start.command";
+
+import { Daemon } from "../commands/start-daemon.command";
 
 export function logsDaemonCommand({ logSockets, scripts }: Daemon, socket: Socket, scriptName: string | null /* null means all */): void {
     if (scriptName && !scripts.find((script) => script.name === scriptName)) {
