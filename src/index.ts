@@ -8,7 +8,8 @@ const program = new Command();
 
 program
     .command("start [pmConfigFilePath]")
-    .option("--only <scripts...>", "Only run specified scripts")
+    .option("--only <scripts...>", "Only start specified scripts")
+    .option("--onlyGroup <groups...>", "Only start scripts in specified group")
     .action((pmConfigFilePath, options) => {
         start(pmConfigFilePath, options);
     });
