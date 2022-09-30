@@ -10,7 +10,7 @@ export function statusDaemonCommand({ processes, scripts }: Daemon, socket: Sock
         return {
             name: script.name,
             running: process ? !process.killed : false,
-            pid: process ? process.pid : undefined,
+            pid: process && !process.killed ? process.pid : undefined,
         };
     });
 

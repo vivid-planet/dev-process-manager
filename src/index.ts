@@ -4,6 +4,7 @@ import { Command } from "commander";
 
 import { logs, restart, shutdown, start, status } from "./commands";
 import { startDaemon } from "./commands/start-daemon.command";
+import { stop } from "./commands/stop.command";
 
 const program = new Command();
 
@@ -27,7 +28,11 @@ program.command("restart <name>").action((name) => {
     restart(name);
 });
 
-program.command("stop").action(() => {
+program.command("stop <name>").action((name) => {
+    stop(name);
+});
+
+program.command("shutdown").action(() => {
     shutdown();
 });
 

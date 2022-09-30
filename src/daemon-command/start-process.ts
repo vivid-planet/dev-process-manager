@@ -8,6 +8,7 @@ export function startProcess(daemon: Daemon, script: ScriptDefinition): void {
     const { logSockets, processes } = daemon;
     console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${script.script}`);
     const NPM_PATH = execSync("npm bin").toString().trim();
+    daemon.scriptStatus[script.name] = "started";
     const p = spawn("bash", ["-c", script.script], { detached: true, env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` } });
     p.stdout.on("data", (data) => {
         process.stdout.write(data);
@@ -26,9 +27,12 @@ export function startProcess(daemon: Daemon, script: ScriptDefinition): void {
         });
     });
     p.on("close", () => {
-        if (!daemon.shuttingDown) {
+        if (daemon.scriptStatus[script.name] == "started") {
             console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${script.name}, restarting...`);
             startProcess(daemon, script);
+        } else {
+            console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${script.name}`);
+            daemon.scriptStatus[script.name] = "stopped";
         }
     });
     p.on("error", (err) => {

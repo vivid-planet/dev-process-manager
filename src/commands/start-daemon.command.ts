@@ -9,26 +9,29 @@ import { shutdown } from "../daemon-command/shutdown";
 import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command";
 import { startDaemonCommand } from "../daemon-command/start.deamon-command";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command";
+import { stopDaemonCommand } from "../daemon-command/stop.daemon-command";
 import { ScriptDefinition } from "../script-definition.type";
 
 export interface Daemon {
     logSockets: { socket: Socket; name: string | null }[];
     scripts: ScriptDefinition[];
     processes: { [key: string]: ChildProcess };
-    shuttingDown: boolean;
+    scriptStatus: { [key: string]: "started" | "stopping" | "stopped" };
     server?: Server;
 }
 
-export const startDaemon = async (pmConfigFilePathOverride?: string): Promise<void> => {
-    const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js";
+export const startDaemon = async (): Promise<void> => {
+    const pmConfigFilePath = "dev-pm.config.js";
     const { scripts }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
-    const processes: { [key: string]: ChildProcess } = {};
-    const logSockets: { socket: Socket; name: string | null }[] = [];
+    const scriptStatus = scripts.reduce<Daemon["scriptStatus"]>((acc, script) => {
+        acc[script.name] = "stopped";
+        return acc;
+    }, {});
     const daemon: Daemon = {
-        logSockets,
+        logSockets: [],
         scripts,
-        processes,
-        shuttingDown: false,
+        processes: {},
+        scriptStatus,
         server: undefined,
     };
 
@@ -51,6 +54,9 @@ export const startDaemon = async (pmConfigFilePathOverride?: string): Promise<vo
             } else if (cmd.startsWith("restart ")) {
                 const scriptName = cmd.substring(8);
                 restartDaemonCommand(daemon, s, scriptName);
+            } else if (cmd.startsWith("stop ")) {
+                const scriptName = cmd.substring(5);
+                stopDaemonCommand(daemon, s, scriptName);
             } else if (cmd.startsWith("start ")) {
                 const options = JSON.parse(cmd.substring(6));
                 startDaemonCommand(daemon, s, options);
