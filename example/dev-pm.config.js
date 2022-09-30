@@ -2,11 +2,11 @@ module.exports = {
     scripts: [
         {
             name: "sleep-1",
-            script: "sleep 60",
+            script: "bash -c 'while true; do echo sleep-1; sleep 5; done'",
         },
         {
             name: "sleep-2",
-            script: "sleep 60",
+            script: "bash -c 'while true; do echo sleep-2; sleep 5; done'",
         },
     ],
 };

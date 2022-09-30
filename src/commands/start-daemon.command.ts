@@ -51,17 +51,18 @@ export const startDaemon = async (): Promise<void> => {
             if (cmd == "logs" || cmd.startsWith("logs ")) {
                 const scriptName = cmd != "logs" ? cmd.substring(5) : null; // null means all
                 logsDaemonCommand(daemon, s, scriptName);
-            } else if (cmd.startsWith("restart ")) {
-                const scriptName = cmd.substring(8);
+            } else if (cmd == "restart" || cmd.startsWith("restart ")) {
+                const scriptName = cmd != "restart" ? cmd.substring(8) : null; // null means all
                 restartDaemonCommand(daemon, s, scriptName);
-            } else if (cmd.startsWith("stop ")) {
-                const scriptName = cmd.substring(5);
+            } else if (cmd == "stop" || cmd.startsWith("stop ")) {
+                const scriptName = cmd != "stop" ? cmd.substring(5) : null; // null means all
                 stopDaemonCommand(daemon, s, scriptName);
-            } else if (cmd.startsWith("start ")) {
-                const options = JSON.parse(cmd.substring(6));
-                startDaemonCommand(daemon, s, options);
-            } else if (cmd == "status") {
-                statusDaemonCommand(daemon, s);
+            } else if (cmd == "start" || cmd.startsWith("start ")) {
+                const scriptName = cmd != "start" ? cmd.substring(6) : null; // null means all
+                startDaemonCommand(daemon, s, scriptName);
+            } else if (cmd == "status" || cmd.startsWith("status ")) {
+                const scriptName = cmd != "status" ? cmd.substring(7) : null; // null means all
+                statusDaemonCommand(daemon, s, scriptName);
             } else if (cmd == "shutdown") {
                 shutdownDaemonCommand(daemon, s);
             } else {
