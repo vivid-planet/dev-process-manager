@@ -14,6 +14,7 @@ import { ScriptDefinition } from "../script-definition.type";
 
 export interface Daemon {
     logSockets: { socket: Socket; name: string | null }[];
+    logBuffer: { [key: string]: string[] };
     scripts: ScriptDefinition[];
     processes: { [key: string]: ChildProcess };
     scriptStatus: { [key: string]: "started" | "stopping" | "stopped" };
@@ -27,12 +28,17 @@ export const startDaemon = async (): Promise<void> => {
         acc[script.name] = "stopped";
         return acc;
     }, {});
+    const logBuffer = scripts.reduce<Daemon["logBuffer"]>((acc, script) => {
+        acc[script.name] = [];
+        return acc;
+    }, {});
     const daemon: Daemon = {
         logSockets: [],
         scripts,
         processes: {},
         scriptStatus,
         server: undefined,
+        logBuffer,
     };
 
     if (existsSync("./.pm.sock")) {

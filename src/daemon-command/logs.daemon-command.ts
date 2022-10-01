@@ -8,6 +8,10 @@ export function logsDaemonCommand(daemon: Daemon, socket: Socket, scriptName: st
     const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
 
     for (const script of scriptsToProcess) {
+        for (const line of daemon.logBuffer[script.name]) {
+            socket.write(`${script.name}: ${line}\n`);
+        }
+
         logSockets.push({ socket, name: script.name });
         socket.on("close", () => {
             const index = logSockets.findIndex((i) => i.socket == socket);
