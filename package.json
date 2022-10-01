@@ -34,11 +34,13 @@
         "cli-table3": "^0.6.1",
         "colors": "^1.4.0",
         "commander": "^9.0.0",
-        "ts-node": "^10.4.0"
+        "ts-node": "^10.4.0",
+        "wait-on": "^6.0.1"
     },
     "devDependencies": {
         "@comet/eslint-config": "^3.0.0-canary.344.0",
         "@types/node": "^14.0.0",
+        "@types/wait-on": "^5.3.1",
         "eslint": "^8.20.0",
         "husky": "^8.0.0",
         "lint-staged": "^12.0.0",

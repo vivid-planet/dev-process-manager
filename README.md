@@ -21,7 +21,11 @@ module.exports = {
         {
              name: "api",
              script: "npm run start",
-             group: ["foo", "bar"] //optional
+             group: ["foo", "bar"], //to access a group of scripts in all commands
+             waitOn: [
+                "packages/foo/lib/index.d.ts", //wait until package is built
+                "tcp:5432"  //wait until database is started (tcp:$POSTGRESQL_PORT is also supported)
+             ]
         },
         ...
     ],

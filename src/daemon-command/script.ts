@@ -1,6 +1,7 @@
 import { ChildProcess, execSync, spawn } from "child_process";
 import colors from "colors";
 import { Socket } from "net";
+import waitOn from "wait-on";
 
 import { ScriptDefinition } from "../script-definition.type";
 
@@ -8,7 +9,7 @@ const KEEP_LOG_LINES = 100;
 
 export class Script {
     scriptDefinition: ScriptDefinition;
-    status: "started" | "stopping" | "stopped" = "stopped";
+    status: "started" | "stopping" | "stopped" | "waiting" = "stopped";
     process?: ChildProcess;
     logBuffer: string[] = [];
     logSockets: Socket[] = [];
@@ -24,6 +25,17 @@ export class Script {
         if (!this.scriptDefinition.group) return [];
         return Array.isArray(this.scriptDefinition.group) ? this.scriptDefinition.group : [this.scriptDefinition.group];
     }
+    get waitOn(): string[] {
+        if (!this.scriptDefinition.waitOn) return [];
+        const waitOn = Array.isArray(this.scriptDefinition.waitOn) ? this.scriptDefinition.waitOn : [this.scriptDefinition.waitOn];
+        return waitOn.map((str) =>
+            str.replace(/\$[a-z\d_]+/gi, function (match) {
+                const sub = process.env[match.substring(1)];
+                return sub || match;
+            }),
+        );
+    }
+
     async killProcess(socket?: Socket): Promise<void> {
         if (this.process && !this.process.killed) {
             console.log(`killing ${this.name}`);
@@ -37,18 +49,54 @@ export class Script {
         }
     }
 
-    handleLogs(data: Buffer): void {
-        this.logSockets.forEach((socket) => {
-            socket.write(`${this.name}: ${data}`);
-        });
+    handleLogs(data: Buffer | string): void {
         const incomingLines = data.toString().split("\n");
         if (incomingLines[incomingLines.length - 1] == "") incomingLines.splice(incomingLines.length - 1, 1);
+        for (const line of incomingLines) {
+            console.log(`${this.name}: ${line}`);
+            this.logSockets.forEach((socket) => {
+                socket.write(`${this.name}: ${line}`);
+            });
+        }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);
         this.logBuffer.splice(0, removeLines > 0 ? removeLines : 0, ...incomingLines);
     }
 
-    startProcess(): void {
-        console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${this.scriptDefinition.script}`);
+    async startProcess(): Promise<void> {
+        if (this.waitOn.length > 0) {
+            this.status = "waiting";
+
+            try {
+                //first a silent try for 200ms (to avoid too much console output)
+                await waitOn({
+                    resources: this.waitOn,
+                    timeout: 1000,
+                });
+                this.handleLogs("[dev-pm] WAIT ON FINISHED WITHIN 200ms");
+            } catch {
+                this.handleLogs("[dev-pm] WAIT ON FAILED WITHIN 200ms");
+                //then without timeout
+                this.handleLogs("[dev-pm] waiting for required resources...");
+                let pending = this.waitOn.length;
+                await Promise.all(
+                    this.waitOn.map(async (res) => {
+                        this.handleLogs(`[dev-pm] waiting for ${res}`);
+                        await waitOn({
+                            resources: [res],
+                        });
+                        pending--;
+                        this.handleLogs(`[dev-pm] finished waiting for ${res} (${pending} resources pending)`);
+                    }),
+                );
+            }
+
+            if (this.status !== "waiting") {
+                // script could have been stopped while waiting
+                return;
+            }
+        }
+
+        this.handleLogs("[dev-pm] starting process...");
         const NPM_PATH = execSync("npm bin").toString().trim();
         this.status = "started";
         const p = spawn("bash", ["-c", this.scriptDefinition.script], {
@@ -57,11 +105,9 @@ export class Script {
         });
         this.process = p;
         p.stdout.on("data", (data: Buffer) => {
-            process.stdout.write(data);
             this.handleLogs(data);
         });
         p.stderr.on("data", (data: Buffer) => {
-            process.stderr.write(data);
             this.handleLogs(data);
         });
 
