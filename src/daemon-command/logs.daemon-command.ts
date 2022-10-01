@@ -4,19 +4,18 @@ import { Daemon } from "../commands/start-daemon.command";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export function logsDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): void {
-    const { logSockets } = daemon;
     const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
 
     for (const script of scriptsToProcess) {
-        for (const line of daemon.logBuffer[script.name]) {
+        for (const line of script.logBuffer) {
             socket.write(`${script.name}: ${line}\n`);
         }
 
-        logSockets.push({ socket, name: script.name });
+        script.logSockets.push(socket);
         socket.on("close", () => {
-            const index = logSockets.findIndex((i) => i.socket == socket);
+            const index = script.logSockets.findIndex((i) => i == socket);
             if (index !== -1) {
-                logSockets.splice(index, 1);
+                script.logSockets.splice(index, 1);
             }
         });
     }

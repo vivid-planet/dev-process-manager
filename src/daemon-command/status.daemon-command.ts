@@ -6,15 +6,13 @@ import { Daemon } from "../commands/start-daemon.command";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export function statusDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): void {
-    const { processes } = daemon;
     const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
 
     const response = scriptsToProcess.map((script) => {
-        const process = processes[script.name];
         return {
             name: script.name,
-            running: process ? !process.killed : false,
-            pid: process && !process.killed ? process.pid : undefined,
+            running: script.process ? !script.process.killed : false,
+            pid: script.process && !script.process.killed ? script.process.pid : undefined,
         };
     });
 
