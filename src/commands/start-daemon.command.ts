@@ -41,21 +41,21 @@ export const startDaemon = async (): Promise<void> => {
         s.on("data", async (command) => {
             const cmd = command.toString();
 
-            if (cmd == "logs" || cmd.startsWith("logs ")) {
-                const scriptName = cmd != "logs" ? cmd.substring(5) : null; // null means all
-                logsDaemonCommand(daemon, s, scriptName);
-            } else if (cmd == "restart" || cmd.startsWith("restart ")) {
-                const scriptName = cmd != "restart" ? cmd.substring(8) : null; // null means all
-                restartDaemonCommand(daemon, s, scriptName);
-            } else if (cmd == "stop" || cmd.startsWith("stop ")) {
-                const scriptName = cmd != "stop" ? cmd.substring(5) : null; // null means all
-                stopDaemonCommand(daemon, s, scriptName);
-            } else if (cmd == "start" || cmd.startsWith("start ")) {
-                const scriptName = cmd != "start" ? cmd.substring(6) : null; // null means all
-                startDaemonCommand(daemon, s, scriptName);
-            } else if (cmd == "status" || cmd.startsWith("status ")) {
-                const scriptName = cmd != "status" ? cmd.substring(7) : null; // null means all
-                statusDaemonCommand(daemon, s, scriptName);
+            if (cmd.startsWith("logs ")) {
+                const names = JSON.parse(cmd.substring(5));
+                logsDaemonCommand(daemon, s, names);
+            } else if (cmd.startsWith("restart ")) {
+                const names = JSON.parse(cmd.substring(8));
+                restartDaemonCommand(daemon, s, names);
+            } else if (cmd.startsWith("stop ")) {
+                const names = JSON.parse(cmd.substring(5));
+                stopDaemonCommand(daemon, s, names);
+            } else if (cmd.startsWith("start ")) {
+                const names = JSON.parse(cmd.substring(6));
+                startDaemonCommand(daemon, s, names);
+            } else if (cmd.startsWith("status ")) {
+                const names = JSON.parse(cmd.substring(7));
+                statusDaemonCommand(daemon, s, names);
             } else if (cmd == "shutdown") {
                 shutdownDaemonCommand(daemon, s);
             } else {

@@ -21,7 +21,7 @@ module.exports = {
         {
              name: "api",
              script: "npm run start",
-             group: ["foo", "bar"], //to access a group of scripts in all commands
+             group: ["foo", "bar"], //to access a group of scripts in all commands using @groupname
              waitOn: [
                 "packages/foo/lib/index.d.ts", //wait until package is built
                 "tcp:5432"  //wait until database is started (tcp:$POSTGRESQL_PORT is also supported)
@@ -37,10 +37,10 @@ module.exports = {
 
 ### Start
 
-Start one or all processes. The script-name argument can also be "all" or a group.
+Start one or all processes. The script-name argument can also be multiple names, "all" or a @group.
 
 ```console
-$ npx dev-process-manager start [script-name]
+$ npx dev-process-manager start [script-name or @group]
 ```
 
 ### Stop
@@ -48,7 +48,7 @@ $ npx dev-process-manager start [script-name]
 Stop running processes
 
 ```console
-$ npx dev-process-manager stop [script-name]
+$ npx dev-process-manager stop [script-name or @group]
 ```
 
 ### Restart
@@ -56,7 +56,7 @@ $ npx dev-process-manager stop [script-name]
 Restart a previously started processes
 
 ```console
-$ npx dev-process-manager restart [script-name]
+$ npx dev-process-manager restart [script-name or @group]
 ```
 
 ### Status
@@ -64,7 +64,7 @@ $ npx dev-process-manager restart [script-name]
 Lists running processes
 
 ```console
-$ npx dev-process-manager status [script-name]
+$ npx dev-process-manager status [script-name or @group]
 ```
 
 ### Logs
@@ -72,7 +72,7 @@ $ npx dev-process-manager status [script-name]
 Prints logs of either a specific process or all running processes in real time.
 
 ```console
-$ npx dev-process-manager logs [script-name]
+$ npx dev-process-manager logs [script-name or @group]
 ```
 
 ### Start Daemon
