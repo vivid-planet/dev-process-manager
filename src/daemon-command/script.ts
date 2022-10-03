@@ -55,11 +55,12 @@ export class Script {
         for (const line of incomingLines) {
             console.log(`${this.name}: ${line}`);
             this.logSockets.forEach((socket) => {
-                socket.write(`${this.name}: ${line}`);
+                socket.write(`${this.name}: ${line}\n`);
             });
         }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);
-        this.logBuffer.splice(0, removeLines > 0 ? removeLines : 0, ...incomingLines);
+        this.logBuffer.splice(0, removeLines > 0 ? removeLines : 0);
+        this.logBuffer.splice(this.logBuffer.length - 1, 0, ...incomingLines);
     }
 
     async startProcess(): Promise<void> {
