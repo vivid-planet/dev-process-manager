@@ -95,7 +95,7 @@ __metadata:
     wait-on: ^6.0.1
     yarn-run-all: ^3.0.0
   bin:
-    dev-process-manager: lib/index.js
+    dev-pm: lib/index.js
   languageName: unknown
   linkType: soft
 
