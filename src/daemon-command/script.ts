@@ -72,9 +72,9 @@ export class Script {
                     resources: this.waitOn,
                     timeout: 1000,
                 });
-                this.handleLogs("[dev-pm] WAIT ON FINISHED WITHIN 200ms");
+                this.handleLogs("[dev-pm] WAIT ON FINISHED WITHIN 1000ms");
             } catch {
-                this.handleLogs("[dev-pm] WAIT ON FAILED WITHIN 200ms");
+                this.handleLogs("[dev-pm] WAIT ON FAILED WITHIN 1000ms");
                 //then without timeout
                 this.handleLogs("[dev-pm] waiting for required resources...");
                 let pending = this.waitOn.length;
