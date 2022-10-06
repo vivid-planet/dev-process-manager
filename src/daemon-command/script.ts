@@ -67,7 +67,7 @@ export class Script {
             this.status = "waiting";
 
             try {
-                //first a silent try for 200ms (to avoid too much console output)
+                //first a silent try (to avoid too much console output)
                 await waitOn({
                     resources: this.waitOn,
                     timeout: 1000,
