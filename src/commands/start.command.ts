@@ -6,27 +6,25 @@ import { createServer, Socket } from "net";
 
 import { ScriptDefinition } from "../script-definition.type";
 
-export const start = async (pmConfigFilePathOverride?: string, options?: { only?: string[] }): Promise<void> => {
+export const start = async (pmConfigFilePathOverride?: string, options?: { only?: string[]; onlyGroup?: string[] }): Promise<void> => {
     const pmConfigFilePath = pmConfigFilePathOverride ? pmConfigFilePathOverride : "dev-pm.config.js";
     const { scripts }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
     const processes: { [key: string]: ChildProcess } = {};
     const logSockets: { socket: Socket; name: string | null }[] = [];
     let shuttingDown = false;
-    let scriptsToStart: ScriptDefinition[] = [];
-
-    if (options?.only && options?.only?.length > 0) {
-        options.only.map((scriptName) => {
-            const foundScript = scripts.find((script) => script.name === scriptName);
-            if (foundScript) {
-                scriptsToStart.push(foundScript);
-            } else {
-                console.error(`${colors.bgRed.bold.black(" dev-pm ")} Script ${scriptName} not found in dev-pm config`);
-                process.exit(1);
-            }
-        });
-    } else {
-        scriptsToStart = scripts;
-    }
+    const scriptsToStart: ScriptDefinition[] = scripts.filter((script) => {
+        if (options?.only && options.only.length > 0) {
+            if (!options.only.includes(script.name)) return false;
+        }
+        if (options?.onlyGroup && options.onlyGroup.length > 0) {
+            const scriptGroups = Array.isArray(script.group) ? script.group : [script.group];
+            return scriptGroups.some((g) => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                return options.onlyGroup!.includes(g);
+            });
+        }
+        return true;
+    });
 
     function startProcess(script: ScriptDefinition): void {
         console.log(`${colors.bgGreen.bold.black(" dev-pm ")} starting: ${script.script}`);
