@@ -1,10 +1,10 @@
-import { ChildProcess } from "child_process";
 import colors from "colors";
 import { existsSync } from "fs";
-import { createServer, Server, Socket } from "net";
+import { createServer, Server } from "net";
 
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command";
 import { restartDaemonCommand } from "../daemon-command/restart.daemon-command";
+import { Script } from "../daemon-command/script";
 import { shutdown } from "../daemon-command/shutdown";
 import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command";
 import { startDaemonCommand } from "../daemon-command/start.deamon-command";
@@ -13,32 +13,19 @@ import { stopDaemonCommand } from "../daemon-command/stop.daemon-command";
 import { ScriptDefinition } from "../script-definition.type";
 
 export interface Daemon {
-    logSockets: { socket: Socket; name: string | null }[];
-    logBuffer: { [key: string]: string[] };
-    scripts: ScriptDefinition[];
-    processes: { [key: string]: ChildProcess };
-    scriptStatus: { [key: string]: "started" | "stopping" | "stopped" };
+    scripts: Script[];
     server?: Server;
 }
 
 export const startDaemon = async (): Promise<void> => {
     const pmConfigFilePath = "dev-pm.config.js";
-    const { scripts }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
-    const scriptStatus = scripts.reduce<Daemon["scriptStatus"]>((acc, script) => {
-        acc[script.name] = "stopped";
-        return acc;
-    }, {});
-    const logBuffer = scripts.reduce<Daemon["logBuffer"]>((acc, script) => {
-        acc[script.name] = [];
-        return acc;
-    }, {});
+    const { scripts: scriptDefinitions }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFilePath}`);
+    const scripts = scriptDefinitions.map((scriptDefinition) => {
+        return new Script(scriptDefinition);
+    });
     const daemon: Daemon = {
-        logSockets: [],
         scripts,
-        processes: {},
-        scriptStatus,
         server: undefined,
-        logBuffer,
     };
 
     if (existsSync("./.pm.sock")) {
