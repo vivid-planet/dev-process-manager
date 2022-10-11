@@ -19,8 +19,13 @@ export async function startDaemonCommand(daemon: Daemon, socket: Socket, options
     });
 
     scriptsToStart.forEach((script) => {
-        socket.write(`starting ${script.name}...\n`);
-        startProcess(daemon, script);
+        const process = daemon.processes[script.name];
+        if (process && !process.killed) {
+            socket.write(`already running: ${script.name}\n`);
+        } else {
+            socket.write(`starting ${script.name}...\n`);
+            startProcess(daemon, script);
+        }
     });
 
     socket.end();

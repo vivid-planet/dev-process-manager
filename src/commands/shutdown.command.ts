@@ -5,4 +5,8 @@ export const shutdown = async (): Promise<void> => {
     client.on("connect", () => {
         client.write("shutdown");
     });
+    client.on("data", (data) => {
+        //TODO handle stderr/stdin and also write on stderr
+        process.stdout.write(data);
+    });
 };

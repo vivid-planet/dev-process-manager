@@ -2,9 +2,8 @@ import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
 import { killProcess } from "./kill-process";
-import { startProcess } from "./start-process";
 
-export async function restartDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string): Promise<void> {
+export async function stopDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string): Promise<void> {
     const { scripts } = daemon;
     const script = scripts.find((i) => i.name == scriptName);
     if (!script) {
@@ -14,11 +13,8 @@ export async function restartDaemonCommand(daemon: Daemon, socket: Socket, scrip
         return;
     }
 
+    daemon.scriptStatus[script.name] = "stopped";
     await killProcess(daemon, socket, scriptName);
-
-    console.log(`starting ${scriptName}`);
-    socket.write(`starting ${scriptName}\n`);
-    startProcess(daemon, script);
 
     socket.end();
 }
