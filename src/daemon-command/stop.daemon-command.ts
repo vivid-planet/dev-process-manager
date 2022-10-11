@@ -2,19 +2,15 @@ import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
 import { killProcess } from "./kill-process";
+import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
-export async function stopDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string): Promise<void> {
-    const { scripts } = daemon;
-    const script = scripts.find((i) => i.name == scriptName);
-    if (!script) {
-        console.log(`unknown script name ${scriptName}`);
-        socket.write(`unknown script name ${scriptName}\n`);
-        socket.end();
-        return;
+export async function stopDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): Promise<void> {
+    const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
+
+    for (const script of scriptsToProcess) {
+        daemon.scriptStatus[script.name] = "stopped";
+        await killProcess(daemon, socket, script.name);
     }
-
-    daemon.scriptStatus[script.name] = "stopped";
-    await killProcess(daemon, socket, scriptName);
 
     socket.end();
 }

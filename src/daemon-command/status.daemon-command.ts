@@ -3,9 +3,13 @@ import colors from "colors";
 import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
+import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
-export function statusDaemonCommand({ processes, scripts }: Daemon, socket: Socket): void {
-    const response = scripts.map((script) => {
+export function statusDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): void {
+    const { processes } = daemon;
+    const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
+
+    const response = scriptsToProcess.map((script) => {
         const process = processes[script.name];
         return {
             name: script.name,

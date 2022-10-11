@@ -1,24 +1,13 @@
 import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
+import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 import { startProcess } from "./start-process";
 
-export async function startDaemonCommand(daemon: Daemon, socket: Socket, options: { only?: string[]; onlyGroup?: string[] }): Promise<void> {
-    const scriptsToStart = daemon.scripts.filter((script) => {
-        if (options?.only && options.only.length > 0) {
-            if (!options.only.includes(script.name)) return false;
-        }
-        if (options?.onlyGroup && options.onlyGroup.length > 0) {
-            const scriptGroups = Array.isArray(script.group) ? script.group : [script.group];
-            return scriptGroups.some((g) => {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return options.onlyGroup!.includes(g);
-            });
-        }
-        return true;
-    });
+export async function startDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): Promise<void> {
+    const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
 
-    scriptsToStart.forEach((script) => {
+    for (const script of scriptsToProcess) {
         const process = daemon.processes[script.name];
         if (process && !process.killed) {
             socket.write(`already running: ${script.name}\n`);
@@ -26,7 +15,7 @@ export async function startDaemonCommand(daemon: Daemon, socket: Socket, options
             socket.write(`starting ${script.name}...\n`);
             startProcess(daemon, script);
         }
-    });
+    }
 
     socket.end();
 }

@@ -8,27 +8,23 @@ import { stop } from "./commands/stop.command";
 
 const program = new Command();
 
-program
-    .command("start")
-    .option("--only <scripts...>", "Only start specified scripts")
-    .option("--onlyGroup <groups...>", "Only start scripts in specified group")
-    .action((options) => {
-        start(options);
-    });
+program.command("start [name]").action((name) => {
+    start(name);
+});
 
 program.command("logs [name]").action((name) => {
     logs(name);
 });
 
-program.command("status").action(() => {
-    status();
+program.command("status [name]").action((name) => {
+    status(name);
 });
 
-program.command("restart <name>").action((name) => {
+program.command("restart [name]").action((name) => {
     restart(name);
 });
 
-program.command("stop <name>").action((name) => {
+program.command("stop [name]").action((name) => {
     stop(name);
 });
 

@@ -11,7 +11,7 @@ $ npm install @comet/dev-process-manager
 ## Usage
 
 Add `dev-pm.config.js` file to the project root.
-This file defines all available processes, which should be started by dev-process-manager.
+This file defines all available scripts, which should be started by dev-process-manager.
 
 ### dev-pm.config.js
 
@@ -21,6 +21,7 @@ module.exports = {
         {
              name: "api",
              script: "npm run start",
+             group: ["foo", "bar"] //optional
         },
         ...
     ],
@@ -31,26 +32,19 @@ module.exports = {
 ## Commands
 
 ### Start
-Either use the package.json script and run `npm run start`
-or start with:
+
+Start one or all processes. The script-name argument can also be "all" or a group.
+
 ```console
-$ npx dev-process-manager start [path-to-dev-pm.config.js]
+$ npx dev-process-manager start [script-name]
 ```
-
-The path to the config file can be specified in an optional parameter. "dev-pm.config.js" in the root directory is used by default.
-
-#### Options
-Only start specified scripts. Accepts one or more script names.
-```console
-$ npx dev-process-manager start --only api admin
-```
-
 
 ### Stop
 
-Stop all running processes
+Stop running processes
+
 ```console
-$ npx dev-process-manager stop
+$ npx dev-process-manager stop [script-name]
 ```
 
 ### Restart
@@ -58,20 +52,37 @@ $ npx dev-process-manager stop
 Restart a previously started processes
 
 ```console
-$ npx dev-process-manager restart <script-name>
+$ npx dev-process-manager restart [script-name]
 ```
 
-
 ### Status
+
 Lists running processes
 
 ```console
-$ npx dev-process-manager status
+$ npx dev-process-manager status [script-name]
 ```
 
 ### Logs
+
 Prints logs of either a specific process or all running processes in real time.
 
 ```console
 $ npx dev-process-manager logs [script-name]
+```
+
+### Start Daemon
+
+Starts the dev-pm daemon, usually done automatically by other commands.
+
+```console
+$ npx dev-process-manager start-daemon
+```
+
+### Shutdown
+
+Stop all running processes and shutdown dev-pm
+
+```console
+$ npx dev-process-manager shutdown
 ```
