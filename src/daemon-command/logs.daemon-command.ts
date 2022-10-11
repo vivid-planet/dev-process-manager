@@ -5,6 +5,11 @@ import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export function logsDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): void {
     const scriptsToProcess = scriptsMatchingPattern(daemon, names);
+    if (!scriptsToProcess.length) {
+        socket.write("No matching scripts found in dev-pm config");
+        socket.end();
+        return;
+    }
 
     for (const script of scriptsToProcess) {
         for (const line of script.logBuffer) {

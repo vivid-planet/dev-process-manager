@@ -7,6 +7,11 @@ import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export function statusDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): void {
     const scriptsToProcess = scriptsMatchingPattern(daemon, names);
+    if (!scriptsToProcess.length) {
+        socket.write("No matching scripts found in dev-pm config");
+        socket.end();
+        return;
+    }
 
     const table = new CLITable({
         head: [colors.blue.bold("Script"), colors.blue.bold("Status"), colors.bold.blue("PID")],
