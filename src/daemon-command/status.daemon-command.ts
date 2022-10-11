@@ -5,8 +5,8 @@ import { Socket } from "net";
 import { Daemon } from "../commands/start-daemon.command";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
-export function statusDaemonCommand(daemon: Daemon, socket: Socket, scriptName: string | null /* null means all */): void {
-    const scriptsToProcess = scriptsMatchingPattern(daemon, scriptName);
+export function statusDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): void {
+    const scriptsToProcess = scriptsMatchingPattern(daemon, names);
 
     const table = new CLITable({
         head: [colors.blue.bold("Script"), colors.blue.bold("Status"), colors.bold.blue("PID")],

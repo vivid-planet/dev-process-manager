@@ -8,24 +8,24 @@ import { stop } from "./commands/stop.command";
 
 const program = new Command();
 
-program.command("start [name]").action((name) => {
-    start(name);
+program.command("start [name...]").action((names) => {
+    start(names);
 });
 
-program.command("logs [name]").action((name) => {
-    logs(name);
+program.command("logs [name...]").action((names) => {
+    logs(names);
 });
 
-program.command("status [name]").action((name) => {
-    status(name);
+program.command("status [name...]").action((names) => {
+    status(names);
 });
 
-program.command("restart [name]").action((name) => {
-    restart(name);
+program.command("restart [name...]").action((names) => {
+    restart(names);
 });
 
-program.command("stop [name]").action((name) => {
-    stop(name);
+program.command("stop [name...]").action((names) => {
+    stop(names);
 });
 
 program.command("shutdown").action(() => {
