@@ -1,5 +1,6 @@
 import colors from "colors";
-import { Daemon } from "src/commands/start.command";
+
+import { Daemon } from "../commands/start-daemon.command";
 
 export const shutdown = async (daemon: Daemon): Promise<void> => {
     console.log(`${colors.bgGreen.bold.black(" dev-pm ")} shutting down`);

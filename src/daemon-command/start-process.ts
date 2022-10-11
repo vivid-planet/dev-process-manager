@@ -1,7 +1,8 @@
 import { execSync, spawn } from "child_process";
 import colors from "colors";
-import { Daemon } from "src/commands/start.command";
-import { ScriptDefinition } from "src/script-definition.type";
+
+import { Daemon } from "../commands/start-daemon.command";
+import { ScriptDefinition } from "../script-definition.type";
 
 export function startProcess(daemon: Daemon, script: ScriptDefinition): void {
     const { logSockets, processes } = daemon;
