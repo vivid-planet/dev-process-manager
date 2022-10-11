@@ -40,7 +40,7 @@ module.exports = {
 Start one or all processes. The script-name argument can also be multiple names, "all" or a @group.
 
 ```console
-$ npx dev-process-manager start [script-name or @group]
+$ npx dev-pm start [script-name or @group]
 ```
 
 ### Stop
@@ -48,7 +48,7 @@ $ npx dev-process-manager start [script-name or @group]
 Stop running processes
 
 ```console
-$ npx dev-process-manager stop [script-name or @group]
+$ npx dev-pm stop [script-name or @group]
 ```
 
 ### Restart
@@ -56,7 +56,7 @@ $ npx dev-process-manager stop [script-name or @group]
 Restart a previously started processes
 
 ```console
-$ npx dev-process-manager restart [script-name or @group]
+$ npx dev-pm restart [script-name or @group]
 ```
 
 ### Status
@@ -64,7 +64,7 @@ $ npx dev-process-manager restart [script-name or @group]
 Lists running processes
 
 ```console
-$ npx dev-process-manager status [script-name or @group]
+$ npx dev-pm status [script-name or @group]
 ```
 
 ### Logs
@@ -72,7 +72,7 @@ $ npx dev-process-manager status [script-name or @group]
 Prints logs of either a specific process or all running processes in real time.
 
 ```console
-$ npx dev-process-manager logs [script-name or @group]
+$ npx dev-pm logs [script-name or @group]
 ```
 
 ### Start Daemon
@@ -80,7 +80,7 @@ $ npx dev-process-manager logs [script-name or @group]
 Starts the dev-pm daemon, usually done automatically by other commands.
 
 ```console
-$ npx dev-process-manager start-daemon
+$ npx dev-pm start-daemon
 ```
 
 ### Shutdown
@@ -88,5 +88,5 @@ $ npx dev-process-manager start-daemon
 Stop all running processes and shutdown dev-pm
 
 ```console
-$ npx dev-process-manager shutdown
+$ npx dev-pm shutdown
 ```

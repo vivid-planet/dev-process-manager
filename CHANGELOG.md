@@ -7,6 +7,7 @@
 -   start is not blocking anymore (a start-daemon command is now the long running proccess)
 -   pm config file isn't configurable anymore
 -   waitOn support directly in script definition
+-   renamed binary to dev-pm
 
 # 1.0.0
 
