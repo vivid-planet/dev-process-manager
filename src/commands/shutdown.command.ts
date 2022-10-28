@@ -1,12 +1,6 @@
-import { createConnection } from "net";
+import { connect } from "./connect";
 
 export const shutdown = async (): Promise<void> => {
-    const client = createConnection(".pm.sock");
-    client.on("connect", () => {
-        client.write("shutdown");
-    });
-    client.on("data", (data) => {
-        //TODO handle stderr/stdin and also write on stderr
-        process.stdout.write(data);
-    });
+    const client = await connect();
+    client.write("shutdown");
 };
