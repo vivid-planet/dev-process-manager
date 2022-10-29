@@ -19,7 +19,7 @@ export class Script {
         this.scriptDefinition = scriptDefinition;
         const availableColors = [colors.red, colors.green, colors.yellow, colors.blue, colors.magenta, colors.cyan, colors.white, colors.grey];
         const color = availableColors[Math.floor(Math.random() * availableColors.length)];
-        this.logPrefix = color(this.name + ": ");
+        this.logPrefix = color(`${this.name}: `);
     }
 
     get name(): string {
