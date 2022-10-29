@@ -8,6 +8,7 @@
 -   pm config file isn't configurable anymore
 -   waitOn support directly in script definition
 -   renamed binary to dev-pm
+-   add cpu/memory usage to status output
 
 # 1.0.0
 
