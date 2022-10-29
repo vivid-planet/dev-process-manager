@@ -8,9 +8,12 @@ import { stop } from "./commands/stop.command";
 
 const program = new Command();
 
-program.command("start [name...]").action((names) => {
-    start(names);
-});
+program
+    .command("start [name...]")
+    .option("--follow", "Follow logs after starting script")
+    .action((names, options) => {
+        start({ names, follow: !!options.follow });
+    });
 
 program.command("logs [name...]").action((names) => {
     logs(names);
@@ -20,9 +23,12 @@ program.command("status [name...]").action((names) => {
     status(names);
 });
 
-program.command("restart [name...]").action((names) => {
-    restart(names);
-});
+program
+    .command("restart [name...]")
+    .option("--follow", "Follow logs after starting script")
+    .action((names, options) => {
+        restart({ names, follow: !!options.follow });
+    });
 
 program.command("stop [name...]").action((names) => {
     stop(names);

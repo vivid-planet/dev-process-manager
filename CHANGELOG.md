@@ -8,6 +8,7 @@
 -   pm config file isn't configurable anymore
 -   waitOn support directly in script definition
 -   renamed binary to dev-pm
+-   added --follow option to start/restart command to follow logs after start
 
 # 1.0.0
 

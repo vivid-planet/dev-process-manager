@@ -49,6 +49,16 @@ export class Script {
         }
     }
 
+    addLogSocket(socket: Socket): void {
+        this.logSockets.push(socket);
+        socket.on("close", () => {
+            const index = this.logSockets.findIndex((i) => i == socket);
+            if (index !== -1) {
+                this.logSockets.splice(index, 1);
+            }
+        });
+    }
+
     handleLogs(data: Buffer | string): void {
         const incomingLines = data.toString().split("\n");
         if (incomingLines[incomingLines.length - 1] == "") incomingLines.splice(incomingLines.length - 1, 1);
