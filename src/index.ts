@@ -16,9 +16,12 @@ program.command("logs [name...]").action((names) => {
     logs(names);
 });
 
-program.command("status [name...]").action((names) => {
-    status(names);
-});
+program
+    .command("status [name...]")
+    .option("--refresh", "Keep status open and refresh periodically")
+    .action((names, options) => {
+        status({ names, refresh: !!options.refresh });
+    });
 
 program.command("restart [name...]").action((names) => {
     restart(names);

@@ -64,8 +64,11 @@ $ npx dev-pm restart [script-name or @group]
 Lists running processes
 
 ```console
-$ npx dev-pm status [script-name or @group]
+$ npx dev-pm status [options] [script-name or @group]
 ```
+
+Options:
+`--refresh` Keep status open and refresh periodically
 
 ### Logs
 
