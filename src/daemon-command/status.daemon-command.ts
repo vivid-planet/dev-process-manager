@@ -10,7 +10,7 @@ import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export interface StatusCommandOptions {
     names: string[];
-    refresh: boolean;
+    interval: number | undefined;
 }
 
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
@@ -20,6 +20,16 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
         socket.end();
         return;
     }
+
+    //log-update reads rows/columns from terminal, but in our case it's a socket that doesn't contain those
+    //inject a high enough number so will refresh more rows and don't wrap too early
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    socket.rows = 1000;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    socket.columns = 200;
+
     const logUpdate = createLogUpdate(socket);
 
     do {
@@ -35,15 +45,17 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
             let memory = "";
             if (pid) {
                 const stats = await pidusage(pid);
-                cpu = `${stats.cpu}%`;
+                cpu = `${Math.round(stats.cpu)}%`;
                 memory = prettyBytes(stats.memory);
             }
             table.push([script.name, status, cpu, memory, pid?.toString()]);
         }
 
         logUpdate(table.toString());
-        await delay(1000);
-    } while (options.refresh);
+        if (options.interval) {
+            await delay(options.interval * 1000);
+        }
+    } while (options.interval);
 
     socket.end();
 }

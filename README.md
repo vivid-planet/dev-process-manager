@@ -68,7 +68,7 @@ $ npx dev-pm status [options] [script-name or @group]
 ```
 
 Options:
-`--refresh` Keep status open and refresh periodically
+`--interval [seconds]` Keep status open and refresh periodically at specified interval
 
 ### Logs
 

@@ -9,7 +9,7 @@
 -   waitOn support directly in script definition
 -   renamed binary to dev-pm
 -   add cpu/memory usage to status output
--   add --refresh option to status output to keep status open and refresh periodically
+-   add --interval option to status output to keep status open and optionally refresh periodically
 
 # 1.0.0
 
