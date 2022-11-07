@@ -9,6 +9,7 @@
 -   waitOn support directly in script definition
 -   renamed binary to dev-pm
 -   added --follow option to start/restart command to follow logs after start
+-   add cpu/memory usage to status output
 
 # 1.0.0
 
