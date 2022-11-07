@@ -40,8 +40,11 @@ module.exports = {
 Start one or all processes. The script-name argument can also be multiple names, "all" or a @group.
 
 ```console
-$ npx dev-pm start [script-name or @group]
+$ npx dev-pm start [options] [script-name or @group]
 ```
+
+Options:
+`--follow` Follow logs after starting script (script will not be stopped when stopping this process)
 
 ### Stop
 
@@ -56,8 +59,11 @@ $ npx dev-pm stop [script-name or @group]
 Restart a previously started processes
 
 ```console
-$ npx dev-pm restart [script-name or @group]
+$ npx dev-pm restart [options] [script-name or @group]
 ```
+
+Options:
+`--follow` Follow logs after starting script (script will not be stopped when stopping this process)
 
 ### Status
 

@@ -1,16 +1,7 @@
-import { createConnection } from "net";
+import { RestartCommandOptions } from "../daemon-command/restart.daemon-command";
+import { connect } from "./connect";
 
-import { autoStartDaemon } from "./auto-start-deamon";
-
-export const restart = async (names: string[]): Promise<void> => {
-    await autoStartDaemon();
-
-    const client = createConnection(".pm.sock");
-    client.on("connect", () => {
-        client.write(`restart ${JSON.stringify(names)}`);
-    });
-    client.on("data", (data) => {
-        //TODO handle stderr/stdin and also write on stderr
-        process.stdout.write(data);
-    });
+export const restart = async (options: RestartCommandOptions): Promise<void> => {
+    const client = await connect();
+    client.write(`restart ${JSON.stringify(options)}`);
 };
