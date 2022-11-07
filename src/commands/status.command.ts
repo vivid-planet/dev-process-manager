@@ -1,16 +1,7 @@
-import { createConnection } from "net";
-
 import { StatusCommandOptions } from "../daemon-command/status.daemon-command";
-import { autoStartDaemon } from "./auto-start-deamon";
+import { connect } from "./connect";
 
-export const status = async (options: StatusCommandOptions): Promise<void> => {
-    await autoStartDaemon();
-
-    const client = createConnection(".pm.sock");
-    client.on("connect", () => {
-        client.write(`status ${JSON.stringify(options)}`);
-    });
-    client.on("data", (data) => {
-        process.stdout.write(data);
-    });
+export const status = async (names: string[]): Promise<void> => {
+    const client = await connect();
+    client.write(`status ${JSON.stringify(options)}`);
 };

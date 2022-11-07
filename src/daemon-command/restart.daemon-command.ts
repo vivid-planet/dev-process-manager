@@ -3,8 +3,12 @@ import { Socket } from "net";
 import { Daemon } from "../commands/start-daemon.command";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
-export async function restartDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): Promise<void> {
-    const scriptsToProcess = scriptsMatchingPattern(daemon, names);
+export interface RestartCommandOptions {
+    names: string[];
+    follow: boolean;
+}
+export async function restartDaemonCommand(daemon: Daemon, socket: Socket, options: RestartCommandOptions): Promise<void> {
+    const scriptsToProcess = scriptsMatchingPattern(daemon, options.names);
     if (!scriptsToProcess.length) {
         socket.write("No matching scripts found in dev-pm config");
         socket.end();
@@ -17,8 +21,14 @@ export async function restartDaemonCommand(daemon: Daemon, socket: Socket, names
 
         console.log(`starting ${script.name}`);
         socket.write(`starting ${script.name}\n`);
-        script.startProcess();
+        script.startProcess(); //don't await
+
+        if (options.follow) {
+            script.addLogSocket(socket);
+        }
     }
 
-    socket.end();
+    if (!options.follow) {
+        socket.end();
+    }
 }

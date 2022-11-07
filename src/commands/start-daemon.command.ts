@@ -59,11 +59,12 @@ export const startDaemon = async (): Promise<void> => {
             } else if (cmd == "shutdown") {
                 shutdownDaemonCommand(daemon, s);
             } else {
-                console.log(`${colors.bgYellow.bold.black(" dev-pm ")} unknown command ${cmd}`);
+                s.write(`unknown command ${cmd}`);
+                s.end();
             }
         });
     });
-    console.log(`${colors.bgYellow.bold.black(" dev-pm ")} daemon started, listening for connections in .pm.sock`);
+    console.log(`daemon started, listening for connections in .pm.sock`);
 
     process.on("SIGINT", function () {
         shutdown(daemon);

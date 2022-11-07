@@ -13,9 +13,13 @@ export class Script {
     process?: ChildProcess;
     logBuffer: string[] = [];
     logSockets: Socket[] = [];
+    logPrefix: string;
 
     constructor(scriptDefinition: ScriptDefinition) {
         this.scriptDefinition = scriptDefinition;
+        const availableColors = [colors.red, colors.green, colors.yellow, colors.blue, colors.magenta, colors.cyan, colors.white, colors.grey];
+        const color = availableColors[Math.floor(Math.random() * availableColors.length)];
+        this.logPrefix = color(`${this.name}: `);
     }
 
     get name(): string {
@@ -49,13 +53,23 @@ export class Script {
         }
     }
 
+    addLogSocket(socket: Socket): void {
+        this.logSockets.push(socket);
+        socket.on("close", () => {
+            const index = this.logSockets.findIndex((i) => i == socket);
+            if (index !== -1) {
+                this.logSockets.splice(index, 1);
+            }
+        });
+    }
+
     handleLogs(data: Buffer | string): void {
         const incomingLines = data.toString().split("\n");
         if (incomingLines[incomingLines.length - 1] == "") incomingLines.splice(incomingLines.length - 1, 1);
         for (const line of incomingLines) {
-            console.log(`${this.name}: ${line}`);
+            console.log(`${this.logPrefix}${line}`);
             this.logSockets.forEach((socket) => {
-                socket.write(`${this.name}: ${line}\n`);
+                socket.write(`${this.logPrefix}${line}\n`);
             });
         }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);
@@ -73,9 +87,7 @@ export class Script {
                     resources: this.waitOn,
                     timeout: 1000,
                 });
-                this.handleLogs("[dev-pm] WAIT ON FINISHED WITHIN 1000ms");
             } catch {
-                this.handleLogs("[dev-pm] WAIT ON FAILED WITHIN 1000ms");
                 //then without timeout
                 this.handleLogs("[dev-pm] waiting for required resources...");
                 let pending = this.waitOn.length;
@@ -114,17 +126,17 @@ export class Script {
 
         p.on("close", () => {
             if (this.status == "started") {
-                console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${this.name}, restarting...`);
+                this.handleLogs(`[dev-pm] process stopped, restarting...`);
                 this.startProcess();
             } else {
-                console.log(`${colors.bgRed.bold.black(" dev-pm ")} process stopped ${this.name}`);
+                this.handleLogs(`[dev-pm] process stopped`);
                 this.status = "stopped";
             }
         });
         p.on("error", (err) => {
             // TODO handle
             console.error(err);
-            console.log(`${colors.bgRed.bold.black(" dev-pm ")} Failed starting process  ${this.name}`);
+            this.handleLogs(`[dev-pm] Failed starting process`);
         });
     }
 }
