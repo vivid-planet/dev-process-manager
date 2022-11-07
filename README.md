@@ -70,8 +70,11 @@ Options:
 Lists running processes
 
 ```console
-$ npx dev-pm status [script-name or @group]
+$ npx dev-pm status [options] [script-name or @group]
 ```
+
+Options:
+`--interval [seconds]` Keep status open and refresh periodically at specified interval
 
 ### Logs
 
