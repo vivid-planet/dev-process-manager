@@ -17,8 +17,9 @@ export interface StatusCommandOptions {
 const statusTexts: { [status in ScriptStatus]: string } = {
     started: colors.green("Started"),
     stopping: colors.red("stopping"),
-    stopped: colors.red("Stopped"),
+    stopped: "Stopped",
     waiting: colors.yellow("Waiting"),
+    backoff: colors.red("Backoff"),
 };
 
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {

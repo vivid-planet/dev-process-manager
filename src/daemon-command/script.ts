@@ -6,7 +6,7 @@ import waitOn from "wait-on";
 import { ScriptDefinition } from "../script-definition.type";
 
 const KEEP_LOG_LINES = 100;
-export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting";
+export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
 
 export class Script {
     scriptDefinition: ScriptDefinition;
@@ -45,7 +45,7 @@ export class Script {
     async killProcess(socket?: Socket): Promise<void> {
         if (this.status == "stopped" || this.status == "stopping") {
             // already stopped or stopping
-        } else if (this.status == "waiting") {
+        } else if (this.status == "waiting" || this.status == "backoff") {
             this.status = "stopped";
         } else if (this.status == "started") {
             if (this.process && this.process.pid) {
@@ -138,11 +138,17 @@ export class Script {
             this.handleLogs(data);
         });
 
-        p.on("close", () => {
+        p.on("close", async () => {
             if (this.status == "started") {
-                this.handleLogs(`[dev-pm] process stopped, restarting...`);
+                this.handleLogs(`[dev-pm] process crashed, restarting...`);
                 this.restartCount++;
-                this.startProcess();
+                this.status = "backoff";
+                const waitTime = Math.pow(1.3, this.restartCount);
+                this.handleLogs(`[dev-pm] waiting ${Math.round(waitTime)}s between restarts`);
+                await new Promise((r) => setTimeout(r, waitTime * 1000));
+                if (this.status == "backoff") {
+                    this.startProcess();
+                }
             } else {
                 this.handleLogs(`[dev-pm] process stopped`);
                 this.status = "stopped";
