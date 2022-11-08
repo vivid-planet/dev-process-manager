@@ -8,8 +8,7 @@ export const shutdown = async (daemon: Daemon, socket?: Socket): Promise<void> =
 
     await Promise.all(
         daemon.scripts.map((script) => {
-            script.status = "stopped";
-            script.killProcess(socket);
+            return script.killProcess(socket);
         }),
     );
 

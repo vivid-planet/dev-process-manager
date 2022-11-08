@@ -16,7 +16,6 @@ export async function restartDaemonCommand(daemon: Daemon, socket: Socket, optio
     }
 
     for (const script of scriptsToProcess) {
-        script.status = "stopping";
         await script.killProcess(socket);
 
         console.log(`starting ${script.name}`);

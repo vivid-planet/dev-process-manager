@@ -11,10 +11,11 @@ export async function stopDaemonCommand(daemon: Daemon, socket: Socket, names: s
         return;
     }
 
-    for (const script of scriptsToProcess) {
-        script.status = "stopped";
-        await script.killProcess(socket);
-    }
+    await Promise.all(
+        scriptsToProcess.map((script) => {
+            return script.killProcess(socket);
+        }),
+    );
 
     socket.end();
 }
