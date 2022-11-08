@@ -1,6 +1,6 @@
 import { createConnection, Socket } from "net";
 
-import { autoStartDaemon } from "./auto-start-deamon";
+import { autoStartDaemon } from "./auto-start-daemon";
 
 export async function connect(): Promise<Socket> {
     await autoStartDaemon();
