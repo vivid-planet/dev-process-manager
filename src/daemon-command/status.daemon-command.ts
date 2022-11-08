@@ -42,7 +42,14 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
 
     do {
         const table = new CLITable({
-            head: [colors.blue.bold("Script"), colors.blue.bold("Status"), colors.blue.bold("CPU"), colors.blue.bold("Mem"), colors.bold.blue("PID")],
+            head: [
+                colors.blue.bold("Script"),
+                colors.blue.bold("Status"),
+                colors.blue.bold("CPU"),
+                colors.blue.bold("Mem"),
+                colors.bold.blue("PID"),
+                colors.bold.blue("Restarts"),
+            ],
             style: { compact: true },
         });
         for (const script of scriptsToProcess) {
@@ -65,7 +72,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
                     //
                 }
             }
-            table.push([script.name, status, cpu, memory, pid?.toString()]);
+            table.push([script.name, status, cpu, memory, pid?.toString(), script.restartCount]);
         }
 
         logUpdate(table.toString());
