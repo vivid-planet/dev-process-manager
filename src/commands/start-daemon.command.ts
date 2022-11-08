@@ -7,7 +7,7 @@ import { restartDaemonCommand } from "../daemon-command/restart.daemon-command";
 import { Script } from "../daemon-command/script";
 import { shutdown } from "../daemon-command/shutdown";
 import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command";
-import { startDaemonCommand } from "../daemon-command/start.deamon-command";
+import { startDaemonCommand } from "../daemon-command/start.daemon-command";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command";
 import { ScriptDefinition } from "../script-definition.type";
