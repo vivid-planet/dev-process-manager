@@ -6,10 +6,11 @@ import waitOn from "wait-on";
 import { ScriptDefinition } from "../script-definition.type";
 
 const KEEP_LOG_LINES = 100;
+export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting";
 
 export class Script {
     scriptDefinition: ScriptDefinition;
-    status: "started" | "stopping" | "stopped" | "waiting" = "stopped";
+    status: ScriptStatus = "stopped";
     process?: ChildProcess;
     logBuffer: string[] = [];
     logSockets: Socket[] = [];
@@ -41,14 +42,26 @@ export class Script {
     }
 
     async killProcess(socket?: Socket): Promise<void> {
-        if (this.process && !this.process.killed) {
-            console.log(`killing ${this.name}`);
-            socket?.write(`killing ${this.name}\n`);
-            process.kill(-this.process.pid);
-            while (this.status != "stopped") {
-                console.log(`waiting for killed`);
-                socket?.write(`waiting for killed\n`);
+        if (this.status == "stopped" || this.status == "stopping") {
+            // already stopped or stopping
+        } else if (this.status == "waiting") {
+            this.status = "stopped";
+        } else if (this.status == "started") {
+            if (this.process && this.process.pid) {
+                this.status = "stopping";
+                console.log(`killing ${this.name}`);
+                socket?.write(`killing ${this.name}\n`);
+                process.kill(-this.process.pid);
                 await new Promise((r) => setTimeout(r, 100));
+
+                // this ts-ignore is required because ts thinks we can't do this.status != "stopped" when we set it to stopping in the same function. But this is async so it will happen.
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                while (this.status != "stopped") {
+                    console.log(`waiting for  ${this.name} killed`);
+                    socket?.write(`waiting for ${this.name} killed\n`);
+                    await new Promise((r) => setTimeout(r, 500));
+                }
             }
         }
     }

@@ -6,12 +6,20 @@ import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
 import { Daemon } from "../commands/start-daemon.command";
+import { ScriptStatus } from "./script";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export interface StatusCommandOptions {
     names: string[];
     interval: number | undefined;
 }
+
+const statusTexts: { [status in ScriptStatus]: string } = {
+    started: colors.green("Started"),
+    stopping: colors.red("stopping"),
+    stopped: colors.red("Stopped"),
+    waiting: colors.yellow("Waiting"),
+};
 
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, options.names);
@@ -38,15 +46,24 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
             style: { compact: true },
         });
         for (const script of scriptsToProcess) {
-            const running = script.process ? !script.process.killed : false;
-            const status = script.status === "waiting" ? colors.yellow("Waiting") : running ? colors.green("Running") : colors.red("Stopped");
-            const pid = script.process && !script.process.killed ? script.process.pid : undefined;
+            const pid = script.process?.pid;
+            let status = statusTexts[script.status];
+            if (script.status == "started") {
+                if (pid) {
+                    status = colors.green("Running");
+                }
+            }
+
             let cpu = "";
             let memory = "";
-            if (pid) {
-                const stats = await pidusage(pid);
-                cpu = `${Math.round(stats.cpu)}%`;
-                memory = prettyBytes(stats.memory);
+            if (pid && script.status == "started") {
+                try {
+                    const stats = await pidusage(pid);
+                    cpu = `${Math.round(stats.cpu)}%`;
+                    memory = prettyBytes(stats.memory);
+                } catch {
+                    //
+                }
             }
             table.push([script.name, status, cpu, memory, pid?.toString()]);
         }
