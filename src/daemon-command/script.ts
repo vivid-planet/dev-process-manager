@@ -15,6 +15,7 @@ export class Script {
     logBuffer: string[] = [];
     logSockets: Socket[] = [];
     logPrefix: string;
+    restartCount = 0;
 
     constructor(scriptDefinition: ScriptDefinition) {
         this.scriptDefinition = scriptDefinition;
@@ -140,6 +141,7 @@ export class Script {
         p.on("close", () => {
             if (this.status == "started") {
                 this.handleLogs(`[dev-pm] process stopped, restarting...`);
+                this.restartCount++;
                 this.startProcess();
             } else {
                 this.handleLogs(`[dev-pm] process stopped`);
