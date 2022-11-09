@@ -16,8 +16,10 @@ export async function startDaemonCommand(daemon: Daemon, socket: Socket, options
     }
 
     for (const script of scriptsToProcess) {
-        if (script.process && !script.process.killed) {
+        if (script.status == "started") {
             socket.write(`already running: ${script.name}\n`);
+        } else if (script.status == "waiting") {
+            socket.write(`already waiting: ${script.name}\n`);
         } else {
             socket.write(`starting ${script.name}...\n`);
             script.startProcess(); //don't await

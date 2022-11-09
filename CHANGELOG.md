@@ -11,6 +11,7 @@
 -   added --follow option to start/restart command to follow logs after start
 -   add cpu/memory usage to status output
 -   add --interval option to status output to keep status open and optionally refresh periodically
+-   add exponential growing backoff wait time between restarts when a process crashes
 
 # 1.0.0
 
