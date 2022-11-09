@@ -76,6 +76,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
             table.push([script.name, status, cpu, memory, pid?.toString(), script.restartCount]);
         }
 
+        if (socket.destroyed) break;
         logUpdate(table.toString());
         if (options.interval) {
             await delay(options.interval * 1000);
