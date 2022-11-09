@@ -1,3 +1,4 @@
+import colors from "colors";
 import { existsSync } from "fs";
 import { createServer, Server } from "net";
 
@@ -71,5 +72,13 @@ export const startDaemon = async (): Promise<void> => {
 
     process.on("SIGTERM", function () {
         shutdown(daemon);
+    });
+
+    const events = ["rejectionHandled", "uncaughtException", "SIGABRT", "SIGHUP", "SIGPWR", "SIGQUIT"];
+    events.forEach((eventName) => {
+        process.on(eventName, (...args) => {
+            console.log(`${colors.bgRed.bold.black(" dev-pm ")} unhandled error event "${eventName}" was called with args: ${args.join(",")}`);
+            shutdown(daemon);
+        });
     });
 };
