@@ -1,6 +1,7 @@
 import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
+import { handleLogSocketClose } from "./handle-log-socket-close";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export interface StartCommandOptions {
@@ -31,5 +32,9 @@ export async function startDaemonCommand(daemon: Daemon, socket: Socket, options
 
     if (!options.follow) {
         socket.end();
+    } else {
+        socket.on("close", () => {
+            handleLogSocketClose(daemon, socket);
+        });
     }
 }
