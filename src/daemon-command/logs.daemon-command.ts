@@ -1,6 +1,7 @@
 import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
+import { handleLogSocketClose } from "./handle-log-socket-close";
 import { scriptsMatchingPattern } from "./scripts-matching-pattern";
 
 export function logsDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): void {
@@ -15,7 +16,10 @@ export function logsDaemonCommand(daemon: Daemon, socket: Socket, names: string[
         for (const line of script.logBuffer) {
             socket.write(`${script.logPrefix}${line}\n`);
         }
-
         script.addLogSocket(socket);
     }
+
+    socket.on("close", () => {
+        handleLogSocketClose(daemon, socket);
+    });
 }
