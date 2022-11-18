@@ -82,7 +82,7 @@ export class Script {
         }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);
         this.logBuffer.splice(0, removeLines > 0 ? removeLines : 0);
-        this.logBuffer.splice(this.logBuffer.length - 1, 0, ...incomingLines);
+        this.logBuffer.splice(this.logBuffer.length, 0, ...incomingLines);
     }
 
     async startProcess(): Promise<void> {
