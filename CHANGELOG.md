@@ -4,8 +4,6 @@
 
 _TBD_
 
-This release marks a complete rewrite of the dev-process-manager.
-
 ### Highlights
 
 -   Daemonization of the dev-process-manager
