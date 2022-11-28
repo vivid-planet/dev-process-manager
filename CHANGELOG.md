@@ -2,7 +2,7 @@
 
 ## 2.0.0
 
-_TBD_
+_Nov 28, 2022_
 
 ### Highlights
 
