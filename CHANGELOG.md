@@ -1,18 +1,33 @@
-# [Next]
+# Changelog
 
-## Highlights
+## 2.0.0
 
--   start command gets more flexible by allowing to start only individual scripts.
--   stop command added that allows stopping individual processes
--   start is not blocking anymore (a start-daemon command is now the long running proccess)
--   pm config file isn't configurable anymore
--   waitOn support directly in script definition
--   renamed binary to dev-pm
--   added --follow option to start/restart command to follow logs after start
--   add cpu/memory usage to status output
--   add --interval option to status output to keep status open and optionally refresh periodically
--   add exponential growing backoff wait time between restarts when a process crashes
+_TBD_
 
-# 1.0.0
+### Highlights
+
+-   Daemonization of the dev-process-manager
+-   Support for process groups
+-   Starting of individual processes with `dev-pm start (name|@group)`
+-   `waitOn` support to wait for conditions before starting
+
+### Breaking changes
+
+-   Rename binary to `dev-pm`
+-   Remove support to pass config file via CLI argument
+
+### Changes
+
+-   Make `dev-pm start` more flexible by allowing to start individual processes using `dev-pm start (name|@group)`
+-   Add `dev-pm stop (name|@group)` command to stop process
+-   `dev-pm start` does not block anymore thanks to daemonization
+-   Add `--follow` option to `dev-pm (start|restart)` commands to follow logs after start
+-   Add CPU/memory usage to `dev-pm status` output
+-   Add `--interval` option to `dev-pm status` to keep it open and optionally refresh periodically
+-   Add exponential growing backoff wait time between restarts when a process crashes
+
+## 1.0.0
+
+_May 25, 2022_
 
 Initial release
