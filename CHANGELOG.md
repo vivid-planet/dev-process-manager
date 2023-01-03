@@ -1,5 +1,11 @@
 # Changelog
 
+## [NEXT]
+
+### Changes
+
+-   support running dev-pm in any subfolder by looking for dev-pm.config.js in parent folders
+
 ## 2.0.0
 
 _Nov 28, 2022_
