@@ -1,5 +1,11 @@
 # Changelog
 
+## Next
+
+### Changes
+
+- Fix a bug where docker processes won't stop correctly
+
 ## 2.1.0
 
 _Jan 11, 2023_
