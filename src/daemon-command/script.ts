@@ -52,7 +52,7 @@ export class Script {
                 this.status = "stopping";
                 console.log(`killing ${this.name}`);
                 socket?.write(`killing ${this.name}\n`);
-                process.kill(-this.process.pid);
+                process.kill(-this.process.pid, "SIGINT");
                 await new Promise((r) => setTimeout(r, 100));
 
                 // this ts-ignore is required because ts thinks we can't do this.status != "stopped" when we set it to stopping in the same function. But this is async so it will happen.

@@ -5,6 +5,7 @@
 ### Changes
 
 -   add support for .env files using dotenv and dotenv-expand to allow usage of .env vars in waitOn
+-   Change stop signal from SIGKILL to SIGINT (to fix issues with stopping docker)
 
 ## 2.1.0
 
