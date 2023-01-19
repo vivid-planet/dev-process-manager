@@ -1,5 +1,11 @@
 # Changelog
 
+## Next
+
+### Changes
+
+- Change stop signal from SIGKILL to SIGINT (to fix issues with stopping docker)
+
 ## 2.1.0
 
 _Jan 11, 2023_
