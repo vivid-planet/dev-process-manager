@@ -4,7 +4,7 @@
 
 ### Changes
 
-- Fix a bug where docker processes won't stop correctly
+- Change stop signal from SIGKILL to SIGINT (to fix issues with stopping docker)
 
 ## 2.1.0
 
