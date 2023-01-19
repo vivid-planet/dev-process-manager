@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
 import { Command, Option } from "commander";
+import * as dotenv from "dotenv";
+import * as dotenvExpand from "dotenv-expand";
 
 import { logs, restart, shutdown, start, status } from "./commands";
 import { startDaemon } from "./commands/start-daemon.command";
 import { stop } from "./commands/stop.command";
+
+const env = dotenv.config();
+dotenvExpand.expand(env);
 
 const program = new Command();
 
