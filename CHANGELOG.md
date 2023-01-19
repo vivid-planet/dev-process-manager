@@ -1,5 +1,11 @@
 # Changelog
 
+## Next
+
+### Changes
+
+-   add support for .env files using dotenv and dotenv-expand to allow usage of .env vars in waitOn
+
 ## 2.1.0
 
 _Jan 11, 2023_
