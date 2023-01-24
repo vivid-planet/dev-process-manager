@@ -26,6 +26,7 @@ program.command("logs [name...]").action((names) => {
 
 program
     .command("status [name...]")
+    .aliases(["list", "ls"])
     .addOption(new Option("-i, --interval [seconds]", "Keep status open and refresh periodically at given interval").preset("1"))
     .action((names, options) => {
         status({ names, interval: options.interval ? parseInt(options.interval) : undefined });
@@ -42,9 +43,12 @@ program.command("stop [name...]").action((names) => {
     stop(names);
 });
 
-program.command("shutdown").action(() => {
-    shutdown();
-});
+program
+    .command("shutdown")
+    .alias("del")
+    .action(() => {
+        shutdown();
+    });
 
 program.command("start-daemon").action(() => {
     startDaemon();
