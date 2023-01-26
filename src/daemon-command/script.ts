@@ -137,7 +137,7 @@ export class Script {
                 this.handleLogs(`[dev-pm] process crashed, restarting...`);
                 this.restartCount++;
                 this.status = "backoff";
-                const waitTime = Math.min(Math.pow(1.3, this.restartCount), 120);
+                const waitTime = Math.min(Math.pow(1.3, this.restartCount), 30);
                 this.handleLogs(`[dev-pm] waiting ${Math.round(waitTime)}s between restarts`);
                 await new Promise((r) => setTimeout(r, waitTime * 1000));
                 if (this.status == "backoff") {
