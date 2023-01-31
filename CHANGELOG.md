@@ -7,6 +7,7 @@
 -   add support for .env files using dotenv and dotenv-expand to allow usage of .env vars in waitOn
 -   change stop signal from SIGKILL to SIGINT (to fix issues with stopping docker)
 -   change maximum backoff time from 120s to 30s
+-   less strict engine specification (only require node >= 14)
 
 ## 2.1.0
 
