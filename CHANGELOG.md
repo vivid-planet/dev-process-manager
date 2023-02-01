@@ -1,6 +1,8 @@
 # Changelog
 
-## Next
+## 2.2.0
+
+_TBD_
 
 ### Changes
 
