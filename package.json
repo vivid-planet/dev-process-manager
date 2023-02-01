@@ -56,7 +56,6 @@
         "yarn-run-all": "^3.0.0"
     },
     "engines": {
-        "node": "14",
-        "yarn": "3"
+        "node": ">=14"
     }
 }
