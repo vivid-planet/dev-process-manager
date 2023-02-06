@@ -45,7 +45,7 @@ program.command("stop [name...]").action((names) => {
 
 program
     .command("shutdown")
-    .alias("del")
+    .alias("kill")
     .action(() => {
         shutdown();
     });
