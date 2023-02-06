@@ -1,5 +1,11 @@
 # Changelog
 
+## Next
+
+### Changes
+
+- add shortcuts `list` and `ls` for `status` and `kill` for `shutdown`
+
 ## 2.2.0
 
 _Feb 2, 2023_
