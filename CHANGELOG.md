@@ -1,5 +1,13 @@
 # Changelog
 
+## NEXT
+
+_TBA_
+
+### Changes
+
+-   Fix bug with wrong cwd when (auto-)starting daemon in subfolder
+
 ## 2.2.0
 
 _Feb 2, 2023_
