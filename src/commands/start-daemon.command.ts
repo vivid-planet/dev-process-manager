@@ -19,9 +19,9 @@ export interface Daemon {
 }
 
 export const startDaemon = async (): Promise<void> => {
-    const dir = findConfigDir();
+    process.chdir(findConfigDir());
     const pmConfigFileName = "dev-pm.config.js";
-    const { scripts: scriptDefinitions }: { scripts: ScriptDefinition[] } = await import(`${dir}/${pmConfigFileName}`);
+    const { scripts: scriptDefinitions }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFileName}`);
     const scripts = scriptDefinitions.map((scriptDefinition) => {
         return new Script(scriptDefinition);
     });
@@ -30,7 +30,7 @@ export const startDaemon = async (): Promise<void> => {
         server: undefined,
     };
 
-    if (existsSync(`${findConfigDir()}/.pm.sock`)) {
+    if (existsSync(`.pm.sock`)) {
         console.log(
             "Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.",
         );
@@ -38,7 +38,7 @@ export const startDaemon = async (): Promise<void> => {
     }
 
     daemon.server = createServer();
-    daemon.server.listen(`${findConfigDir()}/.pm.sock`);
+    daemon.server.listen(`.pm.sock`);
     daemon.server.on("connection", (s) => {
         s.on("data", async (command) => {
             const cmd = command.toString();
