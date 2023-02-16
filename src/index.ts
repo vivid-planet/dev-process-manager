@@ -12,6 +12,8 @@ const env = dotenv.config();
 dotenvExpand.expand(env);
 
 const program = new Command();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+program.version(require("../package.json").version);
 
 program
     .command("start [name...]")
