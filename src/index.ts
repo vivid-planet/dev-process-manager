@@ -20,9 +20,12 @@ program
         start({ names, follow: !!options.follow });
     });
 
-program.command("logs [name...]").action((names) => {
-    logs(names);
-});
+program
+    .command("logs [name...]")
+    .aliases(["log"])
+    .action((names) => {
+        logs(names);
+    });
 
 program
     .command("status [name...]")
@@ -45,7 +48,7 @@ program.command("stop [name...]").action((names) => {
 
 program
     .command("shutdown")
-    .alias("kill")
+    .alias("halt")
     .action(() => {
         shutdown();
     });

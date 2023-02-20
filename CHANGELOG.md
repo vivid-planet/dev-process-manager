@@ -4,7 +4,7 @@
 
 ### Changes
 
-- add shortcuts `list` and `ls` for `status` and `kill` for `shutdown`
+-   add shortcuts `list` and `ls` for `status`, `log` for `logs` and `halt` for `shutdown`
 
 ## 2.2.0
 
