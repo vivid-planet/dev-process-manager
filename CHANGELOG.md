@@ -6,6 +6,7 @@ _TBA_
 
 ### Changes
 
+-   add shortcuts `list` and `ls` for `status`, `log` for `logs` and `halt` for `shutdown`
 -   Fix bug with wrong cwd when (auto-)starting daemon in subfolder
 
 ## 2.2.0
