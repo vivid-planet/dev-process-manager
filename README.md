@@ -8,6 +8,12 @@ dev-process-manager is a Node.js process manager for local development environme
 $ npm install @comet/dev-process-manager
 ```
 
+Recommended Alias:
+```console
+alias dpm="npm exec -- dev-pm"
+```
+
+
 ## Usage
 
 Add `dev-pm.config.js` file to the project root.
