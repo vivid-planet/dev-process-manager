@@ -10,7 +10,7 @@ $ npm install @comet/dev-process-manager
 
 Recommended Alias:
 ```console
-alias dpm="npm exec dev-pm"
+alias dpm="npm exec -- dev-pm"
 ```
 
 
