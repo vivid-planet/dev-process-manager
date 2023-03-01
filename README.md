@@ -105,3 +105,11 @@ Stop all running processes and shutdown dev-pm
 ```console
 $ npx dev-pm shutdown
 ```
+
+## Development
+
+Use in existing project with
+
+```
+npx ts-node ~/ws/dev-process-manager/src/index.ts
+```
