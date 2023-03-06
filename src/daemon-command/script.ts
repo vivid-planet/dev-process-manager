@@ -118,7 +118,7 @@ export class Script {
         }
 
         this.handleLogs("[dev-pm] starting process...");
-        const NPM_PATH = execSync("npm bin").toString().trim();
+        const NPM_PATH = `${execSync("npm root").toString().trim()}/.bin`;
         this.status = "started";
         const p = spawn("bash", ["-c", this.scriptDefinition.script], {
             detached: true,
