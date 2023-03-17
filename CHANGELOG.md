@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3.1
+
+### Patch Changes
+
+-   9a06ebc: Add changesets for managing changelogs
+
 ## NEXT
 
 _TBA_
