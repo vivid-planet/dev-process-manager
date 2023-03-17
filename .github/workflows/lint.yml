@@ -1,4 +1,4 @@
-name: CI
+name: Lint
 
 on:
     push:
@@ -13,7 +13,7 @@ on:
             - next
 
 jobs:
-    CI:
+    Lint:
         runs-on: ubuntu-latest
         steps:
             - run: echo "${{ github.actor }}"
@@ -34,19 +34,3 @@ jobs:
 
             - name: Lint
               run: yarn lint
-
-            - name: Publish Canary release
-              if: ${{ github.ref_name == 'main' || github.ref_name == 'next' }}
-              run: |
-                  npm --no-git-tag-version --preid canary.${{ github.run_number }} version prerelease
-                  npm publish --tag canary
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-            - name: Publish stable release
-              if: ${{ github.ref_type == 'tag' }}
-              run: |
-                  npm --allow-same-version --no-git-tag-version version ${{ github.ref_name }}
-                  npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
