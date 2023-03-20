@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3.2
+
+### Patch Changes
+
+-   05cdda9: Test release for testing the new pipelines
+
 ## 2.3.1
 
 ### Patch Changes
