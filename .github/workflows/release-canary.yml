@@ -28,6 +28,11 @@ jobs:
 
       - name: Publish Canary release
         run: |
+          echo --- > .changeset/canary.md
+          echo "@comet/dev-process-manager": patch >> .changeset/canary.md
+          echo --- >> .changeset/canary.md
+          echo >> .changeset/canary.md
+          echo fake change to always get a canary release >> .changeset/canary.md
           yarn changeset version --snapshot canary
           yarn run publish --tag canary
         env:
