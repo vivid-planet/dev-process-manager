@@ -29,7 +29,6 @@ jobs:
       - name: Publish Canary release
         run: |
           yarn changeset version --snapshot canary
-          yarn build
-          yarn changeset publish --tag canary
+          yarn run publish -- --tag canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
