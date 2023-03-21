@@ -12,12 +12,6 @@
 
 -   5979a6b: Add changesets for managing changelogs
 
-## NEXT
-
-_TBA_
-
-### Changes
-
 ## 2.3.0
 
 _Mar 6, 2023_
