@@ -2,6 +2,7 @@ import CLITable from "cli-table3";
 import colors from "colors";
 import { create as createLogUpdate } from "log-update";
 import { Socket } from "net";
+import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
@@ -21,6 +22,19 @@ const statusTexts: { [status in ScriptStatus]: string } = {
     waiting: colors.yellow("Waiting"),
     backoff: colors.red("Backoff"),
 };
+
+async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: number }> {
+    const pids = await pidtree(pid, { root: true });
+    const usages = await pidusage(pids);
+    return Object.values(usages).reduce(
+        (acc, value) => {
+            acc.cpu += value.cpu;
+            acc.memory += value.memory;
+            return acc;
+        },
+        { cpu: 0, memory: 0 },
+    );
+}
 
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, options.names);
@@ -66,7 +80,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
             let memory = "";
             if (pid && script.status == "started") {
                 try {
-                    const stats = await pidusage(pid);
+                    const stats = await pidusageRecursive(pid);
                     cpu = `${Math.round(stats.cpu)}%`;
                     memory = prettyBytes(stats.memory);
                 } catch {
