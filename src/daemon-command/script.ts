@@ -122,7 +122,7 @@ export class Script {
         this.status = "started";
         const p = spawn("bash", ["-c", this.scriptDefinition.script], {
             detached: true,
-            env: { ...process.env, PATH: `${NPM_PATH}:${process.env.PATH}` },
+            env: { ...process.env, ...(this.scriptDefinition.env ?? {}), PATH: `${NPM_PATH}:${process.env.PATH}` },
         });
         this.process = p;
         p.stdout.on("data", (data: Buffer) => {

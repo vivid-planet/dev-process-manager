@@ -3,4 +3,5 @@ export interface ScriptDefinition {
     script: string;
     group?: string | string[];
     waitOn?: string | string[];
+    env?: NodeJS.ProcessEnv;
 }
