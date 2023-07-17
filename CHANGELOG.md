@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.0
+
+### Minor Changes
+
+-   f8001f7: Report memory/cpu usage recursively for child processes
+-   084d868: allow overriding of env per script
+
 ## 2.3.2
 
 ### Patch Changes
