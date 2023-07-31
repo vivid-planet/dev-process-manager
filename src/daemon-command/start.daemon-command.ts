@@ -2,14 +2,13 @@ import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
 import { handleLogSocketClose } from "./handle-log-socket-close";
-import { scriptsMatchingPattern } from "./scripts-matching-pattern";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
 
-export interface StartCommandOptions {
-    names: string[];
+export interface StartCommandOptions extends ScriptsMatchingPatternOptions {
     follow: boolean;
 }
 export async function startDaemonCommand(daemon: Daemon, socket: Socket, options: StartCommandOptions): Promise<void> {
-    const scriptsToProcess = scriptsMatchingPattern(daemon, options.names);
+    const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
         socket.write("No matching scripts found in dev-pm config");
         socket.end();

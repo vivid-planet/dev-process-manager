@@ -22,8 +22,8 @@ export const startDaemon = async (): Promise<void> => {
     process.chdir(findConfigDir());
     const pmConfigFileName = "dev-pm.config.js";
     const { scripts: scriptDefinitions }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFileName}`);
-    const scripts = scriptDefinitions.map((scriptDefinition) => {
-        return new Script(scriptDefinition);
+    const scripts = scriptDefinitions.map((scriptDefinition, id) => {
+        return new Script({ ...scriptDefinition, id });
     });
     const daemon: Daemon = {
         scripts,

@@ -1,19 +1,25 @@
 import { Daemon } from "../commands/start-daemon.command";
 import { Script } from "./script";
 
-export function scriptsMatchingPattern(daemon: Daemon, names: string[]): Script[] {
-    if (names.length == 0 || names.includes("all")) {
-        // all
-        return daemon.scripts;
-    }
+export interface ScriptsMatchingPatternOptions {
+    patterns: string[];
+}
+
+export function scriptsMatchingPattern(daemon: Daemon, { patterns }: ScriptsMatchingPatternOptions): Script[] {
+    const uniquePatterns = [...new Set(patterns.map((pattern) => pattern.split(",")).flat())];
+    const ids = uniquePatterns.filter((pattern) => pattern && !isNaN(+pattern)).map(Number) || [];
+    const names = uniquePatterns.filter((pattern) => pattern && isNaN(+pattern)) || [];
+
     return daemon.scripts.filter((script) => {
-        return names.some((name) => {
-            if (name[0] === "@") {
-                if (script.groups.includes(name.substring(1))) return true;
-            } else {
-                if (script.name == name) return true;
-            }
-            return false;
+        if (ids.length === 0 && names.length === 0) return true;
+
+        const idExists = ids.some((id) => script.id === id);
+        const nameExists = names.some((name) => {
+            if (name === "all") return true;
+            if (name[0] === "@" && script.groups.includes(name[0])) return true;
+            return script.name === name;
         });
+
+        return idExists || nameExists;
     });
 }
