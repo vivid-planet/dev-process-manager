@@ -8,6 +8,8 @@ import { logs, restart, shutdown, start, status } from "./commands";
 import { startDaemon } from "./commands/start-daemon.command";
 import { stop } from "./commands/stop.command";
 
+export { Config } from "./config.type";
+
 const env = dotenv.config();
 dotenvExpand.expand(env);
 

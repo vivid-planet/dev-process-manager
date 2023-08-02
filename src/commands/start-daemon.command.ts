@@ -2,6 +2,7 @@ import colors from "colors";
 import { existsSync } from "fs";
 import { createServer, Server } from "net";
 
+import { Config } from "../config.type";
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command";
 import { restartDaemonCommand } from "../daemon-command/restart.daemon-command";
 import { Script } from "../daemon-command/script";
@@ -10,7 +11,6 @@ import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command
 import { startDaemonCommand } from "../daemon-command/start.daemon-command";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command";
-import { ScriptDefinition } from "../script-definition.type";
 import { findConfigDir } from "../utils/find-config-dir";
 
 export interface Daemon {
@@ -21,7 +21,7 @@ export interface Daemon {
 export const startDaemon = async (): Promise<void> => {
     process.chdir(findConfigDir());
     const pmConfigFileName = "dev-pm.config.js";
-    const { scripts: scriptDefinitions }: { scripts: ScriptDefinition[] } = await import(`${process.cwd()}/${pmConfigFileName}`);
+    const { scripts: scriptDefinitions }: Config = await import(`${process.cwd()}/${pmConfigFileName}`);
     const scripts = scriptDefinitions.map((scriptDefinition, id) => {
         return new Script({ ...scriptDefinition, id });
     });
