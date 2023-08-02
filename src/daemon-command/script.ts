@@ -24,6 +24,10 @@ export class Script {
         this.logPrefix = color(`${this.name}: `);
     }
 
+    get id(): number {
+        return this.scriptDefinition.id;
+    }
+
     get name(): string {
         return this.scriptDefinition.name;
     }

@@ -8,10 +8,9 @@ import prettyBytes from "pretty-bytes";
 
 import { Daemon } from "../commands/start-daemon.command";
 import { ScriptStatus } from "./script";
-import { scriptsMatchingPattern } from "./scripts-matching-pattern";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
 
-export interface StatusCommandOptions {
-    names: string[];
+export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
     interval: number | undefined;
 }
 
@@ -37,7 +36,7 @@ async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: nu
 }
 
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
-    const scriptsToProcess = scriptsMatchingPattern(daemon, options.names);
+    const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
         socket.write("No matching scripts found in dev-pm config");
         socket.end();
@@ -58,6 +57,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
     do {
         const table = new CLITable({
             head: [
+                colors.blue.bold("ID"),
                 colors.blue.bold("Script"),
                 colors.blue.bold("Status"),
                 colors.blue.bold("CPU"),
@@ -87,7 +87,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
                     //
                 }
             }
-            table.push([script.name, status, cpu, memory, pid?.toString(), script.restartCount]);
+            table.push([script.id, script.name, status, cpu, memory, pid?.toString(), script.restartCount]);
         }
 
         if (!socket.writable) break;

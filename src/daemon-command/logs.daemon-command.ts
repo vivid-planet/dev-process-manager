@@ -2,10 +2,12 @@ import { Socket } from "net";
 
 import { Daemon } from "../commands/start-daemon.command";
 import { handleLogSocketClose } from "./handle-log-socket-close";
-import { scriptsMatchingPattern } from "./scripts-matching-pattern";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
 
-export function logsDaemonCommand(daemon: Daemon, socket: Socket, names: string[]): void {
-    const scriptsToProcess = scriptsMatchingPattern(daemon, names);
+export type LogsCommandOptions = ScriptsMatchingPatternOptions;
+
+export function logsDaemonCommand(daemon: Daemon, socket: Socket, options: LogsCommandOptions): void {
+    const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
         socket.write("No matching scripts found in dev-pm config");
         socket.end();

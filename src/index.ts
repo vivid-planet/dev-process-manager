@@ -16,36 +16,36 @@ const program = new Command();
 program.version(require("../package.json").version);
 
 program
-    .command("start [name...]")
+    .command("start [patterns...]")
     .option("--follow", "Follow logs after starting script")
-    .action((names, options) => {
-        start({ names, follow: !!options.follow });
+    .action((patterns: string[], options) => {
+        start({ patterns, follow: !!options.follow });
     });
 
 program
-    .command("logs [name...]")
+    .command("logs [patterns...]")
     .aliases(["log"])
-    .action((names) => {
-        logs(names);
+    .action((patterns: string[]) => {
+        logs({ patterns });
     });
 
 program
-    .command("status [name...]")
+    .command("status [patterns...]")
     .aliases(["list", "ls"])
     .addOption(new Option("-i, --interval [seconds]", "Keep status open and refresh periodically at given interval").preset("1"))
-    .action((names, options) => {
-        status({ names, interval: options.interval ? parseInt(options.interval) : undefined });
+    .action((patterns: string[], options) => {
+        status({ patterns, interval: options.interval ? parseInt(options.interval) : undefined });
     });
 
 program
-    .command("restart [name...]")
+    .command("restart [patterns...]")
     .option("--follow", "Follow logs after starting script")
-    .action((names, options) => {
-        restart({ names, follow: !!options.follow });
+    .action((patterns: string[], options) => {
+        restart({ patterns, follow: !!options.follow });
     });
 
-program.command("stop [name...]").action((names) => {
-    stop(names);
+program.command("stop [patterns...]").action((patterns: string[]) => {
+    stop({ patterns });
 });
 
 program
