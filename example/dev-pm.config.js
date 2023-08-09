@@ -1,4 +1,11 @@
-module.exports = {
+// @ts-check
+
+/**
+ * Normally you would  use import('@comet/dev-process-manager').Config
+ *
+ * @type {import('../lib').Config}
+ */
+const config = {
     scripts: [
         {
             name: "sleep-1",
@@ -13,3 +20,5 @@ module.exports = {
         },
     ],
 };
+
+module.exports = config;
