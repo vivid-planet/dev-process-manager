@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.5.0
+
+### Minor Changes
+
+-   010e766: Change maximum backoff time from 30s to 10s
+-   96cd913: every script is now accessible through an dedicated numeric id
+-   911589a: Expose config type
+
+    Can be used to type check the configuration file. See [example/dev-pm.config.js](example/dev-pm.config.js) for an example.
+
+### Patch Changes
+
+-   5eb9f4f: Remove `@changesets/cli` as dependency
+
 ## 2.4.0
 
 ### Minor Changes
