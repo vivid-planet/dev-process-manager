@@ -16,7 +16,7 @@ export function scriptsMatchingPattern(daemon: Daemon, { patterns }: ScriptsMatc
         const idExists = ids.some((id) => script.id === id);
         const nameExists = names.some((name) => {
             if (name === "all") return true;
-            if (name[0] === "@" && script.groups.includes(name[0])) return true;
+            if (name[0] === "@" && script.groups.includes(name.substring(1))) return true;
             return script.name === name;
         });
 
