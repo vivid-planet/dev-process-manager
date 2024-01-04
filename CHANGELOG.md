@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.1
+
+### Patch Changes
+
+-   544a42d: Fix script matching via groups, for example, `npx dev-pm logs @api`
+
 ## 2.5.0
 
 ### Minor Changes
