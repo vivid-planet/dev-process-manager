@@ -16,7 +16,7 @@ export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
 
 const statusTexts: { [status in ScriptStatus]: string } = {
     started: colors.green("Started"),
-    stopping: colors.red("stopping"),
+    stopping: colors.red("Stopping"),
     stopped: "Stopped",
     waiting: colors.yellow("Waiting"),
     backoff: colors.red("Backoff"),
