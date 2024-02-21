@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.0
+
+### Minor Changes
+
+-   6331bc6: upgrade wait-on to get rid of axios vulnerability
+
 ## 2.5.1
 
 ### Patch Changes
