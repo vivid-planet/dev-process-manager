@@ -1,37 +1,37 @@
 name: Lint
 
 on:
-    push:
-        tags:
-            - "[0-9]+.[0-9]+.[0-9]+"
-        branches:
-            - main
-            - next
-    pull_request:
-        branches:
-            - main
-            - next
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - main
+      - next
+  pull_request:
+    branches:
+      - main
+      - next
 
 jobs:
-    lint:
-        name: Lint
-        runs-on: ubuntu-latest
-        steps:
-            - run: echo "${{ github.actor }}"
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.actor }}"
 
-            - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-            - name: Use Node.js 14.x
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 14
-                  registry-url: "https://registry.npmjs.org"
-                  cache: "yarn" # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#caching-packages-dependencies
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: "yarn" # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#caching-packages-dependencies
 
-            - run: yarn install
+      - run: yarn install
 
-            - name: Build
-              run: yarn build
+      - name: Build
+        run: yarn build
 
-            - name: Lint
-              run: yarn lint
+      - name: Lint
+        run: yarn lint
