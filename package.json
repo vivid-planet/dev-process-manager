@@ -17,7 +17,8 @@
         "lint:eslint": "eslint src/",
         "lint:tsc": "tsc",
         "build": "tsc",
-        "start": "tsc --watch"
+        "start": "tsc --watch",
+        "build-and-publish": "yarn build && yarn changeset publish"
     },
     "repository": {
         "type": "git",
