@@ -34,6 +34,7 @@ jobs:
           echo >> .changeset/canary.md
           echo fake change to always get a canary release >> .changeset/canary.md
           yarn changeset version --snapshot canary
-          yarn run publish --tag canary
+          yarn build
+          yarn changeset publish --tag canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
