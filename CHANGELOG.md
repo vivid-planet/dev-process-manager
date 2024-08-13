@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.6.1
+
+### Patch Changes
+
+-   d62d43b: Fix pretty-bytes dependency
+
+    Since v6 pretty-bytes is an ESM-only package.
+    This doesn't work with our CommonJS setup, causing the dev-process-manager to fail during startup.
+
 ## 2.6.0
 
 ### Minor Changes
