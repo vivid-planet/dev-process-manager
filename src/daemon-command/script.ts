@@ -1,5 +1,7 @@
 import { ChildProcess, execSync, spawn } from "child_process";
 import colors from "colors";
+import * as dotenv from "dotenv";
+import * as dotenvExpand from "dotenv-expand";
 import { Socket } from "net";
 import waitOn from "wait-on";
 
@@ -7,6 +9,10 @@ import { ScriptDefinition } from "../script-definition.type";
 
 const KEEP_LOG_LINES = 100;
 export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
+
+const expandedEnv = { ...(process.env as Record<string, string>) };
+dotenv.config({ processEnv: expandedEnv });
+dotenvExpand.expand({ processEnv: expandedEnv });
 
 export class Script {
     scriptDefinition: ScriptDefinition;
@@ -40,7 +46,7 @@ export class Script {
         const waitOn = Array.isArray(this.scriptDefinition.waitOn) ? this.scriptDefinition.waitOn : [this.scriptDefinition.waitOn];
         return waitOn.map((str) =>
             str.replace(/\$[a-z\d_]+/gi, function (match) {
-                const sub = process.env[match.substring(1)];
+                const sub = expandedEnv[match.substring(1)];
                 return sub || match;
             }),
         );
