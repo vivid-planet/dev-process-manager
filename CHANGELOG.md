@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.0
+
+### Minor Changes
+
+-   0e94d06: Don't inject .env file as real environment variables for child processes
+
+    This can cause problems when the child process has a custom .env loading mechanism (e.g., additional files such as .env.secrets), but dev-pm sets environment variables which overrule the values loaded by the child process.
+
 ## 2.6.1
 
 ### Patch Changes
