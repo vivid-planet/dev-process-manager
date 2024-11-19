@@ -30,6 +30,10 @@ export class Script {
         this.logPrefix = color(`${this.name}: `);
     }
 
+    updateScriptDefinition(scriptDefinition: ScriptDefinition) {
+        this.scriptDefinition = scriptDefinition;
+    }
+
     get id(): number {
         return this.scriptDefinition.id;
     }

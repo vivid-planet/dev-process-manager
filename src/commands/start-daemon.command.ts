@@ -1,5 +1,5 @@
 import colors from "colors";
-import { existsSync } from "fs";
+import { existsSync, watchFile } from "fs";
 import { createServer, Server } from "net";
 
 import { Config } from "../config.type";
@@ -21,14 +21,42 @@ export interface Daemon {
 export const startDaemon = async (): Promise<void> => {
     process.chdir(findConfigDir());
     const pmConfigFileName = "dev-pm.config.js";
-    const { scripts: scriptDefinitions }: Config = await import(`${process.cwd()}/${pmConfigFileName}`);
-    const scripts = scriptDefinitions.map((scriptDefinition, id) => {
-        return new Script({ ...scriptDefinition, id });
-    });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { scripts: scriptDefinitions }: Config = require(`${process.cwd()}/${pmConfigFileName}`);
     const daemon: Daemon = {
-        scripts,
+        scripts: scriptDefinitions.map((scriptDefinition, id) => {
+            return new Script({ ...scriptDefinition, id });
+        }),
         server: undefined,
     };
+
+    watchFile(`${process.cwd()}/${pmConfigFileName}`, async () => {
+        console.log(`${pmConfigFileName} file changed, reloading scripts`);
+        delete require.cache[require.resolve(`${process.cwd()}/${pmConfigFileName}`)];
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { scripts: scriptDefinitions }: Config = require(`${process.cwd()}/${pmConfigFileName}`);
+
+        daemon.scripts = daemon.scripts.filter((script) => {
+            if (!scriptDefinitions.find((s) => s.name === script.name)) {
+                console.log("Removing script", script.name);
+                script.killProcess();
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        scriptDefinitions.forEach((scriptDefinition, id) => {
+            const script = daemon.scripts.find((s) => s.name === scriptDefinition.name);
+            if (script) {
+                console.log("Updating script definition", script.name);
+                script.updateScriptDefinition({ ...scriptDefinition, id });
+            } else {
+                console.log("Adding new script", scriptDefinition.name);
+                daemon.scripts.push(new Script({ ...scriptDefinition, id }));
+            }
+        });
+    });
 
     if (existsSync(`.pm.sock`)) {
         console.log(
