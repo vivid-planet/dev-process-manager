@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.7.0
+
+### Minor Changes
+
+-   0e94d06: Don't inject .env file as real environment variables for child processes
+
+    This can cause problems when the child process has a custom .env loading mechanism (e.g., additional files such as .env.secrets), but dev-pm sets environment variables which overrule the values loaded by the child process.
+
+-   ee3ebf8: Watch dev-pm.config.js and update in running daemon
+
+    This allows modifications without having to shutdown the deamon.
+
+    -   processes are not restarted if the script command changes
+    -   processes are stopped if the script is removed
+    -   processes are not started if a new script is added
+    -   identifier for updates is the name of a script
+
 ## 2.6.1
 
 ### Patch Changes
