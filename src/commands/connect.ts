@@ -1,13 +1,15 @@
 import { createConnection, Socket } from "net";
+import { dirname } from "path";
 
-import { findConfigDir } from "../utils/find-config-dir.js";
+import { loadConfig } from "../utils/load-config.js";
 import { autoStartDaemon } from "./auto-start-daemon.js";
 
 export async function connect(): Promise<Socket> {
     await autoStartDaemon();
+    const { sources } = await loadConfig();
 
     return new Promise((resolve, reject) => {
-        const client = createConnection(`${findConfigDir()}/.pm.sock`);
+        const client = createConnection(`${dirname(sources[0])}/.pm.sock`);
         client.on("error", (error: { code: string }) => {
             if (error.code == "ECONNREFUSED") {
                 console.log(

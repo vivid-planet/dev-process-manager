@@ -2,7 +2,6 @@ import colors from "colors";
 import { existsSync, watchFile } from "fs";
 import { createServer, Server } from "net";
 
-import { Config } from "../config.type.js";
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";
 import { restartDaemonCommand } from "../daemon-command/restart.daemon-command.js";
 import { Script } from "../daemon-command/script.js";
@@ -11,7 +10,7 @@ import { shutdown } from "../daemon-command/shutdown.js";
 import { startDaemonCommand } from "../daemon-command/start.daemon-command.js";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command.js";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command.js";
-import { findConfigDir } from "../utils/find-config-dir.js";
+import { loadConfig } from "../utils/load-config.js";
 
 export interface Daemon {
     scripts: Script[];
@@ -19,10 +18,9 @@ export interface Daemon {
 }
 
 export const startDaemon = async (): Promise<void> => {
-    process.chdir(findConfigDir());
-    const pmConfigFileName = "dev-pm.config.js";
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { scripts: scriptDefinitions }: Config = require(`${process.cwd()}/${pmConfigFileName}`);
+    const { config, sources } = await loadConfig();
+
+    const { scripts: scriptDefinitions } = config;
     const daemon: Daemon = {
         scripts: scriptDefinitions.map((scriptDefinition, id) => {
             return new Script({ ...scriptDefinition, id });
@@ -30,11 +28,10 @@ export const startDaemon = async (): Promise<void> => {
         server: undefined,
     };
 
-    watchFile(`${process.cwd()}/${pmConfigFileName}`, async () => {
-        console.log(`${pmConfigFileName} file changed, reloading scripts`);
-        delete require.cache[require.resolve(`${process.cwd()}/${pmConfigFileName}`)];
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { scripts: scriptDefinitions }: Config = require(`${process.cwd()}/${pmConfigFileName}`);
+    watchFile(sources[0], async () => {
+        console.log(`config file changed, reloading scripts`);
+        const { config } = await loadConfig();
+        const { scripts: scriptDefinitions } = config;
 
         daemon.scripts = daemon.scripts.filter((script) => {
             if (!scriptDefinitions.find((s) => s.name === script.name)) {

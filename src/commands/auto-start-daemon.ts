@@ -1,17 +1,19 @@
 import { spawn } from "child_process";
 import { existsSync } from "fs";
+import { dirname } from "path";
 
-import { findConfigDir } from "../utils/find-config-dir.js";
+import { loadConfig } from "../utils/load-config.js";
 
 export async function autoStartDaemon(): Promise<void> {
-    if (existsSync(`${findConfigDir()}/.pm.sock`)) {
+    const { sources } = await loadConfig();
+    if (existsSync(`${dirname(sources[0])}/.pm.sock`)) {
         // socket file already exists, we assume daemon is already running
         return;
     }
     console.log("starting dev-pm daemon...");
     const child = spawn(process.argv[0], [process.argv[1], "start-daemon"], { detached: true, stdio: ["ignore", "ignore", "ignore"] });
     child.unref();
-    while (!existsSync(`${findConfigDir()}/.pm.sock`)) {
+    while (!existsSync(`${dirname(sources[0])}/.pm.sock`)) {
         await new Promise((r) => setTimeout(r, 100));
     }
 }
