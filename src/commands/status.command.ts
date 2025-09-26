@@ -1,5 +1,5 @@
-import { StatusCommandOptions } from "../daemon-command/status.daemon-command";
-import { connect } from "./connect";
+import { StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
+import { connect } from "./connect.js";
 
 export const status = async (options: StatusCommandOptions): Promise<void> => {
     const client = await connect();

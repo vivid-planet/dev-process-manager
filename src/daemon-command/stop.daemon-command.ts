@@ -1,7 +1,7 @@
 import { Socket } from "net";
 
-import { Daemon } from "../commands/start-daemon.command";
-import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
+import { Daemon } from "../commands/start-daemon.command.js";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export type StopCommandOptions = ScriptsMatchingPatternOptions;
 

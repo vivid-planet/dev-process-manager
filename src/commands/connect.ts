@@ -1,7 +1,7 @@
 import { createConnection, Socket } from "net";
 
-import { findConfigDir } from "../utils/find-config-dir";
-import { autoStartDaemon } from "./auto-start-daemon";
+import { findConfigDir } from "../utils/find-config-dir.js";
+import { autoStartDaemon } from "./auto-start-daemon.js";
 
 export async function connect(): Promise<Socket> {
     await autoStartDaemon();

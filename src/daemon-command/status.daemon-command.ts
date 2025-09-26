@@ -6,9 +6,9 @@ import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
-import { Daemon } from "../commands/start-daemon.command";
-import { ScriptStatus } from "./script";
-import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
+import { Daemon } from "../commands/start-daemon.command.js";
+import { ScriptStatus } from "./script.js";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
     interval: number | undefined;

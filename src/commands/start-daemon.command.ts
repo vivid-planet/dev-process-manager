@@ -2,16 +2,16 @@ import colors from "colors";
 import { existsSync, watchFile } from "fs";
 import { createServer, Server } from "net";
 
-import { Config } from "../config.type";
-import { logsDaemonCommand } from "../daemon-command/logs.daemon-command";
-import { restartDaemonCommand } from "../daemon-command/restart.daemon-command";
-import { Script } from "../daemon-command/script";
-import { shutdown } from "../daemon-command/shutdown";
-import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command";
-import { startDaemonCommand } from "../daemon-command/start.daemon-command";
-import { statusDaemonCommand } from "../daemon-command/status.daemon-command";
-import { stopDaemonCommand } from "../daemon-command/stop.daemon-command";
-import { findConfigDir } from "../utils/find-config-dir";
+import { Config } from "../config.type.js";
+import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";
+import { restartDaemonCommand } from "../daemon-command/restart.daemon-command.js";
+import { Script } from "../daemon-command/script.js";
+import { shutdownDaemonCommand } from "../daemon-command/shutdown.daemon-command.js";
+import { shutdown } from "../daemon-command/shutdown.js";
+import { startDaemonCommand } from "../daemon-command/start.daemon-command.js";
+import { statusDaemonCommand } from "../daemon-command/status.daemon-command.js";
+import { stopDaemonCommand } from "../daemon-command/stop.daemon-command.js";
+import { findConfigDir } from "../utils/find-config-dir.js";
 
 export interface Daemon {
     scripts: Script[];

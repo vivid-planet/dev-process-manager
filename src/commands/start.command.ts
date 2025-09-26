@@ -1,5 +1,5 @@
-import { StartCommandOptions } from "../daemon-command/start.daemon-command";
-import { connect } from "./connect";
+import { StartCommandOptions } from "../daemon-command/start.daemon-command.js";
+import { connect } from "./connect.js";
 
 export const start = async (options: StartCommandOptions): Promise<void> => {
     const client = await connect();

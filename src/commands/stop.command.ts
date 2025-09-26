@@ -1,5 +1,5 @@
-import { StopCommandOptions } from "../daemon-command/stop.daemon-command";
-import { connect } from "./connect";
+import { StopCommandOptions } from "../daemon-command/stop.daemon-command.js";
+import { connect } from "./connect.js";
 
 export const stop = async (options: StopCommandOptions): Promise<void> => {
     const client = await connect();
