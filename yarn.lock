@@ -333,7 +333,7 @@ __metadata:
     wait-on: ^8.0.4
     yarn-run-all: ^3.1.1
   bin:
-    dev-pm: lib/index.js
+    dev-pm: lib/dev-pm.js
   languageName: unknown
   linkType: soft
 

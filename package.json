@@ -6,7 +6,7 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "bin": {
-        "dev-pm": "lib/index.js"
+        "dev-pm": "lib/dev-pm.js"
     },
     "files": [
         "lib/**/*"
