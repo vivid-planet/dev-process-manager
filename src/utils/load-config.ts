@@ -1,6 +1,6 @@
 import { loadConfig as unconfigLoadConfig } from "unconfig";
 
-import { Config } from "../config.type.js";
+import { Config } from "../config.js";
 
 export async function loadConfig() {
     return unconfigLoadConfig<Config>({
