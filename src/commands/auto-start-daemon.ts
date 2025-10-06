@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { existsSync } from "fs";
 
-import { findConfigDir } from "../utils/find-config-dir";
+import { findConfigDir } from "../utils/find-config-dir.js";
 
 export async function autoStartDaemon(): Promise<void> {
     if (existsSync(`${findConfigDir()}/.pm.sock`)) {

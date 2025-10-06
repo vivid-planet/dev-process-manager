@@ -1,14 +1,21 @@
 #!/usr/bin/env node
 
 import { Command, Option } from "commander";
+import { readFileSync } from "fs";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
-import { logs, restart, shutdown, start, status } from "./commands";
-import { startDaemon } from "./commands/start-daemon.command";
-import { stop } from "./commands/stop.command";
+import { logs, restart, shutdown, start, status } from "./commands/index.js";
+import { startDaemon } from "./commands/start-daemon.command.js";
+import { stop } from "./commands/stop.command.js";
 
 const program = new Command();
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-program.version(require("../package.json").version);
+
+{
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const { version } = JSON.parse(readFileSync(resolve(__dirname, "../package.json"), "utf-8"));
+    program.version(version);
+}
 
 program
     .command("start [patterns...]")

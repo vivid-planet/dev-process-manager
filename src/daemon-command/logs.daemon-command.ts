@@ -1,8 +1,8 @@
 import { Socket } from "net";
 
-import { Daemon } from "../commands/start-daemon.command";
-import { handleLogSocketClose } from "./handle-log-socket-close";
-import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern";
+import { Daemon } from "../commands/start-daemon.command.js";
+import { handleLogSocketClose } from "./handle-log-socket-close.js";
+import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export type LogsCommandOptions = ScriptsMatchingPatternOptions;
 

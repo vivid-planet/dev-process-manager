@@ -5,7 +5,7 @@ import * as dotenvExpand from "dotenv-expand";
 import { Socket } from "net";
 import waitOn from "wait-on";
 
-import { ScriptDefinition } from "../script-definition.type";
+import { ScriptDefinition } from "../script-definition.type.js";
 
 const KEEP_LOG_LINES = 100;
 export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";

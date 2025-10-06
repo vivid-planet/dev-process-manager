@@ -1,7 +1,7 @@
 import colors from "colors";
 import { Socket } from "net";
 
-import { Daemon } from "../commands/start-daemon.command";
+import { Daemon } from "../commands/start-daemon.command.js";
 
 export const shutdown = async (daemon: Daemon, socket?: Socket): Promise<void> => {
     console.log(`${colors.bgGreen.bold.black(" dev-pm ")} shutting down`);

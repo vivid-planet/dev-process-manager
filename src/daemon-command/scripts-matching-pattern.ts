@@ -1,5 +1,5 @@
-import { Daemon } from "../commands/start-daemon.command";
-import { Script } from "./script";
+import { Daemon } from "../commands/start-daemon.command.js";
+import { Script } from "./script.js";
 
 export interface ScriptsMatchingPatternOptions {
     patterns: string[];
