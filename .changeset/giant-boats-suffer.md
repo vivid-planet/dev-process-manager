@@ -1,5 +1,5 @@
 ---
-"@comet/dev-process-manager": minor
+"@comet/dev-process-manager": major
 ---
 
-Convert to ESM
+Require Node v18 or later
