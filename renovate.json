@@ -1,6 +1,31 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", ":semanticCommitsDisabled"],
+    "minimumReleaseAge": "3 days",
+    "internalChecksFilter": "strict",
+    "packageRules": [
+        {
+            "groupName": "ESLint",
+            "matchPackageNames": ["/^eslint/"]
+        },
+        {
+            "groupName": "Prettier",
+            "matchPackageNames": ["/^prettier/"]
+        },
+        {
+            "groupName": "TypeScript",
+            "matchPackageNames": ["/typescript/"]
+        },
+        {
+            "groupName": "Node.js",
+            "matchPackageNames": ["node"],
+            "rangeStrategy": "widen"
+        },
+        {
+            "matchUpdateTypes": ["major"],
+            "labels": ["major", "dependencies"]
+        }
+    ],
+    "lockFileMaintenance": { "enabled": true },
+    "labels": ["dependencies"]
 }
