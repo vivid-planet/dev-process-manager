@@ -10,7 +10,7 @@ export interface RestartCommandOptions extends ScriptsMatchingPatternOptions {
 export async function restartDaemonCommand(daemon: Daemon, socket: Socket, options: RestartCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
-        socket.write("No matching scripts found in dev-pm config");
+        socket.write("No matching scripts found in dev-pm config\n");
         socket.end();
         return;
     }
