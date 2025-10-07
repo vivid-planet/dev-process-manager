@@ -52,7 +52,7 @@
         "@types/node": "^20.14.11",
         "@types/pidusage": "^2.0.5",
         "@types/wait-on": "^5.3.4",
-        "eslint": "^8.19.0",
+        "eslint": "^8.57.1",
         "husky": "^9.1.7",
         "lint-staged": "^15.2.7",
         "prettier": "^2.0.0",
