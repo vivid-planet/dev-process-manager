@@ -44,7 +44,7 @@
         "pidusage": "^3.0.2",
         "pretty-bytes": "^5.6.0",
         "unconfig": "^7.3.3",
-        "wait-on": "^8.0.4"
+        "wait-on": "^8.0.5"
     },
     "devDependencies": {
         "@changesets/cli": "^2.27.7",
