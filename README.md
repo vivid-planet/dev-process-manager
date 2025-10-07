@@ -16,13 +16,15 @@ alias dpm="npm exec -- dev-pm"
 
 ## Usage
 
-Add `dev-pm.config.js` file to the project root.
+Add `dev-pm.config.ts` file to the project root.
 This file defines all available scripts, which should be started by dev-process-manager.
 
-### dev-pm.config.js
+### dev-pm.config.ts
 
-```javascript
-module.exports = {
+```typescript
+import { defineConfig } from '@comet/dev-process-manager';
+
+export default defineConfig({
     scripts: [
         {
              name: "api",
@@ -35,9 +37,11 @@ module.exports = {
         },
         ...
     ],
-};
+});
 
 ```
+
+(Other supported file types are 'ts', 'mts', 'cts', 'js', 'mjs', 'cjs' and 'json')
 
 ## Commands
 
