@@ -2999,11 +2999,11 @@ __metadata:
   linkType: hard
 
 "husky@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "husky@npm:9.1.0"
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
   bin:
     husky: bin.js
-  checksum: 604e1d7d76cde9350f3fbbd04830706c9c93ae1e110a71f9f6c157f8c7ea624c3dfe36fc77c343e98b22cc0a6a3cbd00d8f750b819a3015190c2307e59b05dad
+  checksum: c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
   languageName: node
   linkType: hard
 
