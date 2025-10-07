@@ -3,8 +3,8 @@
     "packageManager": "yarn@3.2.0",
     "license": "BSD-2-Clause",
     "version": "2.7.1",
-    "exports": "lib/index.js",
-    "types": "lib/index.d.ts",
+    "exports": "./lib/index.js",
+    "types": "./lib/index.d.ts",
     "bin": {
         "dev-pm": "lib/dev-pm.js"
     },
