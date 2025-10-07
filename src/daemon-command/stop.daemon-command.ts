@@ -8,7 +8,7 @@ export type StopCommandOptions = ScriptsMatchingPatternOptions;
 export async function stopDaemonCommand(daemon: Daemon, socket: Socket, options: StopCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
-        socket.write("No matching scripts found in dev-pm config");
+        socket.write("No matching scripts found in dev-pm config\n");
         socket.end();
         return;
     }

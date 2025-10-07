@@ -38,7 +38,7 @@ async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: nu
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
-        socket.write("No matching scripts found in dev-pm config");
+        socket.write("No matching scripts found in dev-pm config\n");
         socket.end();
         return;
     }
