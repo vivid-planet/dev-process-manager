@@ -1,6 +1,6 @@
 {
     "name": "@comet/dev-process-manager",
-    "packageManager": "yarn@3.2.0",
+    "packageManager": "yarn@3.8.7",
     "license": "BSD-2-Clause",
     "version": "2.7.1",
     "exports": "./lib/index.js",
