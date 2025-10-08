@@ -1,5 +1,37 @@
 # Changelog
 
+## 3.0.0
+
+### Major Changes
+
+-   7997999: Require Node v18 or later
+
+### Minor Changes
+
+-   be6c47c: Show a nice console error when config is invalid
+-   c0f4cd9: Add support for defining typed config using defineConfig helper
+
+    This pattern follows vite.config.ts defineConfig helper and is implemented using [unconfig](https://github.com/antfu-collective/unconfig).
+
+    Example `dev-pm.config.ts`:
+
+    ```ts
+    import { defineConfig } from "@comet/dev-process-manager";
+
+    export default defineConfig({
+        scripts: [
+            {
+                name: "api",
+                script: "npm run start-api",
+            },
+        ],
+    });
+    ```
+
+### Patch Changes
+
+-   f19b170: Add missing newline to 'no matching scripts' error
+
 ## 2.7.1
 
 ### Patch Changes

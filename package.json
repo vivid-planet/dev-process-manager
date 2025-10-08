@@ -2,7 +2,7 @@
     "name": "@comet/dev-process-manager",
     "packageManager": "yarn@3.2.0",
     "license": "BSD-2-Clause",
-    "version": "2.7.1",
+    "version": "3.0.0",
     "exports": "./lib/index.js",
     "types": "./lib/index.d.ts",
     "bin": {
