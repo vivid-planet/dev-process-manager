@@ -1,6 +1,5 @@
 {
     "name": "@comet/dev-process-manager",
-    "packageManager": "yarn@3.2.0",
     "license": "BSD-2-Clause",
     "version": "3.0.0",
     "exports": "./lib/index.js",
@@ -18,7 +17,7 @@
         "lint:tsc": "tsc",
         "build": "tsc",
         "start": "tsc --watch",
-        "build-and-publish": "yarn build && yarn changeset publish"
+        "build-and-publish": "npm run build && npx changeset publish"
     },
     "repository": {
         "type": "git",
@@ -55,9 +54,9 @@
         "eslint": "^8.57.1",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.3",
+        "npm-run-all2": "^8.0.4",
         "prettier": "^2.8.8",
-        "typescript": "^5.5.3",
-        "yarn-run-all": "^3.1.1"
+        "typescript": "^5.5.3"
     },
     "engines": {
         "node": ">=18"

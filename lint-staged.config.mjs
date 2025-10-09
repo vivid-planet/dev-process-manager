@@ -3,6 +3,6 @@
  * @type {import('lint-staged').Configuration}
  */
 export default {
-    "*.{ts,tsx,js,jsx,json,css,scss,md}": () => "npx yarn lint:eslint",
-    "*.{ts,tsx}": () => "npx yarn lint:tsc",
+    "*.{ts,tsx,js,jsx,json,css,scss,md}": () => "npm run lint:eslint",
+    "*.{ts,tsx}": () => "npm run lint:tsc",
 };
