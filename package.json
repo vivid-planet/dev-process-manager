@@ -48,7 +48,7 @@
     "devDependencies": {
         "@changesets/cli": "^2.29.7",
         "@comet/eslint-config": "^6.8.0",
-        "@types/node": "^20.14.11",
+        "@types/node": "^20.19.27",
         "@types/pidusage": "^2.0.5",
         "@types/wait-on": "^5.3.4",
         "eslint": "^8.57.1",
