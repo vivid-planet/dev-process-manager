@@ -35,7 +35,7 @@
     "dependencies": {
         "cli-table3": "^0.6.5",
         "colors": "^1.4.0",
-        "commander": "^12.1.0",
+        "commander": "^14.0.2",
         "dotenv": "^16.6.1",
         "dotenv-expand": "^11.0.7",
         "log-update": "^4.0.0",
