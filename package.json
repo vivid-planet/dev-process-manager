@@ -51,7 +51,7 @@
         "@types/node": "^24.10.9",
         "@types/pidusage": "^2.0.5",
         "@types/wait-on": "^5.3.4",
-        "eslint": "^8.57.1",
+        "eslint": "^9.39.2",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.7",
         "npm-run-all2": "^8.0.4",
