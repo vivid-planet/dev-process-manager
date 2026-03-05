@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+-   8621d0f: Add -n flag to log command to display last n lines and exit
+
 ## 3.0.0
 
 ### Major Changes
