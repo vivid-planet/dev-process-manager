@@ -29,6 +29,7 @@ export default defineConfig({
         {
              name: "api",
              script: "npm run start",
+             alias: "backend", //to access the script using an alternative name in all commands
              group: ["foo", "bar"], //to access a group of scripts in all commands using @groupname
              waitOn: [
                 "packages/foo/lib/index.d.ts", //wait until package is built
@@ -47,10 +48,10 @@ export default defineConfig({
 
 ### Start
 
-Start one or all processes. The script-name argument can also be multiple names, "all" or a @group.
+Start one or all processes. The script-name argument can also be multiple names, an alias, "all" or a @group.
 
 ```console
-$ npx dev-pm start [options] [script-name or @group]
+$ npx dev-pm start [options] [script-name, alias or @group]
 ```
 
 Options:
@@ -61,7 +62,7 @@ Options:
 Stop running processes
 
 ```console
-$ npx dev-pm stop [script-name or @group]
+$ npx dev-pm stop [script-name, alias or @group]
 ```
 
 ### Restart
@@ -69,7 +70,7 @@ $ npx dev-pm stop [script-name or @group]
 Restart a previously started processes
 
 ```console
-$ npx dev-pm restart [options] [script-name or @group]
+$ npx dev-pm restart [options] [script-name, alias or @group]
 ```
 
 Options:
@@ -80,7 +81,7 @@ Options:
 Lists running processes
 
 ```console
-$ npx dev-pm status [options] [script-name or @group]
+$ npx dev-pm status [options] [script-name, alias or @group]
 ```
 
 Options:
@@ -91,7 +92,7 @@ Options:
 Prints logs of either a specific process or all running processes in real time.
 
 ```console
-$ npx dev-pm logs [script-name or @group]
+$ npx dev-pm logs [script-name, alias or @group]
 ```
 
 ### Start Daemon
