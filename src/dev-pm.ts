@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command, Option } from "commander";
+import { Command, InvalidArgumentError, Option } from "commander";
 import { readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -27,8 +27,13 @@ program
 program
     .command("logs [patterns...]")
     .aliases(["log"])
-    .action((patterns: string[]) => {
-        logs({ patterns });
+    .option("-n, --lines <number>", "Display last n log lines and exit", (value) => {
+        const n = parseInt(value, 10);
+        if (isNaN(n) || n < 1) throw new InvalidArgumentError("Must be a positive integer.");
+        return n;
+    })
+    .action((patterns: string[], options) => {
+        logs({ patterns, lines: options.lines });
     });
 
 program
