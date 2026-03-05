@@ -41,6 +41,10 @@ export class Script {
     get name(): string {
         return this.scriptDefinition.name;
     }
+    get aliases(): string[] {
+        if (!this.scriptDefinition.alias) return [];
+        return Array.isArray(this.scriptDefinition.alias) ? this.scriptDefinition.alias : [this.scriptDefinition.alias];
+    }
     get groups(): string[] {
         if (!this.scriptDefinition.group) return [];
         return Array.isArray(this.scriptDefinition.group) ? this.scriptDefinition.group : [this.scriptDefinition.group];
