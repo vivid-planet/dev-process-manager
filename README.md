@@ -93,6 +93,8 @@ Prints logs of either a specific process or all running processes in real time.
 ```console
 $ npx dev-pm logs [script-name or @group]
 ```
+Options:
+`-n [lines]` print n log lines and exit.
 
 ### Start Daemon
 
