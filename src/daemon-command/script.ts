@@ -12,6 +12,7 @@ export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "bac
 
 const expandedEnv = { ...(process.env as Record<string, string>) };
 dotenv.config({ processEnv: expandedEnv });
+dotenv.config({ processEnv: expandedEnv, path: ".env.local", override: true });
 dotenvExpand.expand({ processEnv: expandedEnv });
 
 export class Script {
