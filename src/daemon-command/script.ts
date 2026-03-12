@@ -3,6 +3,7 @@ import colors from "colors";
 import * as dotenv from "dotenv";
 import * as dotenvExpand from "dotenv-expand";
 import { Socket } from "net";
+import path from "path";
 import waitOn from "wait-on";
 
 import { ScriptDefinition } from "../script-definition.type.js";
@@ -12,7 +13,7 @@ export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "bac
 
 const expandedEnv = { ...(process.env as Record<string, string>) };
 dotenv.config({ processEnv: expandedEnv });
-dotenv.config({ processEnv: expandedEnv, path: ".env.local", override: true });
+dotenv.config({ processEnv: expandedEnv, path: path.resolve(process.cwd(), ".env.local"), override: true });
 dotenvExpand.expand({ processEnv: expandedEnv });
 
 export class Script {
