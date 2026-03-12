@@ -17,6 +17,8 @@
         "lint:tsc": "tsc",
         "build": "tsc",
         "start": "tsc --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
         "build-and-publish": "npm run build && npx changeset publish"
     },
     "repository": {
@@ -56,7 +58,8 @@
         "lint-staged": "^16.2.7",
         "npm-run-all2": "^8.0.4",
         "prettier": "^2.8.8",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "vitest": "^4.0.18"
     },
     "engines": {
         "node": ">=18"
