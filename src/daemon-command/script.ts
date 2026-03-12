@@ -11,10 +11,15 @@ import { ScriptDefinition } from "../script-definition.type.js";
 const KEEP_LOG_LINES = 100;
 export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
 
-const expandedEnv = { ...(process.env as Record<string, string>) };
-dotenv.config({ processEnv: expandedEnv });
-dotenv.config({ processEnv: expandedEnv, path: path.resolve(process.cwd(), ".env.local"), override: true });
-dotenvExpand.expand({ processEnv: expandedEnv });
+let expandedEnv: Record<string, string>;
+function loadExpandedEnv() {
+    if (expandedEnv) return expandedEnv;
+    expandedEnv = { ...(process.env as Record<string, string>) };
+    dotenv.config({ processEnv: expandedEnv });
+    dotenv.config({ processEnv: expandedEnv, path: path.resolve(process.cwd(), ".env.local"), override: true });
+    dotenvExpand.expand({ processEnv: expandedEnv });
+    return expandedEnv;
+}
 
 export class Script {
     scriptDefinition: ScriptDefinition;
@@ -56,7 +61,7 @@ export class Script {
         const waitOn = Array.isArray(this.scriptDefinition.waitOn) ? this.scriptDefinition.waitOn : [this.scriptDefinition.waitOn];
         return waitOn.map((str) =>
             str.replace(/\$[a-z\d_]+/gi, function (match) {
-                const sub = expandedEnv[match.substring(1)];
+                const sub = loadExpandedEnv()[match.substring(1)];
                 return sub || match;
             }),
         );

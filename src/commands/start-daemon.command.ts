@@ -1,6 +1,7 @@
 import colors from "colors";
 import { existsSync, watchFile } from "fs";
 import { createServer, Server } from "net";
+import { dirname } from "path";
 
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";
 import { restartDaemonCommand } from "../daemon-command/restart.daemon-command.js";
@@ -19,6 +20,7 @@ export interface Daemon {
 
 export const startDaemon = async (): Promise<void> => {
     const { config, sources } = await loadConfig();
+    process.chdir(dirname(sources[0]));
 
     const { scripts: scriptDefinitions } = config;
     const daemon: Daemon = {
