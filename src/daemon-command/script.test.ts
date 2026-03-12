@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { Script } from "./script.js";
 
-function createScript(overrides: Partial<Parameters<typeof Script["prototype"]["updateScriptDefinition"]>[0]> = {}) {
+function createScript(overrides: Partial<Parameters<(typeof Script)["prototype"]["updateScriptDefinition"]>[0]> = {}) {
     return new Script({
         id: 1,
         name: "test-script",
@@ -68,12 +68,12 @@ describe("Script", () => {
         it("should trim old lines when buffer exceeds 100", () => {
             const script = createScript();
             // Fill the buffer with 90 lines
-            const first = Array.from({ length: 90 }, (_, i) => `old ${i}`).join("\n") + "\n";
+            const first = `${Array.from({ length: 90 }, (_, i) => `old ${i}`).join("\n")}\n`;
             script.handleLogs(first);
             expect(script.logBuffer).toHaveLength(90);
 
             // Add 20 more lines — should trim to keep 100
-            const second = Array.from({ length: 20 }, (_, i) => `new ${i}`).join("\n") + "\n";
+            const second = `${Array.from({ length: 20 }, (_, i) => `new ${i}`).join("\n")}\n`;
             script.handleLogs(second);
             expect(script.logBuffer).toHaveLength(100);
             expect(script.logBuffer[0]).toBe("old 10");
