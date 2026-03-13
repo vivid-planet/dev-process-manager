@@ -125,6 +125,30 @@ describe("dev-pm e2e", () => {
         expect(logs).not.toContain("19876");
     }, 30000);
 
+    it("loads .env for waitOn variable expansion", async () => {
+        writeFileSync(resolve(tmpDir, ".env"), "TEST_PORT=19876\n");
+
+        writeFileSync(
+            resolve(tmpDir, "dev-pm.config.mjs"),
+            `export default {
+    scripts: [
+        { name: "test-script", script: 'node -e "setInterval(() => {}, 1000)"', waitOn: "tcp:$TEST_PORT" },
+    ],
+};
+`,
+        );
+
+        await runDevPm(["start", "test-script"], tmpDir);
+        await new Promise((r) => setTimeout(r, 2000));
+
+        const status = stripAnsi(await runDevPm(["status"], tmpDir));
+        expect(status).toContain("test-script");
+        expect(status).toContain("Waiting");
+
+        const logs = stripAnsi(await runDevPm(["logs", "-n", "10", "test-script"], tmpDir));
+        expect(logs).toContain("19876");
+    }, 30000);
+
     it("works from a subdirectory of the config file", async () => {
         const subDir = resolve(tmpDir, "packages", "app");
         mkdirSync(subDir, { recursive: true });
