@@ -1,5 +1,5 @@
 import colors from "colors";
-import { existsSync, watchFile } from "fs";
+import { existsSync, unlinkSync, watchFile } from "fs";
 import { createServer, Server } from "net";
 
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";
@@ -10,6 +10,7 @@ import { shutdown } from "../daemon-command/shutdown.js";
 import { startDaemonCommand } from "../daemon-command/start.daemon-command.js";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command.js";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command.js";
+import { isDaemonRunning } from "../utils/is-daemon-running.js";
 import { loadConfig } from "../utils/load-config.js";
 
 export interface Daemon {
@@ -56,10 +57,12 @@ export const startDaemon = async (): Promise<void> => {
     });
 
     if (existsSync(`.pm.sock`)) {
-        console.log(
-            "Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.",
-        );
-        return;
+        if (await isDaemonRunning(`.pm.sock`)) {
+            console.log("Could not start dev-pm server. Another dev-pm instance is already running.");
+            return;
+        }
+        // socket file exists but daemon is not running, remove stale socket file
+        unlinkSync(`.pm.sock`);
     }
 
     daemon.server = createServer();

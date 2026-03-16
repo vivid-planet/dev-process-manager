@@ -12,9 +12,7 @@ export async function connect(): Promise<Socket> {
         const client = createConnection(`${dirname(sources[0])}/.pm.sock`);
         client.on("error", (error: { code: string }) => {
             if (error.code == "ECONNREFUSED") {
-                console.log(
-                    "Error connecting to dev-pm daemon at .pm.sock.\ndev-pm could have crashed and left the file behind. In this case please remove the file manually.",
-                );
+                console.log("Error connecting to dev-pm daemon at .pm.sock.");
                 process.exit(-1);
             }
             reject(error);
