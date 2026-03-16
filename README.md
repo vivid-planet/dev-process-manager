@@ -44,6 +44,15 @@ export default defineConfig({
 
 (Other supported file types are 'ts', 'mts', 'cts', 'js', 'mjs', 'cjs' and 'json')
 
+## Environment Variables
+
+dev-process-manager automatically loads environment variables from the following files in the project root, in order:
+
+1. `.env` — shared defaults, typically committed to version control
+2. `.env.local` — local overrides, typically added to `.gitignore`
+
+Values defined in `.env.local` take precedence over those in `.env`. Variable expansion (e.g. `$OTHER_VAR`) is supported in both files.
+
 ## Commands
 
 ### Start
