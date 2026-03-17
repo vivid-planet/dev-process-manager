@@ -56,10 +56,9 @@ export const startDaemon = async (): Promise<void> => {
     });
 
     if (existsSync(`.pm.sock`)) {
-        console.log(
+        throw new Error(
             "Could not start dev-pm server. A '.pm.sock' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.",
         );
-        return;
     }
 
     daemon.server = createServer();
