@@ -1,4 +1,4 @@
-import { createConnection, Socket } from "net";
+import { createConnection, type Socket } from "net";
 import { dirname } from "path";
 
 import { loadConfig } from "../utils/load-config.js";

@@ -1,4 +1,4 @@
-import { StartCommandOptions } from "../daemon-command/start.daemon-command.js";
+import { type StartCommandOptions } from "../daemon-command/start.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 

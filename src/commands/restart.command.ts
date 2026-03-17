@@ -1,4 +1,4 @@
-import { RestartCommandOptions } from "../daemon-command/restart.daemon-command.js";
+import { type RestartCommandOptions } from "../daemon-command/restart.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 

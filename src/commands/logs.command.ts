@@ -1,4 +1,4 @@
-import { LogsCommandOptions } from "../daemon-command/logs.daemon-command.js";
+import { type LogsCommandOptions } from "../daemon-command/logs.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 
