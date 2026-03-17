@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+-   36e9d51: Add `alias` configuration option to scripts that allows setting alternative names for matching scripts
+
+    Scripts can now have one or more aliases that can be used to reference them in all commands (start, stop, restart, logs, status).
+
+-   4aa5c56: Add support for `.env.local` file
+
+    Variables defined in `.env.local` override those in `.env`, following the common convention where `.env` holds shared defaults and `.env.local` holds machine-local overrides (typically added to `.gitignore`).
+
+-   88d96aa: Don't fail when `.pm.sock` file exists but daemon is not running
+
+    Verify if the daemon is actually running by trying to connect to the socket. If no connection is possible, assume it is not running, remove the stale socket file, and start the daemon.
+
+-   8621d0f: Add -n flag to log command to display last n lines and exit
+
+### Patch Changes
+
+-   b131a01: Fix auto-start when cwd is subdirectory of dev-pm.config.ts
+
 ## 3.0.0
 
 ### Major Changes
