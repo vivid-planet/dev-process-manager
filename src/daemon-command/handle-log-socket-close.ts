@@ -1,6 +1,6 @@
-import { Socket } from "net";
+import { type Socket } from "net";
 
-import { Daemon } from "../commands/start-daemon.command.js";
+import { type Daemon } from "../commands/start-daemon.command.js";
 
 export function handleLogSocketClose(daemon: Daemon, socket: Socket): void {
     for (const script of daemon.scripts) {

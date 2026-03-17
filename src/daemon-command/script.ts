@@ -1,12 +1,12 @@
-import { ChildProcess, execSync, spawn } from "child_process";
+import { type ChildProcess, execSync, spawn } from "child_process";
 import colors from "colors";
 import * as dotenv from "dotenv";
 import * as dotenvExpand from "dotenv-expand";
-import { Socket } from "net";
+import { type Socket } from "net";
 import path from "path";
 import waitOn from "wait-on";
 
-import { ScriptDefinition } from "../script-definition.type.js";
+import { type ScriptDefinition } from "../script-definition.type.js";
 
 const KEEP_LOG_LINES = 100;
 export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";

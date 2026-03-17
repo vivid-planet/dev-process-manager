@@ -1,6 +1,6 @@
 import colors from "colors";
 import { existsSync, watchFile } from "fs";
-import { createServer, Server } from "net";
+import { createServer, type Server } from "net";
 import { dirname } from "path";
 
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";

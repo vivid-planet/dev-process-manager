@@ -1,14 +1,14 @@
 import CLITable from "cli-table3";
 import colors from "colors";
 import { create as createLogUpdate } from "log-update";
-import { Socket } from "net";
+import { type Socket } from "net";
 import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
-import { Daemon } from "../commands/start-daemon.command.js";
-import { ScriptStatus } from "./script.js";
-import { scriptsMatchingPattern, ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
+import { type Daemon } from "../commands/start-daemon.command.js";
+import { type ScriptStatus } from "./script.js";
+import { scriptsMatchingPattern, type ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
     interval: number | undefined;

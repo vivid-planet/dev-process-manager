@@ -1,4 +1,4 @@
-import { StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
+import { type StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 
