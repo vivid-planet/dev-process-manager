@@ -1,5 +1,5 @@
 ---
-"@comet/dev-process-manager": patch
+"@comet/dev-process-manager": minor
 ---
 
 Don't fail when `.pm.sock` file exists but daemon is not running
