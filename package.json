@@ -55,7 +55,7 @@
         "@types/wait-on": "^5.3.4",
         "eslint": "^9.39.4",
         "husky": "^9.1.7",
-        "lint-staged": "^16.2.7",
+        "lint-staged": "^16.4.0",
         "npm-run-all2": "^8.0.4",
         "prettier": "^3.8.1",
         "typescript": "^5.9.3",
