@@ -2,8 +2,8 @@ import CLITable from "cli-table3";
 import colors from "colors";
 import { create as createLogUpdate } from "log-update";
 
-import { type ScriptStatusEntry, type StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
 import { type ScriptStatus } from "../daemon-command/script.js";
+import { type ScriptStatusEntry, type StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 
@@ -29,15 +29,7 @@ function renderTable(entries: ScriptStatusEntry[]): string {
         style: { compact: true },
     });
     for (const entry of entries) {
-        table.push([
-            entry.id,
-            entry.name,
-            statusTexts[entry.status],
-            entry.cpu,
-            entry.memory,
-            entry.pid?.toString(),
-            entry.restarts,
-        ]);
+        table.push([entry.id, entry.name, statusTexts[entry.status], entry.cpu, entry.memory, entry.pid?.toString(), entry.restarts]);
     }
     return table.toString();
 }

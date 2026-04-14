@@ -66,7 +66,7 @@ async function getScriptEntries(daemon: Daemon, patterns: string[]): Promise<Scr
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
-        socket.write(JSON.stringify({ error: "No matching scripts found in dev-pm config" }) + "\n");
+        socket.write(`${JSON.stringify({ error: "No matching scripts found in dev-pm config" })}\n`);
         socket.end();
         return;
     }
@@ -74,7 +74,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
     do {
         const entries = await getScriptEntries(daemon, options.patterns);
         if (!socket.writable) break;
-        socket.write(JSON.stringify(entries) + "\n");
+        socket.write(`${JSON.stringify(entries)}\n`);
         if (options.interval) {
             await delay(options.interval * 1000);
         }

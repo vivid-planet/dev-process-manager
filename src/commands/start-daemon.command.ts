@@ -90,7 +90,7 @@ export const startDaemon = async (): Promise<void> => {
             } else if (cmd == "version") {
                 const __dirname = dirname(fileURLToPath(import.meta.url));
                 const { version } = JSON.parse(readFileSync(resolve(__dirname, "../../package.json"), "utf-8"));
-                s.write(JSON.stringify({ version }) + "\n");
+                s.write(`${JSON.stringify({ version })}\n`);
                 s.end();
             } else {
                 s.write(`unknown command ${cmd}`);
