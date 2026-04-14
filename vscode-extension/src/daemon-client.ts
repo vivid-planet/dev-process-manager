@@ -102,10 +102,11 @@ export function parseStatusOutput(output: string): ScriptStatusEntry[] {
             continue;
         }
 
-        const cells = line
-            .split("│")
-            .map((c) => c.trim())
-            .filter((c) => c !== "");
+        // Split by │ and trim; remove leading/trailing empty strings from the outer borders
+        const cells = line.split("│").map((c) => c.trim());
+        // Remove first and last empty elements (from leading/trailing │)
+        if (cells[0] === "") cells.shift();
+        if (cells[cells.length - 1] === "") cells.pop();
 
         if (cells.length < 7) {
             continue;

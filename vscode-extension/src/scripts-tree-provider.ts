@@ -62,18 +62,7 @@ export class ScriptTreeItem extends vscode.TreeItem {
         this.iconPath = getStatusIcon(status);
 
         const details: string[] = [];
-        if (status === "running") {
-            details.push("Running");
-            if (entry.pid) {
-                details.push(`PID: ${entry.pid}`);
-            }
-            if (entry.cpu) {
-                details.push(`CPU: ${entry.cpu}`);
-            }
-            if (entry.memory) {
-                details.push(`Mem: ${entry.memory}`);
-            }
-        } else {
+        if (status !== "running") {
             details.push(status.charAt(0).toUpperCase() + status.slice(1));
         }
 
@@ -125,30 +114,42 @@ export class ScriptsTreeDataProvider implements vscode.TreeDataProvider<ScriptTr
     }
 
     async refresh(): Promise<void> {
+        let newEntries: ScriptStatusEntry[];
+
         if (!this.socketPath) {
-            this.entries = [];
+            newEntries = [];
+        } else if (!(await isDaemonRunning(this.socketPath))) {
+            newEntries = [];
+        } else {
+            try {
+                const output = await sendCommand(
+                    this.socketPath,
+                    `status ${JSON.stringify({ patterns: [], interval: undefined })}`,
+                );
+                newEntries = parseStatusOutput(output);
+            } catch {
+                newEntries = [];
+            }
+        }
+
+        const changed = !this.entriesEqual(this.entries, newEntries);
+        this.entries = newEntries;
+        if (changed) {
             this._onDidChangeTreeData.fire();
-            return;
         }
+    }
 
-        const running = await isDaemonRunning(this.socketPath);
-        if (!running) {
-            this.entries = [];
-            this._onDidChangeTreeData.fire();
-            return;
+    private entriesEqual(a: ScriptStatusEntry[], b: ScriptStatusEntry[]): boolean {
+        if (a.length !== b.length) {
+            return false;
         }
-
-        try {
-            const output = await sendCommand(
-                this.socketPath,
-                `status ${JSON.stringify({ patterns: [], interval: undefined })}`,
-            );
-            this.entries = parseStatusOutput(output);
-        } catch {
-            this.entries = [];
-        }
-
-        this._onDidChangeTreeData.fire();
+        return a.every(
+            (e, i) =>
+                e.id === b[i].id &&
+                e.name === b[i].name &&
+                e.status === b[i].status &&
+                e.restarts === b[i].restarts,
+        );
     }
 
     getTreeItem(element: ScriptTreeItem): vscode.TreeItem {
