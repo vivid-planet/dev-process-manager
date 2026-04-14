@@ -144,12 +144,12 @@ export function stripAnsi(str: string): string {
  */
 export function isDaemonRunning(socketPath: string): Promise<boolean> {
     return new Promise((resolve) => {
+        const client = createConnection(socketPath);
+
         const timeout = setTimeout(() => {
             client.destroy();
             resolve(false);
         }, 3000);
-
-        const client = createConnection(socketPath);
 
         client.on("connect", () => {
             clearTimeout(timeout);
