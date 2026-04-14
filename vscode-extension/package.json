@@ -1,0 +1,143 @@
+{
+    "name": "dev-process-manager",
+    "displayName": "Dev Process Manager",
+    "description": "VS Code extension for @comet/dev-process-manager - manage dev scripts from the sidebar",
+    "version": "0.1.0",
+    "publisher": "vivid-planet",
+    "license": "BSD-2-Clause",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "workspaceContains:**/dev-pm.config.*",
+        "workspaceContains:**/.pm.sock"
+    ],
+    "main": "./out/extension.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vivid-planet/dev-process-manager.git",
+        "directory": "vscode-extension"
+    },
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "dev-pm",
+                    "title": "Dev Process Manager",
+                    "icon": "resources/icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "dev-pm": [
+                {
+                    "id": "devPmScripts",
+                    "name": "Scripts"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "devPm.refreshScripts",
+                "title": "Refresh Scripts",
+                "category": "Dev PM",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "devPm.startScript",
+                "title": "Start",
+                "category": "Dev PM",
+                "icon": "$(play)"
+            },
+            {
+                "command": "devPm.stopScript",
+                "title": "Stop",
+                "category": "Dev PM",
+                "icon": "$(debug-stop)"
+            },
+            {
+                "command": "devPm.restartScript",
+                "title": "Restart",
+                "category": "Dev PM",
+                "icon": "$(debug-restart)"
+            },
+            {
+                "command": "devPm.showLogs",
+                "title": "Show Logs",
+                "category": "Dev PM",
+                "icon": "$(output)"
+            },
+            {
+                "command": "devPm.startAll",
+                "title": "Start All",
+                "category": "Dev PM",
+                "icon": "$(run-all)"
+            },
+            {
+                "command": "devPm.stopAll",
+                "title": "Stop All",
+                "category": "Dev PM",
+                "icon": "$(debug-stop)"
+            }
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "devPm.refreshScripts",
+                    "when": "view == devPmScripts",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "devPm.startAll",
+                    "when": "view == devPmScripts",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "devPm.stopAll",
+                    "when": "view == devPmScripts",
+                    "group": "navigation@3"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "devPm.startScript",
+                    "when": "view == devPmScripts && viewItem =~ /stopped|backoff/",
+                    "group": "inline@1"
+                },
+                {
+                    "command": "devPm.restartScript",
+                    "when": "view == devPmScripts && viewItem =~ /started|waiting|backoff/",
+                    "group": "inline@2"
+                },
+                {
+                    "command": "devPm.stopScript",
+                    "when": "view == devPmScripts && viewItem =~ /started|waiting|backoff/",
+                    "group": "inline@3"
+                },
+                {
+                    "command": "devPm.showLogs",
+                    "when": "view == devPmScripts",
+                    "group": "inline@4"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "lint": "eslint src/",
+        "package": "npx @vscode/vsce package"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.0",
+        "@types/vscode": "^1.85.0",
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.0"
+    }
+}
