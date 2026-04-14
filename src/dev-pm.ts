@@ -38,7 +38,7 @@ program
 
 program
     .command("status [patterns...]")
-    .aliases(["list", "ls"])
+    .aliases(["list", "ls", "st"])
     .addOption(new Option("-i, --interval [seconds]", "Keep status open and refresh periodically at given interval").preset("1"))
     .action((patterns: string[], options) => {
         status({ patterns, interval: options.interval ? parseInt(options.interval) : undefined });
