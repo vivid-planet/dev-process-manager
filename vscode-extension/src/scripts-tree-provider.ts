@@ -62,11 +62,11 @@ export class ScriptTreeItem extends vscode.TreeItem {
         this.iconPath = getStatusIcon(status);
 
         const details: string[] = [];
-        if (status !== "running") {
+        if (status !== "running" && status !== "stopped") {
             details.push(status.charAt(0).toUpperCase() + status.slice(1));
         }
 
-        if (entry.restarts && entry.restarts !== "0") {
+        if (entry.restarts > 0) {
             details.push(`Restarts: ${entry.restarts}`);
         }
 
@@ -90,6 +90,9 @@ export class ScriptTreeItem extends vscode.TreeItem {
 export class ScriptsTreeDataProvider implements vscode.TreeDataProvider<ScriptTreeItem> {
     private _onDidChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined | void>();
     readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
+
+    private _onDaemonLost = new vscode.EventEmitter<void>();
+    readonly onDaemonLost = this._onDaemonLost.event;
 
     private entries: ScriptStatusEntry[] = [];
     private refreshTimer: ReturnType<typeof setInterval> | undefined;
@@ -120,6 +123,8 @@ export class ScriptsTreeDataProvider implements vscode.TreeDataProvider<ScriptTr
             newEntries = [];
         } else if (!(await isDaemonRunning(this.socketPath))) {
             newEntries = [];
+            this.stopAutoRefresh();
+            this._onDaemonLost.fire();
         } else {
             try {
                 const output = await sendCommand(
@@ -166,5 +171,6 @@ export class ScriptsTreeDataProvider implements vscode.TreeDataProvider<ScriptTr
     dispose(): void {
         this.stopAutoRefresh();
         this._onDidChangeTreeData.dispose();
+        this._onDaemonLost.dispose();
     }
 }

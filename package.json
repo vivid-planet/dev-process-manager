@@ -11,15 +11,15 @@
         "lib/**/*"
     ],
     "scripts": {
-        "prepare": "husky",
+        "build": "tsc",
+        "build-and-publish": "npm run build && npx changeset publish",
         "lint": "run-p lint:eslint lint:tsc",
         "lint:eslint": "eslint src/",
         "lint:tsc": "tsc",
-        "build": "tsc",
+        "prepare": "husky",
         "start": "tsc --watch",
         "test": "vitest run",
-        "test:watch": "vitest",
-        "build-and-publish": "npm run build && npx changeset publish"
+        "test:watch": "vitest"
     },
     "repository": {
         "type": "git",

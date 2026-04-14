@@ -1,7 +1,7 @@
 import { createConnection, type Socket } from "net";
 
 /**
- * Parsed script status entry from the daemon's status table output.
+ * Parsed script status entry from the daemon's JSON response.
  */
 export interface ScriptStatusEntry {
     id: number;
@@ -9,8 +9,8 @@ export interface ScriptStatusEntry {
     status: string;
     cpu: string;
     memory: string;
-    pid: string;
-    restarts: string;
+    pid: number | undefined;
+    restarts: number;
 }
 
 /**
@@ -84,52 +84,14 @@ export function sendCommandStreaming(
 }
 
 /**
- * Parse the ANSI-decorated CLI table output from the status command into structured data.
- * The daemon sends a cli-table3 formatted table with ANSI color codes.
+ * Parse the daemon's JSON status response into structured data.
  */
 export function parseStatusOutput(output: string): ScriptStatusEntry[] {
-    const entries: ScriptStatusEntry[] = [];
-
-    // Strip ANSI escape codes for parsing
-    const clean = stripAnsi(output);
-
-    // The table uses box-drawing characters (│) as column separators
-    const lines = clean.split("\n");
-
-    for (const line of lines) {
-        // Match table data rows: lines that start and end with │
-        if (!line.includes("│")) {
-            continue;
-        }
-
-        // Split by │ and trim; remove leading/trailing empty strings from the outer borders
-        const cells = line.split("│").map((c) => c.trim());
-        // Remove first and last empty elements (from leading/trailing │)
-        if (cells[0] === "") cells.shift();
-        if (cells[cells.length - 1] === "") cells.pop();
-
-        if (cells.length < 7) {
-            continue;
-        }
-
-        // Skip the header row
-        const id = parseInt(cells[0], 10);
-        if (isNaN(id)) {
-            continue;
-        }
-
-        entries.push({
-            id,
-            name: cells[1],
-            status: cells[2].toLowerCase(),
-            cpu: cells[3],
-            memory: cells[4],
-            pid: cells[5],
-            restarts: cells[6],
-        });
-    }
-
-    return entries;
+    const line = output.trim();
+    if (!line) return [];
+    const parsed = JSON.parse(line);
+    if (parsed.error) return [];
+    return parsed as ScriptStatusEntry[];
 }
 
 /**
@@ -138,6 +100,21 @@ export function parseStatusOutput(output: string): ScriptStatusEntry[] {
 export function stripAnsi(str: string): string {
     // eslint-disable-next-line no-control-regex
     return str.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, "").replace(/\x1B\[[\?]?[0-9;]*[a-zA-Z]/g, "");
+}
+
+/**
+ * Query the daemon's version. Returns undefined if the daemon doesn't support the version command (old daemon).
+ */
+export async function getDaemonVersion(socketPath: string): Promise<string | undefined> {
+    try {
+        const output = await sendCommand(socketPath, "version");
+        const line = output.trim();
+        if (!line) return undefined;
+        const parsed = JSON.parse(line);
+        return parsed.version;
+    } catch {
+        return undefined;
+    }
 }
 
 /**

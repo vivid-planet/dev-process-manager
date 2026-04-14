@@ -1,7 +1,8 @@
 import colors from "colors";
-import { existsSync, watchFile } from "fs";
+import { existsSync, readFileSync, watchFile } from "fs";
 import { createServer, type Server } from "net";
-import { dirname } from "path";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
 import { logsDaemonCommand } from "../daemon-command/logs.daemon-command.js";
 import { restartDaemonCommand } from "../daemon-command/restart.daemon-command.js";
@@ -86,6 +87,11 @@ export const startDaemon = async (): Promise<void> => {
                 statusDaemonCommand(daemon, s, names);
             } else if (cmd == "shutdown") {
                 shutdownDaemonCommand(daemon, s);
+            } else if (cmd == "version") {
+                const __dirname = dirname(fileURLToPath(import.meta.url));
+                const { version } = JSON.parse(readFileSync(resolve(__dirname, "../../package.json"), "utf-8"));
+                s.write(JSON.stringify({ version }) + "\n");
+                s.end();
             } else {
                 s.write(`unknown command ${cmd}`);
                 s.end();

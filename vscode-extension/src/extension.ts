@@ -2,12 +2,29 @@ import { existsSync } from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 
-import { sendCommand, sendCommandStreaming, stripAnsi } from "./daemon-client";
+import { getDaemonVersion, isDaemonRunning, sendCommand, sendCommandStreaming, stripAnsi } from "./daemon-client";
 import { type ScriptTreeItem, ScriptsTreeDataProvider } from "./scripts-tree-provider";
 
+const MINIMUM_DAEMON_VERSION = "3.2.0";
+
 let treeDataProvider: ScriptsTreeDataProvider | undefined;
+let reconnectTimer: ReturnType<typeof setInterval> | undefined;
 const logOutputChannels = new Map<string, vscode.OutputChannel>();
 const activeLogConnections = new Map<string, { dispose: () => void }>();
+
+function startReconnecting(socketPath: string, treeView: vscode.TreeView<ScriptTreeItem>): void {
+    if (reconnectTimer) return;
+    reconnectTimer = setInterval(() => {
+        connectToDaemon(socketPath, treeView);
+    }, 5000);
+}
+
+function stopReconnecting(): void {
+    if (reconnectTimer) {
+        clearInterval(reconnectTimer);
+        reconnectTimer = undefined;
+    }
+}
 
 /**
  * Find the `.pm.sock` socket file in the workspace.
@@ -48,6 +65,41 @@ function findSocketPath(): string | undefined {
     return undefined;
 }
 
+function isVersionCompatible(version: string | undefined): boolean {
+    if (!version) return false;
+    const parts = version.split(".").map(Number);
+    const minParts = MINIMUM_DAEMON_VERSION.split(".").map(Number);
+    for (let i = 0; i < minParts.length; i++) {
+        if ((parts[i] ?? 0) > minParts[i]) return true;
+        if ((parts[i] ?? 0) < minParts[i]) return false;
+    }
+    return true;
+}
+
+async function connectToDaemon(socketPath: string, treeView: vscode.TreeView<ScriptTreeItem>): Promise<void> {
+    if (!(await isDaemonRunning(socketPath))) {
+        treeView.message = "Dev PM daemon is not running.";
+        treeDataProvider!.stopAutoRefresh();
+        startReconnecting(socketPath, treeView);
+        return;
+    }
+
+    const version = await getDaemonVersion(socketPath);
+    if (!isVersionCompatible(version)) {
+        const actual = version ?? "unknown";
+        treeView.message = `Daemon version ${actual} is not compatible. Minimum required: ${MINIMUM_DAEMON_VERSION}. Please update dev-process-manager and restart the daemon.`;
+        treeDataProvider!.stopAutoRefresh();
+        startReconnecting(socketPath, treeView);
+        return;
+    }
+
+    stopReconnecting();
+    treeView.message = undefined;
+    treeDataProvider!.setSocketPath(socketPath);
+    treeDataProvider!.startAutoRefresh();
+    treeDataProvider!.refresh();
+}
+
 export function activate(context: vscode.ExtensionContext): void {
     treeDataProvider = new ScriptsTreeDataProvider();
 
@@ -58,24 +110,35 @@ export function activate(context: vscode.ExtensionContext): void {
 
     const socketPath = findSocketPath();
     if (socketPath) {
-        treeDataProvider.setSocketPath(socketPath);
-        treeDataProvider.startAutoRefresh();
-        treeDataProvider.refresh();
+        connectToDaemon(socketPath, treeView);
+    } else {
+        treeView.message = "No dev-pm.config found in workspace.";
     }
+
+    // When daemon goes down during auto-refresh polling, start reconnecting
+    treeDataProvider.onDaemonLost(() => {
+        const sp = findSocketPath();
+        if (sp) {
+            treeView.message = "Dev PM daemon is not running. Start it with: dev-pm start";
+            startReconnecting(sp, treeView);
+        }
+    });
 
     // Watch for workspace changes to detect socket file
     const fileWatcher = vscode.workspace.createFileSystemWatcher("**/.pm.sock");
     fileWatcher.onDidCreate(() => {
         const newSocketPath = findSocketPath();
         if (newSocketPath && treeDataProvider) {
-            treeDataProvider.setSocketPath(newSocketPath);
-            treeDataProvider.startAutoRefresh();
-            treeDataProvider.refresh();
+            connectToDaemon(newSocketPath, treeView);
         }
     });
     fileWatcher.onDidDelete(() => {
         if (treeDataProvider) {
-            treeDataProvider.refresh();
+            treeDataProvider.stopAutoRefresh();
+            const sp = findSocketPath();
+            if (sp) {
+                connectToDaemon(sp, treeView);
+            }
         }
     });
 
@@ -224,6 +287,8 @@ function openLogs(item: ScriptTreeItem): void {
 }
 
 export function deactivate(): void {
+    stopReconnecting();
+
     // Clean up all log streaming connections
     for (const [, connection] of activeLogConnections) {
         connection.dispose();
