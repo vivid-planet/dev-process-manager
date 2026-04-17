@@ -3,35 +3,13 @@ import * as vscode from "vscode";
 import {
     isDaemonRunning,
     parseStatusOutput,
-    type ScriptStatusEntry,
     sendCommand,
 } from "./daemon-client";
-
-type ScriptStatus = "running" | "stopped" | "waiting" | "stopping" | "backoff" | "unknown";
-
-function normalizeStatus(rawStatus: string): ScriptStatus {
-    const s = rawStatus.toLowerCase().trim();
-    if (s === "running" || s === "started") {
-        return "running";
-    }
-    if (s === "stopped") {
-        return "stopped";
-    }
-    if (s === "waiting") {
-        return "waiting";
-    }
-    if (s === "stopping") {
-        return "stopping";
-    }
-    if (s === "backoff") {
-        return "backoff";
-    }
-    return "unknown";
-}
+import { ScriptStatus, ScriptStatusEntry } from "../../shared-types";
 
 function getStatusIcon(status: ScriptStatus): vscode.ThemeIcon {
     switch (status) {
-        case "running":
+        case "started":
             return new vscode.ThemeIcon("play-circle", new vscode.ThemeColor("testing.iconPassed"));
         case "stopped":
             return new vscode.ThemeIcon("circle-outline", new vscode.ThemeColor("disabledForeground"));
@@ -52,17 +30,14 @@ export class ScriptTreeItem extends vscode.TreeItem {
     ) {
         super(entry.name, vscode.TreeItemCollapsibleState.None);
 
-        const status = normalizeStatus(entry.status);
+        const status = entry.status;
 
-        // Map to daemon's original status for context value (used in when clauses for menus)
-        // The daemon uses "started" for running scripts
-        const contextStatus = status === "running" ? "started" : status;
-        this.contextValue = contextStatus;
+        this.contextValue = status;
 
         this.iconPath = getStatusIcon(status);
 
         const details: string[] = [];
-        if (status !== "running" && status !== "stopped") {
+        if (status !== "started" && status !== "stopped") {
             details.push(status.charAt(0).toUpperCase() + status.slice(1));
         }
 

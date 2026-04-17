@@ -6,10 +6,12 @@ import { type Socket } from "net";
 import path from "path";
 import waitOn from "wait-on";
 
+import type { ScriptStatus } from "../../shared-types.js";
 import { type ScriptDefinition } from "../script-definition.type.js";
 
+export type { ScriptStatus };
+
 const KEEP_LOG_LINES = 100;
-export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
 
 let expandedEnv: Record<string, string>;
 function loadExpandedEnv() {

@@ -1,17 +1,5 @@
 import { createConnection, type Socket } from "net";
-
-/**
- * Parsed script status entry from the daemon's JSON response.
- */
-export interface ScriptStatusEntry {
-    id: number;
-    name: string;
-    status: string;
-    cpu: string;
-    memory: string;
-    pid: number | undefined;
-    restarts: number;
-}
+import type { ScriptStatusEntry } from "../../shared-types";
 
 /**
  * Send a command to the dev-pm daemon over the Unix socket and collect the full response.
