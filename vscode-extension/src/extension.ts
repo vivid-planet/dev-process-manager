@@ -258,14 +258,13 @@ function openLogs(item: ScriptTreeItem): void {
     outputChannel.show(true);
 
     // Stream logs (no lines = live streaming after buffer dump)
-    const command = `logs ${JSON.stringify({ patterns: [scriptName] })}`;
+    const command = `logs ${JSON.stringify({ patterns: [scriptName], hideLogPrefix: true })}`;
     const connection = sendCommandStreaming(
         socketPath,
         command,
         (data) => {
             // Strip ANSI color codes for clean output
             const cleanData = stripAnsi(data);
-            // Remove the script name prefix that the daemon adds (e.g., "script-name: ")
             const lines = cleanData.split("\n");
             for (const line of lines) {
                 if (line.trim()) {

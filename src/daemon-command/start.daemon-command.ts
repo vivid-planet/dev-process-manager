@@ -25,7 +25,7 @@ export async function startDaemonCommand(daemon: Daemon, socket: Socket, options
             script.startProcess(); //don't await
         }
         if (options.follow) {
-            script.addLogSocket(socket);
+            script.addLogSocket(socket, { hideLogPrefix: false });
         }
     }
 

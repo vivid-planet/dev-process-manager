@@ -28,7 +28,7 @@ export class Script {
     status: ScriptStatus = "stopped";
     process?: ChildProcess;
     logBuffer: string[] = [];
-    logSockets: Socket[] = [];
+    logSockets: { socket: Socket; hideLogPrefix: boolean }[] = [];
     logPrefix: string;
     restartCount = 0;
 
@@ -94,8 +94,8 @@ export class Script {
         }
     }
 
-    addLogSocket(socket: Socket): void {
-        this.logSockets.push(socket);
+    addLogSocket(socket: Socket, options: { hideLogPrefix: boolean }): void {
+        this.logSockets.push({ socket, ...options });
     }
 
     handleLogs(data: Buffer | string): void {
@@ -104,7 +104,7 @@ export class Script {
         for (const line of incomingLines) {
             console.log(`${this.logPrefix}${line}`);
             this.logSockets.forEach((socket) => {
-                socket.write(`${this.logPrefix}${line}\n`);
+                socket.socket.write(`${socket.hideLogPrefix ? "" : this.logPrefix}${line}\n`);
             });
         }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);
