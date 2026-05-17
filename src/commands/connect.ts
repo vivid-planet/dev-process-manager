@@ -20,9 +20,11 @@ export async function connect(): Promise<Socket> {
         client.on("connect", () => {
             resolve(client);
         });
-        client.on("data", (data) => {
-            //TODO handle stderr/stdin and also write on stderr
-            process.stdout.write(data);
-        });
+    });
+}
+
+export function pipeToStdout(client: Socket): void {
+    client.on("data", (data) => {
+        process.stdout.write(data);
     });
 }
