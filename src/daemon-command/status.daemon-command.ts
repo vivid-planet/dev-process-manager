@@ -103,7 +103,11 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
                 } catch {
                     //
                 }
-                ports = (await listeningPortsRecursive(pid)).join(", ");
+                // detect ports only until some are found, then reuse the stored value for this process
+                if (!script.detectedPorts?.length) {
+                    script.detectedPorts = await listeningPortsRecursive(pid);
+                }
+                ports = script.detectedPorts.join(", ");
             }
             table.push([script.id, script.name, status, cpu, memory, pid?.toString(), ports, script.restartCount]);
         }

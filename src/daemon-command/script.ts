@@ -29,6 +29,7 @@ export class Script {
     logSockets: Socket[] = [];
     logPrefix: string;
     restartCount = 0;
+    detectedPorts?: number[];
 
     constructor(scriptDefinition: ScriptDefinition) {
         this.scriptDefinition = scriptDefinition;
@@ -145,6 +146,7 @@ export class Script {
         this.handleLogs("[dev-pm] starting process...");
         const NPM_PATH = `${execSync("npm root").toString().trim()}/.bin`;
         this.status = "started";
+        this.detectedPorts = undefined; // reset so ports are re-detected for the new process
         const p = spawn("bash", ["-c", this.scriptDefinition.script], {
             detached: true,
             env: { ...process.env, ...(this.scriptDefinition.env ?? {}), PATH: `${NPM_PATH}:${process.env.PATH}` },
