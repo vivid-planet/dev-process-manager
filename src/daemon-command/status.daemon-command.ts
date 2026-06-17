@@ -1,14 +1,11 @@
-import { execFile } from "child_process";
 import CLITable from "cli-table3";
 import colors from "colors";
 import { create as createLogUpdate } from "log-update";
 import { type Socket } from "net";
+import { pidToPorts } from "pid-port";
 import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
-import { promisify } from "util";
-
-const execFileAsync = promisify(execFile);
 
 import { type Daemon } from "../commands/start-daemon.command.js";
 import { type ScriptStatus } from "./script.js";
@@ -42,16 +39,10 @@ async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: nu
 async function listeningPortsRecursive(pid: number): Promise<number[]> {
     const pids = await pidtree(pid, { root: true });
     try {
-        // lsof exits with code 1 when no matching files are found, so don't throw on non-zero exit
-        const { stdout } = await execFileAsync("lsof", ["-nP", "-iTCP", "-sTCP:LISTEN", "-a", "-p", pids.join(","), "-Fn"]).catch(
-            (err: { stdout?: string }) => ({ stdout: err.stdout ?? "" }),
-        );
+        const portsByPid = await pidToPorts(pids);
         const ports = new Set<number>();
-        for (const line of stdout.split("\n")) {
-            // -Fn produces lines like "n*:3000" or "n127.0.0.1:3000"
-            if (!line.startsWith("n")) continue;
-            const match = line.match(/:(\d+)$/);
-            if (match) ports.add(Number(match[1]));
+        for (const pidPorts of portsByPid.values()) {
+            for (const port of pidPorts) ports.add(port);
         }
         return [...ports].sort((a, b) => a - b);
     } catch {
