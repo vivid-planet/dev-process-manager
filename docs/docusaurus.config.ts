@@ -54,6 +54,7 @@ const config: Config = {
             logo: {
                 alt: "dev-process-manager logo",
                 src: "img/logo.svg",
+                srcDark: "img/logo-dark.svg",
             },
             items: [
                 {
