@@ -42,6 +42,7 @@ them at any time with `dpm logs`.
 ## Where to go next
 
 - New here? Start with the [Use Cases](./use-cases.md) to see where dev-process-manager fits.
+- Weighing your options? See the [Comparison with alternatives](./comparison.md) (pm2, terminal tabs, Docker Compose and more).
 - Ready to try it? Follow the [Getting Started](./getting-started.md) guide.
 - Looking for the full config surface? See the [Configuration](./configuration.md)
   reference and the [API Reference](./api-reference.md).
