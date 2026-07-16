@@ -7,9 +7,10 @@ const config: Config = {
     tagline: "A Node.js process manager for local development environments that need multiple processes",
     favicon: "img/favicon.svg",
 
-    // Deployed to GitHub Pages via .github/workflows/deploy-docs.yml.
-    url: "https://vivid-planet.github.io",
-    baseUrl: "/dev-process-manager/",
+    // Deployed on Netlify (see netlify.toml). Update `url` to the production domain
+    // once the Netlify site / custom domain is set up.
+    url: "https://dev-process-manager.netlify.app",
+    baseUrl: "/",
 
     organizationName: "vivid-planet",
     projectName: "dev-process-manager",
