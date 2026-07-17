@@ -45,7 +45,7 @@ them at any time with `dpm logs`.
 - Weighing your options? See the [Comparison with alternatives](./comparison.md) (pm2, terminal tabs, Docker Compose and more).
 - Ready to try it? Follow the [Getting Started](./getting-started.md) guide.
 - Looking for the full config surface? See the [Configuration](./configuration.md)
-  reference and the [API Reference](./api-reference.md).
+  reference.
 - Want to copy-paste something real? Jump to [Examples](./examples.md).
 
 :::note

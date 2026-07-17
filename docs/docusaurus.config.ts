@@ -67,11 +67,6 @@ const config: Config = {
                     label: "Docs",
                 },
                 {
-                    to: "/docs/api-reference",
-                    label: "API",
-                    position: "left",
-                },
-                {
                     to: "/docs/examples",
                     label: "Examples",
                     position: "left",
@@ -104,7 +99,6 @@ const config: Config = {
                     items: [
                         { label: "Configuration", to: "/docs/configuration" },
                         { label: "Commands", to: "/docs/commands" },
-                        { label: "API Reference", to: "/docs/api-reference" },
                         { label: "Examples", to: "/docs/examples" },
                     ],
                 },

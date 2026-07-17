@@ -11,7 +11,6 @@ const sidebars: SidebarsConfig = {
             collapsed: false,
             items: ["getting-started", "configuration", "commands"],
         },
-        "api-reference",
         "examples",
     ],
 };

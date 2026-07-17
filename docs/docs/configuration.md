@@ -11,8 +11,7 @@ dev-process-manager is configured with a single file at your project root:
 `cjs` and `json`.
 
 The file must have a **default export** containing a config object with a `scripts`
-array. Using [`defineConfig`](./api-reference.md#defineconfig) gives you full type
-checking and autocompletion:
+array. Using `defineConfig` gives you full type checking and autocompletion:
 
 ```typescript title="dev-pm.config.ts"
 import { defineConfig } from "@comet/dev-process-manager";
