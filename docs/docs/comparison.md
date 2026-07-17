@@ -33,7 +33,6 @@ The alternatives covered here:
 | **Groups / aliases / selective control**  | ✅                         | ⚠️ (per tab)           | ❌                         | ⚠️ (by process name)          | ⚠️ (by name / namespace)  | ⚠️ (services / profiles)           |
 | **Typed config as code**                  | ✅ (`dev-pm.config.ts`)    | ❌                     | ⚠️ (CLI args / JSON)       | ⚠️ (`Procfile`)               | ⚠️ (`ecosystem.config.js`)| ⚠️ (YAML)                          |
 | **Attach / detach & tail logs later**     | ✅ (daemon)                | ✅ (native terminals)  | ❌ (foreground only)       | ⚠️ (Overmind via tmux)        | ✅ (daemonized)           | ✅ (`-d` + `compose logs`)         |
-| **`.env` / `.env.local` loading**         | ✅ (with expansion)        | ⚠️ (whatever the shell loads) | ❌                  | ✅                            | ⚠️ (env in config)        | ✅ (`.env` / `env_file`)           |
 | **Requires containers / images**          | ❌                         | ❌                     | ❌                         | ❌                            | ❌                        | ✅                                 |
 | **Setup weight**                          | Light                      | None (but tedious)     | Very light                 | Light                         | Medium                    | Heavier                            |
 
@@ -51,14 +50,14 @@ that manual bookkeeping.
 
 Great for running a few npm scripts together with prefixed, colorized output in a single
 terminal. They are intentionally minimal: there is **no dependency ordering** (every
-command starts at once), only basic restart handling, and no notion of groups, a
-daemon, or `.env` layering. dev-process-manager is a better fit once startup order
+command starts at once), only basic restart handling, and no notion of groups or a
+daemon. dev-process-manager is a better fit once startup order
 ([`waitOn`](./configuration.md#waiton)) or reliable crash recovery start to matter.
 
 ### Procfile tools (foreman / node-foreman / Overmind)
 
-Procfile-based runners are simple and language-agnostic, load `.env` files, and
-aggregate logs. What they lack is **dependency-aware startup** — they cannot wait for a
+Procfile-based runners are simple, language-agnostic, and aggregate logs. What they
+lack is **dependency-aware startup** — they cannot wait for a
 TCP port or a build artifact before starting a process — and their crash-recovery and
 selective-control stories vary by implementation. dev-process-manager adds first-class
 `waitOn`, groups/aliases, and automatic backoff on top of the same one-command
