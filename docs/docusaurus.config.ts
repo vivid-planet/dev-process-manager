@@ -7,8 +7,9 @@ const config: Config = {
     tagline: "A Node.js process manager for local development environments that need multiple processes",
     favicon: "img/favicon.svg",
 
-    // Deployed on Netlify (see netlify.toml). Update `url` to the production domain
-    // once the Netlify site / custom domain is set up.
+    // Deployed on Netlify (see netlify.toml). Netlify builds a production deploy on
+    // pushes to main and a deploy preview for each pull request. Update `url` to the
+    // production domain once the Netlify site / custom domain is set up.
     url: "https://dev-process-manager.netlify.app",
     baseUrl: "/",
 
