@@ -28,8 +28,8 @@ dpm start all
   `@groups`.
 - **Automatic crash recovery** — crashed processes restart with exponential backoff.
 - **Config as code** — a single typed `dev-pm.config.ts` describes everything.
-- **Environment files** — automatic loading of `.env` and `.env.local` with variable
-  expansion.
+- **Environment files** — `.env` and `.env.local` are read (with variable expansion) to
+  resolve [`waitOn`](./configuration.md#waiton) resources.
 
 ## How it works
 

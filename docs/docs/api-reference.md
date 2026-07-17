@@ -130,8 +130,10 @@ A few behaviors are useful to know when writing configs:
   `PATH`, so locally installed CLIs run without `npx`.
 - **Automatic restart** — a process that exits unexpectedly is restarted with
   exponential backoff (capped at 10 seconds between attempts).
-- **Environment files** — `.env` then `.env.local` are loaded automatically, with
-  variable expansion; `.env.local` wins.
+- **Environment files** — `.env` then `.env.local` are read (with variable expansion;
+  `.env.local` wins) **only** to expand variables inside [`waitOn`](./configuration.md#waiton).
+  They are **not** injected into executed scripts; use the [`env`](./configuration.md#env)
+  option for that.
 
 ## CLI reference
 

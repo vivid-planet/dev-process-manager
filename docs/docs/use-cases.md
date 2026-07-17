@@ -73,9 +73,9 @@ whole environment by hand.
 ## Share a reproducible dev setup across a team
 
 Because the whole environment is described in a committed `dev-pm.config.ts` (plus a
-committed `.env` for shared defaults), every developer gets the **same startup
-sequence** out of the box. New team members can clone, install and run one command
-instead of following a long "how to run things locally" wiki page.
+committed `.env` for shared `waitOn` values such as ports), every developer gets the
+**same startup sequence** out of the box. New team members can clone, install and run
+one command instead of following a long "how to run things locally" wiki page.
 
 ## Integrate into CI-like local checks
 

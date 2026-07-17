@@ -115,16 +115,23 @@ waitOn: ["tcp:$POSTGRESQL_PORT"]
 ### `env`
 
 Extra environment variables for this specific process. They are merged on top of the
-inherited process environment (and the loaded `.env` files), taking precedence:
+inherited process environment, taking precedence:
 
 ```typescript
 { name: "api", script: "npm run start", env: { NODE_ENV: "development", DEBUG: "app:*" } }
 ```
 
+:::note
+The values loaded from `.env` / `.env.local` (see [below](#environment-variables)) are
+**not** injected here — those files are only used to expand variables inside
+[`waitOn`](#waiton). Use `env` (or your script's own tooling, e.g. `dotenv`) to provide
+environment variables to the running process.
+:::
+
 ## Environment variables
 
-dev-process-manager automatically loads environment variables from the following files
-in the project root, in order:
+dev-process-manager reads environment variables from the following files in the project
+root, in order:
 
 1. `.env` — shared defaults, typically committed to version control.
 2. `.env.local` — local overrides, typically added to `.gitignore`.
@@ -132,7 +139,19 @@ in the project root, in order:
 Values in `.env.local` take precedence over those in `.env`. **Variable expansion**
 (e.g. `$OTHER_VAR`) is supported in both files.
 
+:::caution Used only for `waitOn`
+These files are loaded **only** to expand variables inside
+[`waitOn`](#waiton) resources — for example resolving `tcp:$POSTGRESQL_PORT`. They are
+**not** injected into the environment of your executed scripts. To pass environment
+variables to a running process, use the per-script [`env`](#env) option, or let the
+script load them itself (e.g. via `dotenv`).
+:::
+
 ```bash title=".env"
 POSTGRESQL_PORT=5432
-DATABASE_URL=postgres://localhost:$POSTGRESQL_PORT/app
+```
+
+```typescript title="dev-pm.config.ts"
+// $POSTGRESQL_PORT is resolved from .env / .env.local when evaluating waitOn:
+{ name: "api", script: "npm run start", waitOn: ["tcp:$POSTGRESQL_PORT"] }
 ```
