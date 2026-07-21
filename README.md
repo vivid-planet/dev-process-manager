@@ -46,12 +46,14 @@ export default defineConfig({
 
 ## Environment Variables
 
-dev-process-manager automatically loads environment variables from the following files in the project root, in order:
+dev-process-manager loads environment variables from the following files in the project root, in order:
 
 1. `.env` — shared defaults, typically committed to version control
 2. `.env.local` — local overrides, typically added to `.gitignore`
 
 Values defined in `.env.local` take precedence over those in `.env`. Variable expansion (e.g. `$OTHER_VAR`) is supported in both files.
+
+These variables are only used for substitution within `waitOn` resources (e.g. `tcp:$POSTGRESQL_PORT`). They are **not** passed to the script processes — scripts inherit the daemon's environment.
 
 ## Commands
 
