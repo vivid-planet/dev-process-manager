@@ -2,6 +2,7 @@ import CLITable from "cli-table3";
 import colors from "colors";
 import { create as createLogUpdate } from "log-update";
 import { type Socket } from "net";
+import { pidToPorts } from "pid-port";
 import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
@@ -35,6 +36,20 @@ async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: nu
     );
 }
 
+async function listeningPortsRecursive(pid: number): Promise<number[]> {
+    const pids = await pidtree(pid, { root: true });
+    try {
+        const portsByPid = await pidToPorts(pids);
+        const ports = new Set<number>();
+        for (const pidPorts of portsByPid.values()) {
+            for (const port of pidPorts) ports.add(port);
+        }
+        return [...ports].sort((a, b) => a - b);
+    } catch {
+        return [];
+    }
+}
+
 export async function statusDaemonCommand(daemon: Daemon, socket: Socket, options: StatusCommandOptions): Promise<void> {
     const scriptsToProcess = scriptsMatchingPattern(daemon, { patterns: options.patterns });
     if (!scriptsToProcess.length) {
@@ -63,6 +78,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
                 colors.blue.bold("CPU"),
                 colors.blue.bold("Mem"),
                 colors.bold.blue("PID"),
+                colors.bold.blue("Ports"),
                 colors.bold.blue("Restarts"),
             ],
             style: { compact: true },
@@ -78,6 +94,7 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
 
             let cpu = "";
             let memory = "";
+            let ports = "";
             if (pid && script.status == "started") {
                 try {
                     const stats = await pidusageRecursive(pid);
@@ -86,8 +103,13 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
                 } catch {
                     //
                 }
+                // detect ports only until some are found, then reuse the stored value for this process
+                if (!script.detectedPorts?.length) {
+                    script.detectedPorts = await listeningPortsRecursive(pid);
+                }
+                ports = script.detectedPorts.join(", ");
             }
-            table.push([script.id, script.name, status, cpu, memory, pid?.toString(), script.restartCount]);
+            table.push([script.id, script.name, status, cpu, memory, pid?.toString(), ports, script.restartCount]);
         }
 
         if (!socket.writable) break;
