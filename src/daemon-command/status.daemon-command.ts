@@ -1,10 +1,10 @@
-import { type Socket } from "net";
+import type { Socket } from "net";
 import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
-import { type Daemon } from "../commands/start-daemon.command.js";
-import { type ScriptStatus } from "./script.js";
+import type { Daemon } from "../commands/start-daemon.command.js";
+import type { ScriptStatus } from "./script.js";
 import { scriptsMatchingPattern, type ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
@@ -73,7 +73,9 @@ export async function statusDaemonCommand(daemon: Daemon, socket: Socket, option
 
     do {
         const entries = await getScriptEntries(daemon, options.patterns);
-        if (!socket.writable) break;
+        if (!socket.writable) {
+            break;
+        }
         socket.write(`${JSON.stringify(entries)}\n`);
         if (options.interval) {
             await delay(options.interval * 1000);

@@ -1,9 +1,9 @@
 import CLITable from "cli-table3";
 import colors from "colors";
-import { create as createLogUpdate } from "log-update";
+import { createLogUpdate } from "log-update";
 
-import { type ScriptStatus } from "../daemon-command/script.js";
-import { type ScriptStatusEntry, type StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
+import type { ScriptStatus } from "../daemon-command/script.js";
+import type { ScriptStatusEntry, StatusCommandOptions } from "../daemon-command/status.daemon-command.js";
 import { connect } from "./connect.js";
 import { validConfigOrExit } from "./validate-config.js";
 
