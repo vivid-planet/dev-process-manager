@@ -1,11 +1,11 @@
-# @comet/dev-process-manager
+# dev-process-manager
 
 dev-process-manager is a Node.js process manager for local development environments that need multiple processes. It can be easily integrated into existing Node.js projects.
 
 ## Installation
 
 ```console
-$ npm install @comet/dev-process-manager
+$ npm install dev-process-manager
 ```
 
 Recommended Alias:
@@ -22,7 +22,7 @@ This file defines all available scripts, which should be started by dev-process-
 ### dev-pm.config.ts
 
 ```typescript
-import { defineConfig } from '@comet/dev-process-manager';
+import { defineConfig } from 'dev-process-manager';
 
 export default defineConfig({
     scripts: [

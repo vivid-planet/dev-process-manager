@@ -14,7 +14,7 @@ at your project root.
 The smallest useful config — an API and an admin dev server.
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [
@@ -35,7 +35,7 @@ The API waits for Postgres to accept connections and for a shared package to be 
 before it starts.
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [
@@ -65,7 +65,7 @@ POSTGRESQL_PORT=5432
 ```
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [
@@ -84,7 +84,7 @@ Organize a larger stack into groups so you can start slices of it, and add alias
 convenience.
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [
@@ -127,7 +127,7 @@ dpm status -i 2          # watch the whole stack refresh every 2s
 Give one process its own environment values.
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [
@@ -148,7 +148,7 @@ export default defineConfig({
 A more complete example bringing several of the features together.
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [

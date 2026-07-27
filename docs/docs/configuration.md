@@ -14,7 +14,7 @@ The file must have a **default export** containing a config object with a `scrip
 array. Using `defineConfig` gives you full type checking and autocompletion:
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [

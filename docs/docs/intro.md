@@ -51,5 +51,5 @@ them at any time with `dpm logs`.
 :::note
 This project is developed and maintained by
 [Vivid Planet Software GmbH](https://www.vivid-planet.com/) and published on npm as
-[`@comet/dev-process-manager`](https://www.npmjs.com/package/@comet/dev-process-manager).
+[`dev-process-manager`](https://www.npmjs.com/package/dev-process-manager).
 :::

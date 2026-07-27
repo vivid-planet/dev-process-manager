@@ -1,5 +1,5 @@
 {
-    "name": "@comet/dev-process-manager-docs",
+    "name": "dev-process-manager-docs",
     "version": "0.0.0",
     "private": true,
     "scripts": {
