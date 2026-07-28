@@ -16,7 +16,7 @@ This guide takes you from zero to a running multi-process dev environment.
 ## 1. Install
 
 ```bash
-npm install @comet/dev-process-manager
+npm install dev-process-manager
 ```
 
 ## 2. Add a convenient alias (recommended)
@@ -37,7 +37,7 @@ Add a `dev-pm.config.ts` file to your project root. It lists every process
 dev-process-manager should manage:
 
 ```typescript title="dev-pm.config.ts"
-import { defineConfig } from "@comet/dev-process-manager";
+import { defineConfig } from "dev-process-manager";
 
 export default defineConfig({
     scripts: [

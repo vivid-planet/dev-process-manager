@@ -72,7 +72,7 @@ const config: Config = {
                     position: "left",
                 },
                 {
-                    href: "https://www.npmjs.com/package/@comet/dev-process-manager",
+                    href: "https://www.npmjs.com/package/dev-process-manager",
                     label: "npm",
                     position: "right",
                 },
@@ -106,7 +106,7 @@ const config: Config = {
                     title: "More",
                     items: [
                         { label: "GitHub", href: "https://github.com/vivid-planet/dev-process-manager" },
-                        { label: "npm", href: "https://www.npmjs.com/package/@comet/dev-process-manager" },
+                        { label: "npm", href: "https://www.npmjs.com/package/dev-process-manager" },
                         { label: "Vivid Planet", href: "https://www.vivid-planet.com/" },
                     ],
                 },

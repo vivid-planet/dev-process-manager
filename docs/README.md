@@ -1,7 +1,7 @@
 # dev-process-manager documentation site
 
 This directory contains the [Docusaurus](https://docusaurus.io/) website for
-`@comet/dev-process-manager`.
+`dev-process-manager`.
 
 ## Local development
 
