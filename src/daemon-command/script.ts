@@ -2,21 +2,23 @@ import { type ChildProcess, execSync, spawn } from "child_process";
 import colors from "colors";
 import * as dotenv from "dotenv";
 import * as dotenvExpand from "dotenv-expand";
-import { type Socket } from "net";
+import type { Socket } from "net";
 import path from "path";
 import waitOn from "wait-on";
 
-import { type ScriptDefinition } from "../script-definition.type.js";
+import type { ScriptDefinition } from "../script-definition.type.js";
 
 const KEEP_LOG_LINES = 100;
 export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
 
 let expandedEnv: Record<string, string>;
 function loadExpandedEnv() {
-    if (expandedEnv) return expandedEnv;
+    if (expandedEnv) {
+        return expandedEnv;
+    }
     expandedEnv = { ...(process.env as Record<string, string>) };
-    dotenv.config({ processEnv: expandedEnv });
-    dotenv.config({ processEnv: expandedEnv, path: path.resolve(process.cwd(), ".env.local"), override: true });
+    dotenv.config({ processEnv: expandedEnv, quiet: true });
+    dotenv.config({ processEnv: expandedEnv, path: path.resolve(process.cwd(), ".env.local"), override: true, quiet: true });
     dotenvExpand.expand({ processEnv: expandedEnv });
     return expandedEnv;
 }
@@ -49,15 +51,21 @@ export class Script {
         return this.scriptDefinition.name;
     }
     get aliases(): string[] {
-        if (!this.scriptDefinition.alias) return [];
+        if (!this.scriptDefinition.alias) {
+            return [];
+        }
         return Array.isArray(this.scriptDefinition.alias) ? this.scriptDefinition.alias : [this.scriptDefinition.alias];
     }
     get groups(): string[] {
-        if (!this.scriptDefinition.group) return [];
+        if (!this.scriptDefinition.group) {
+            return [];
+        }
         return Array.isArray(this.scriptDefinition.group) ? this.scriptDefinition.group : [this.scriptDefinition.group];
     }
     get waitOn(): string[] {
-        if (!this.scriptDefinition.waitOn) return [];
+        if (!this.scriptDefinition.waitOn) {
+            return [];
+        }
         const waitOn = Array.isArray(this.scriptDefinition.waitOn) ? this.scriptDefinition.waitOn : [this.scriptDefinition.waitOn];
         return waitOn.map((str) =>
             str.replace(/\$[a-z\d_]+/gi, function (match) {
@@ -98,7 +106,9 @@ export class Script {
 
     handleLogs(data: Buffer | string): void {
         const incomingLines = data.toString().split("\n");
-        if (incomingLines[incomingLines.length - 1] == "") incomingLines.splice(incomingLines.length - 1, 1);
+        if (incomingLines[incomingLines.length - 1] == "") {
+            incomingLines.splice(incomingLines.length - 1, 1);
+        }
         for (const line of incomingLines) {
             console.log(`${this.logPrefix}${line}`);
             this.logSockets.forEach((socket) => {

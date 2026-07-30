@@ -42,7 +42,9 @@ describe("dev-pm e2e", () => {
         execSync("npm run build", { cwd: projectRoot, stdio: "pipe" });
 
         tmpDir = resolve(tmpdir(), "dev-pm-e2e-test");
-        if (existsSync(tmpDir)) rmSync(tmpDir, { recursive: true, force: true });
+        if (existsSync(tmpDir)) {
+            rmSync(tmpDir, { recursive: true, force: true });
+        }
         mkdirSync(tmpDir, { recursive: true });
 
         writeFileSync(

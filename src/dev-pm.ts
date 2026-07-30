@@ -29,7 +29,9 @@ program
     .aliases(["log"])
     .option("-n, --lines <number>", "Display last n log lines and exit", (value) => {
         const n = parseInt(value, 10);
-        if (isNaN(n) || n < 1) throw new InvalidArgumentError("Must be a positive integer.");
+        if (isNaN(n) || n < 1) {
+            throw new InvalidArgumentError("Must be a positive integer.");
+        }
         return n;
     })
     .action((patterns: string[], options) => {
