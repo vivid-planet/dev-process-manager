@@ -1,11 +1,11 @@
-# @comet/dev-process-manager
+# dev-process-manager
 
 dev-process-manager is a Node.js process manager for local development environments that need multiple processes. It can be easily integrated into existing Node.js projects.
 
 ## Installation
 
 ```console
-$ npm install @comet/dev-process-manager
+$ npm install dev-process-manager
 ```
 
 Recommended Alias:
@@ -22,7 +22,7 @@ This file defines all available scripts, which should be started by dev-process-
 ### dev-pm.config.ts
 
 ```typescript
-import { defineConfig } from '@comet/dev-process-manager';
+import { defineConfig } from 'dev-process-manager';
 
 export default defineConfig({
     scripts: [
@@ -46,12 +46,14 @@ export default defineConfig({
 
 ## Environment Variables
 
-dev-process-manager automatically loads environment variables from the following files in the project root, in order:
+dev-process-manager loads environment variables from the following files in the project root, in order:
 
 1. `.env` — shared defaults, typically committed to version control
 2. `.env.local` — local overrides, typically added to `.gitignore`
 
 Values defined in `.env.local` take precedence over those in `.env`. Variable expansion (e.g. `$OTHER_VAR`) is supported in both files.
+
+These variables are only used for substitution within `waitOn` resources (e.g. `tcp:$POSTGRESQL_PORT`). They are **not** passed to the script processes — scripts inherit the daemon's environment.
 
 ## Commands
 

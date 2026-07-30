@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Use Node.js 24.x
         uses: actions/setup-node@v6
@@ -28,7 +28,7 @@ jobs:
       - name: Publish Canary release
         run: |
           echo --- > .changeset/canary.md
-          echo '"@comet/dev-process-manager": patch' >> .changeset/canary.md
+          echo '"dev-process-manager": patch' >> .changeset/canary.md
           echo --- >> .changeset/canary.md
           echo >> .changeset/canary.md
           echo fake change to always get a canary release >> .changeset/canary.md

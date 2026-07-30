@@ -42,7 +42,9 @@ describe("dev-pm e2e", () => {
         execSync("npm run build", { cwd: projectRoot, stdio: "pipe" });
 
         tmpDir = resolve(tmpdir(), "dev-pm-e2e-test");
-        if (existsSync(tmpDir)) rmSync(tmpDir, { recursive: true, force: true });
+        if (existsSync(tmpDir)) {
+            rmSync(tmpDir, { recursive: true, force: true });
+        }
         mkdirSync(tmpDir, { recursive: true });
 
         writeFileSync(
@@ -147,6 +149,34 @@ describe("dev-pm e2e", () => {
 
         const logs = stripAnsi(await runDevPm(["logs", "-n", "10", "test-script"], tmpDir));
         expect(logs).toContain("19876");
+    }, 30000);
+
+    it("does NOT pass .env variables to the script process", async () => {
+        // .env defines a variable that the script tries to read
+        writeFileSync(resolve(tmpDir, ".env"), "SCRIPT_ENV_VAR=from-dotenv\n");
+
+        // Script prints the value of SCRIPT_ENV_VAR, then stays alive
+        writeFileSync(
+            resolve(tmpDir, "dev-pm.config.mjs"),
+            `export default {
+    scripts: [
+        { name: "test-script", script: 'node -e "console.log(\\'SCRIPT_ENV_VAR=[\\' + (process.env.SCRIPT_ENV_VAR ?? \\'\\') + \\']\\'); setInterval(() => {}, 1000)"' },
+    ],
+};
+`,
+        );
+
+        await runDevPm(["start", "test-script"], tmpDir);
+        await new Promise((r) => setTimeout(r, 1000));
+
+        const status = stripAnsi(await runDevPm(["status"], tmpDir));
+        expect(status).toContain("test-script");
+        expect(status).toContain("Running");
+
+        // The script ran (marker present) but the .env value was NOT injected
+        const logs = stripAnsi(await runDevPm(["logs", "-n", "10", "test-script"], tmpDir));
+        expect(logs).toContain("SCRIPT_ENV_VAR=[]");
+        expect(logs).not.toContain("from-dotenv");
     }, 30000);
 
     it("works from a subdirectory of the config file", async () => {

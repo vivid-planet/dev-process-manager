@@ -1,0 +1,82 @@
+/**
+ * Theme inspired by the Dextinity corporate identity:
+ * indigo primary (#403AF2), teal accent (#0FD1C7), deep-navy dark surfaces
+ * and the Roboto typeface. Kept intentionally light-touch — only brand
+ * colors, fonts and a couple of accents on top of the Docusaurus defaults.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap");
+
+:root {
+    --ifm-color-primary: #403af2;
+    --ifm-color-primary-dark: #2a23f0;
+    --ifm-color-primary-darker: #1f17f0;
+    --ifm-color-primary-darkest: #1109c4;
+    --ifm-color-primary-light: #5651f4;
+    --ifm-color-primary-lighter: #615df5;
+    --ifm-color-primary-lightest: #837ff7;
+
+    --ifm-font-family-base: "Roboto", system-ui, -apple-system, sans-serif;
+    --ifm-font-family-monospace: "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
+    --ifm-code-font-size: 95%;
+
+    --dpm-accent: #0fd1c7;
+
+    --docusaurus-highlighted-code-line-bg: rgba(64, 58, 242, 0.1);
+}
+
+/* Dark mode — deep navy surfaces matching the Dextinity site. */
+[data-theme="dark"] {
+    --ifm-color-primary: #8b87f8;
+    --ifm-color-primary-dark: #6a64f5;
+    --ifm-color-primary-darker: #5a54f4;
+    --ifm-color-primary-darkest: #2a23f0;
+    --ifm-color-primary-light: #acaafb;
+    --ifm-color-primary-lighter: #bcbafb;
+    --ifm-color-primary-lightest: #eceafe;
+
+    --ifm-background-color: #100f3b;
+    --ifm-background-surface-color: #181541;
+    --ifm-navbar-background-color: #0d0c30;
+    --ifm-footer-background-color: #0d0c30;
+
+    --docusaurus-highlighted-code-line-bg: rgba(139, 135, 248, 0.2);
+}
+
+/* Teal accent for links inside body content, kept subtle. */
+[data-theme="dark"] .markdown a {
+    color: var(--dpm-accent);
+}
+
+/* Hero banner with the signature indigo → teal gradient. */
+.hero--dpm {
+    background: linear-gradient(120deg, #100f3b 0%, #221cae 55%, #403af2 100%);
+    color: #ffffff;
+    padding: 5rem 0;
+}
+
+.hero--dpm .hero__title {
+    font-size: 3rem;
+    letter-spacing: -0.02em;
+}
+
+.hero--dpm .hero__subtitle {
+    max-width: 42rem;
+    margin: 1rem auto 0;
+    opacity: 0.9;
+}
+
+.hero--dpm .button {
+    border: none;
+}
+
+.hero--dpm .button--accent {
+    background-color: var(--dpm-accent);
+    color: #06231f;
+    font-weight: 500;
+}
+
+.hero--dpm .button--accent:hover {
+    background-color: #0bb8af;
+    color: #06231f;
+}

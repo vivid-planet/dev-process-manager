@@ -25,6 +25,7 @@ export async function connect(): Promise<Socket> {
 
 export function pipeToStdout(client: Socket): void {
     client.on("data", (data) => {
+        //TODO handle stderr/stdin and also write on stderr
         process.stdout.write(data);
     });
 }
