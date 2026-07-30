@@ -19,7 +19,8 @@
         "start": "tsc --watch",
         "test": "vitest run",
         "test:watch": "vitest",
-        "build-and-publish": "npm run build && npx changeset publish"
+        "build-and-publish": "npm run build && npx changeset publish",
+        "version": "changeset version && npm install"
     },
     "repository": {
         "type": "git",
