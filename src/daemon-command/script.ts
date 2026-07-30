@@ -6,8 +6,8 @@ import type { Socket } from "net";
 import path from "path";
 import waitOn from "wait-on";
 
-import type { ScriptStatus } from "../../shared-types.js";
 import type { ScriptDefinition } from "../script-definition.type.js";
+import type { ScriptStatus } from "../shared-types.js";
 
 export type { ScriptStatus };
 

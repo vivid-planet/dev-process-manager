@@ -1,5 +1,5 @@
 import { createConnection, type Socket } from "net";
-import type { ScriptStatusEntry } from "../../shared-types";
+import type { ScriptStatusEntry } from "../../src/shared-types";
 
 /**
  * Send a command to the dev-pm daemon over the Unix socket and collect the full response.

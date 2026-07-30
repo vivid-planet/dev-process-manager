@@ -3,8 +3,8 @@ import pidtree from "pidtree";
 import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
-import type { ScriptStatusEntry } from "../../shared-types.js";
 import type { Daemon } from "../commands/start-daemon.command.js";
+import type { ScriptStatusEntry } from "../shared-types.js";
 import { scriptsMatchingPattern, type ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
 
 export type { ScriptStatusEntry };

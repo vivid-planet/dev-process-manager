@@ -5,7 +5,7 @@ import {
     parseStatusOutput,
     sendCommand,
 } from "./daemon-client";
-import { ScriptStatus, ScriptStatusEntry } from "../../shared-types";
+import { ScriptStatus, ScriptStatusEntry } from "../../src/shared-types";
 
 function getStatusIcon(status: ScriptStatus): vscode.ThemeIcon {
     switch (status) {
