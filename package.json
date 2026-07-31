@@ -33,7 +33,7 @@
     "bugs": {
         "url": "https://github.com/vivid-planet/dev-process-manager/issues"
     },
-    "homepage": "https://github.com/vivid-planet/dev-process-manager#readme",
+    "homepage": "https://dev-process-manager.com/",
     "dependencies": {
         "cli-table3": "^0.6.5",
         "colors": "^1.4.0",
