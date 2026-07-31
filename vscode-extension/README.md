@@ -1,6 +1,6 @@
 # Dev Process Manager - VS Code Extension
 
-A VS Code extension for [@comet/dev-process-manager](https://github.com/vivid-planet/dev-process-manager) that lets you manage your dev scripts directly from the VS Code sidebar.
+A VS Code extension for [dev-process-manager](https://github.com/vivid-planet/dev-process-manager) that lets you manage your dev scripts directly from the VS Code sidebar.
 
 ## Features
 
@@ -13,7 +13,7 @@ A VS Code extension for [@comet/dev-process-manager](https://github.com/vivid-pl
 ## Requirements
 
 - [VS Code](https://code.visualstudio.com/) 1.85.0 or later
-- [@comet/dev-process-manager](https://www.npmjs.com/package/@comet/dev-process-manager) installed and configured in your project
+- [dev-process-manager](https://www.npmjs.com/package/dev-process-manager) installed and configured in your project
 
 ## Usage
 

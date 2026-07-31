@@ -1,7 +1,7 @@
 {
     "name": "dev-process-manager",
     "displayName": "Dev Process Manager",
-    "description": "VS Code extension for @comet/dev-process-manager - manage dev scripts from the sidebar",
+    "description": "VS Code extension for dev-process-manager - manage dev scripts from the sidebar",
     "version": "0.1.0",
     "publisher": "vivid-planet",
     "license": "BSD-2-Clause",
