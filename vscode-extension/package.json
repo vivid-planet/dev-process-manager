@@ -15,6 +15,7 @@
         "workspaceContains:**/dev-pm.config.*",
         "workspaceContains:**/.pm.sock"
     ],
+    "icon": "resources/icon.png",
     "main": "./out/extension.js",
     "repository": {
         "type": "git",
