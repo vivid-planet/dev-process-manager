@@ -57,3 +57,24 @@ npm run package
 ```
 
 This creates a `.vsix` file that can be installed in VS Code.
+
+## Publishing
+
+The extension is published to the [VS Code Marketplace](https://marketplace.visualstudio.com/) by the
+`Deploy VS Code Extension` GitHub Actions workflow (`.github/workflows/deploy-vscode-extension.yml`).
+
+The workflow runs when a tag matching `vscode-extension-v<major>.<minor>.<patch>` is pushed, and can also be
+triggered manually from the Actions tab (`workflow_dispatch`). It publishes the version currently set in
+`vscode-extension/package.json`, so bump that version before tagging.
+
+To cut a release:
+
+```bash
+# 1. Bump the version in vscode-extension/package.json (e.g. to 0.2.0) and commit it
+# 2. Tag the release and push the tag
+git tag vscode-extension-v0.2.0
+git push origin vscode-extension-v0.2.0
+```
+
+Publishing requires a repository secret named `VSCE_PAT` containing an Azure DevOps Personal Access Token
+for the `vivid-planet` publisher (see the [vsce docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token)).
