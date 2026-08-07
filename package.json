@@ -18,7 +18,8 @@
         "dev-pm": "lib/dev-pm.js"
     },
     "files": [
-        "lib/**/*"
+        "lib/**/*",
+        "skills/**/*"
     ],
     "scripts": {
         "prepare": "husky",

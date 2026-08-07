@@ -94,3 +94,4 @@ dpm shutdown        # stop everything and shut down the daemon
 - Learn the full set of options in [Configuration](./configuration.md).
 - Browse every command in [Commands](./commands.md).
 - Copy a ready-made setup from [Examples](./examples.md).
+- Let AI coding agents drive `dev-pm` with the bundled [AI Agent Skill](./agent-skills.md).
