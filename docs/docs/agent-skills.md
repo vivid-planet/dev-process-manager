@@ -46,36 +46,11 @@ This adds a `prepare` script and a `.gitignore` entry, then syncs once. From the
 
 If your project uses Comet, `@comet/cli` provides the same functionality via
 `install-agent-features`, which scans your direct `node_modules` dependencies for
-`skills/` folders and installs what it finds.
-
-Add an `install-agent-features` script to your root `package.json`:
-
-```json title="package.json"
-{
-    "scripts": {
-        "install-agent-features": "npx @comet/cli install-agent-features"
-    }
-}
-```
-
-Then run it (a `--dry-run` flag previews what would be installed):
+`skills/` folders and installs what it finds:
 
 ```bash
-npm run install-agent-features
+npx @comet/cli install-agent-features
 ```
-
-`@comet/cli` can also pull the skill directly from this repository instead of from
-`node_modules`. Add an `agent-features.json` at your project root:
-
-```json title="agent-features.json"
-{
-    "repos": ["https://github.com/vivid-planet/dev-process-manager.git"]
-}
-```
-
-Only the `skills/` folder is sparse-fetched from the repository — the rest is never
-downloaded. Append `#<ref>` to pin a branch, tag or commit
-(e.g. `…dev-process-manager.git#v4.0.0`).
 
 ## What the agent learns
 
