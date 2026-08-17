@@ -1,9 +1,8 @@
 import { spawn } from "child_process";
 import { existsSync, unlinkSync } from "fs";
-import { createConnection } from "net";
-import { dirname } from "path";
 
 import { loadConfig } from "../utils/load-config.js";
+import { connectToSocket, getSocketPath } from "../utils/socket.js";
 
 function isDaemonRunning(socketPath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -11,7 +10,7 @@ function isDaemonRunning(socketPath: string): Promise<boolean> {
             client.destroy();
             resolve(false);
         }, 5000);
-        const client = createConnection(socketPath);
+        const client = connectToSocket(socketPath);
         client.on("connect", () => {
             clearTimeout(timeout);
             client.destroy();
@@ -30,7 +29,7 @@ function isDaemonRunning(socketPath: string): Promise<boolean> {
 
 export async function autoStartDaemon(): Promise<void> {
     const { sources } = await loadConfig();
-    const socketPath = `${dirname(sources[0])}/.pm.sock`;
+    const socketPath = getSocketPath(sources[0]);
     if (existsSync(socketPath)) {
         if (await isDaemonRunning(socketPath)) {
             // daemon is running

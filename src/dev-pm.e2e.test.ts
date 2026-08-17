@@ -179,6 +179,42 @@ describe("dev-pm e2e", () => {
         expect(logs).not.toContain("from-dotenv");
     }, 30000);
 
+    it("works when the socket path is too long for sockaddr_un", async () => {
+        // sockaddr_un.sun_path is 108 bytes on Linux and 104 bytes on macOS
+        const longDir = resolve(tmpDir, "a".repeat(60), "b".repeat(60));
+        mkdirSync(longDir, { recursive: true });
+        expect(resolve(longDir, ".pm.sock").length).toBeGreaterThan(108);
+
+        // own config file, so that the daemon uses the long directory as project root
+        writeFileSync(
+            resolve(longDir, "dev-pm.config.mjs"),
+            `export default {
+    scripts: [
+        { name: "long-path-script", script: 'node -e "setInterval(() => {}, 1000)"' },
+    ],
+};
+`,
+        );
+
+        // Status auto-starts the daemon, which listens on the long socket path
+        const status1 = stripAnsi(await runDevPm(["status"], longDir));
+        expect(status1).toContain("long-path-script");
+        expect(status1).toContain("Stopped");
+
+        const startOutput = await runDevPm(["start", "long-path-script"], longDir);
+        expect(startOutput).toContain("starting long-path-script");
+
+        await new Promise((r) => setTimeout(r, 100));
+
+        const status2 = stripAnsi(await runDevPm(["status"], longDir));
+        expect(status2).toContain("Running");
+
+        await runDevPm(["shutdown"], longDir);
+
+        await new Promise((r) => setTimeout(r, 100));
+        expect(existsSync(resolve(longDir, ".pm.sock"))).toBe(false);
+    }, 30000);
+
     it("works from a subdirectory of the config file", async () => {
         const subDir = resolve(tmpDir, "packages", "app");
         mkdirSync(subDir, { recursive: true });
