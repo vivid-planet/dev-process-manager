@@ -13,7 +13,7 @@ import { startDaemonCommand } from "../daemon-command/start.daemon-command.js";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command.js";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command.js";
 import { loadConfig } from "../utils/load-config.js";
-import { getSocketPath, listenOnSocket, SOCKET_FILE_NAME } from "../utils/socket.js";
+import { chdirToProjectRoot, SOCKET_FILE_NAME } from "../utils/socket.js";
 
 export interface Daemon {
     scripts: Script[];
@@ -22,7 +22,7 @@ export interface Daemon {
 
 export const startDaemon = async (): Promise<void> => {
     const { config, sources } = await loadConfig();
-    process.chdir(dirname(sources[0]));
+    chdirToProjectRoot(sources[0]);
 
     const { scripts: scriptDefinitions } = config;
     const daemon: Daemon = {
@@ -59,15 +59,14 @@ export const startDaemon = async (): Promise<void> => {
         });
     });
 
-    const socketPath = getSocketPath(sources[0]);
-    if (existsSync(socketPath)) {
+    if (existsSync(SOCKET_FILE_NAME)) {
         throw new Error(
             `Could not start dev-pm server. A '${SOCKET_FILE_NAME}' file already exists. \nThere are 2 possible reasons for this:\nA: Another dev-pm instance is already running. \nB: dev-pm crashed and left the file behind. In this case please remove the file manually.`,
         );
     }
 
     daemon.server = createServer();
-    listenOnSocket(daemon.server, socketPath);
+    daemon.server.listen(SOCKET_FILE_NAME);
     daemon.server.on("connection", (s) => {
         s.on("data", async (command) => {
             const cmd = command.toString();

@@ -1,15 +1,16 @@
-import type { Socket } from "net";
+import { createConnection, type Socket } from "net";
 
 import { loadConfig } from "../utils/load-config.js";
-import { connectToSocket, getSocketPath, SOCKET_FILE_NAME } from "../utils/socket.js";
+import { chdirToProjectRoot, SOCKET_FILE_NAME } from "../utils/socket.js";
 import { autoStartDaemon } from "./auto-start-daemon.js";
 
 export async function connect(): Promise<Socket> {
     await autoStartDaemon();
     const { sources } = await loadConfig();
+    chdirToProjectRoot(sources[0]);
 
     return new Promise((resolve, reject) => {
-        const client = connectToSocket(getSocketPath(sources[0]));
+        const client = createConnection(SOCKET_FILE_NAME);
         client.on("error", (error: { code: string }) => {
             if (error.code == "ECONNREFUSED") {
                 console.log(`Error connecting to dev-pm daemon at ${SOCKET_FILE_NAME}.`);

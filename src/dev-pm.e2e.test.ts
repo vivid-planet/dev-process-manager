@@ -14,7 +14,7 @@ function stripAnsi(str: string): string {
     return str.replace(/\x1b\[[0-9;]*m/g, "");
 }
 
-function runDevPm(args: string[], cwd: string, timeoutMs = 1000): Promise<string> {
+function runDevPm(args: string[], cwd: string, timeoutMs = 5000): Promise<string> {
     return new Promise((resolve, reject) => {
         const child = spawn(process.execPath, [devPmBin, ...args], { cwd });
         let output = "";
