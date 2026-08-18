@@ -139,8 +139,8 @@ Install it with either installer — both discover the `skills/` folder inside
 # skills-npm (generic installer)
 $ npx skills-npm setup
 
-# or @comet/cli
-$ npx @comet/cli install-agent-features
+# or @dextinity/cli
+$ npx @dextinity/cli install-agent-features
 ```
 
 See the [AI Agent Skills documentation](https://dev-process-manager.com/docs/agent-skills)

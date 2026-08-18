@@ -42,14 +42,14 @@ npx skills-npm setup
 This adds a `prepare` script and a `.gitignore` entry, then syncs once. From then on the
 `dev-pm` skill is re-linked automatically whenever dependencies are installed.
 
-### Option B — @comet/cli
+### Option B — @dextinity/cli
 
-If your project uses Comet, `@comet/cli` provides the same functionality via
+If your project uses Dextinity, `@dextinity/cli` provides the same functionality via
 `install-agent-features`, which scans your direct `node_modules` dependencies for
 `skills/` folders and installs what it finds:
 
 ```bash
-npx @comet/cli install-agent-features
+npx @dextinity/cli install-agent-features
 ```
 
 ## What the agent learns
