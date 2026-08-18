@@ -196,20 +196,26 @@ describe("dev-pm e2e", () => {
 `,
         );
 
-        // Status auto-starts the daemon, which listens on the long socket path
-        const status1 = stripAnsi(await runDevPm(["status"], longDir));
-        expect(status1).toContain("long-path-script");
-        expect(status1).toContain("Stopped");
+        try {
+            // Status auto-starts the daemon, which listens on the long socket path
+            const status1 = stripAnsi(await runDevPm(["status"], longDir));
+            expect(status1).toContain("long-path-script");
+            expect(status1).toContain("Stopped");
 
-        const startOutput = await runDevPm(["start", "long-path-script"], longDir);
-        expect(startOutput).toContain("starting long-path-script");
+            const startOutput = await runDevPm(["start", "long-path-script"], longDir);
+            expect(startOutput).toContain("starting long-path-script");
 
-        await new Promise((r) => setTimeout(r, 100));
+            await new Promise((r) => setTimeout(r, 100));
 
-        const status2 = stripAnsi(await runDevPm(["status"], longDir));
-        expect(status2).toContain("Running");
-
-        await runDevPm(["shutdown"], longDir);
+            const status2 = stripAnsi(await runDevPm(["status"], longDir));
+            expect(status2).toContain("Running");
+        } finally {
+            // afterEach only shuts down the daemon in tmpDir, so this one has to be cleaned up here - also when an
+            // assertion above failed, otherwise the daemon and its script keep running after the directory is deleted
+            await runDevPm(["shutdown"], longDir).catch(() => {
+                // daemon may have failed to start
+            });
+        }
 
         await new Promise((r) => setTimeout(r, 100));
         expect(existsSync(resolve(longDir, ".pm.sock"))).toBe(false);
