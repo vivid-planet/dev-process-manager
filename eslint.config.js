@@ -1,4 +1,4 @@
-import nestjsConfig from "@comet/eslint-config/nestjs.js";
+import nestjsConfig from "@dextinity/eslint-config/nestjs.js";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -13,7 +13,7 @@ export default [
             },
         },
         rules: {
-            "@comet/no-other-module-relative-import": "off",
+            "@dextinity/no-other-module-relative-import": "off",
         },
     },
 ];
