@@ -30,6 +30,8 @@ dpm start all
 - **Config as code** — a single typed `dev-pm.config.ts` describes everything.
 - **Environment files** — `.env` and `.env.local` are read (with variable expansion) to
   resolve [`waitOn`](./configuration.md#waiton) resources.
+- **AI agent ready** — a bundled [Agent Skill](./agent-skills.md) teaches AI coding agents
+  how to drive `dev-pm` correctly.
 
 ## How it works
 
@@ -47,6 +49,7 @@ them at any time with `dpm logs`.
 - Looking for the full config surface? See the [Configuration](./configuration.md)
   reference.
 - Want to copy-paste something real? Jump to [Examples](./examples.md).
+- Working with AI coding agents? Install the bundled [AI Agent Skill](./agent-skills.md).
 
 :::note
 This project is developed and maintained by

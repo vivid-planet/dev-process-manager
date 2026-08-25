@@ -124,6 +124,28 @@ Stop all running processes and shutdown dev-pm
 $ npx dev-pm shutdown
 ```
 
+## AI Agent Skills
+
+dev-process-manager ships an [Agent Skill](https://agentskills.io/) that teaches AI coding
+agents (Claude Code, Cursor, GitHub Copilot, …) how to drive `dev-pm` correctly. It is
+bundled inside the npm package under a `skills/` directory (`skills/dev-pm/SKILL.md`), so
+any project that depends on dev-process-manager can install it straight from
+`node_modules`.
+
+Install it with either installer — both discover the `skills/` folder inside
+`node_modules/dev-process-manager` automatically:
+
+```console
+# skills-npm (generic installer)
+$ npx skills-npm setup
+
+# or @dextinity/cli
+$ npx @dextinity/cli install-agent-features
+```
+
+See the [AI Agent Skills documentation](https://dev-process-manager.com/docs/agent-skills)
+for details.
+
 ## Development
 
 Use in existing project with
