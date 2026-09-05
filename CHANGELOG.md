@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.1.0
+
+### Minor Changes
+
+- d9815c3: Bundle the `dev-pm` AI Agent Skill in the npm package under `skills/dev-pm/`. It can be installed into consuming projects via `skills-npm` or `@dextinity/cli install-agent-features`.
+
+### Patch Changes
+
+- 463e596: Fix daemon socket failing with `EINVAL` when the project path is long
+
+    Unix domain socket paths must fit into `sockaddr_un.sun_path` (108 bytes on Linux, 104 bytes on macOS). In deeply nested projects the path to `.pm.sock` exceeded that limit, so starting the daemon or connecting to it failed. All commands now change into the project root (like the daemon already did) and refer to the socket by its plain file name.
+
 ## 4.0.0
 
 ### Major Changes
