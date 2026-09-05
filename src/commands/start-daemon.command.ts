@@ -12,7 +12,7 @@ import { shutdown } from "../daemon-command/shutdown.js";
 import { startDaemonCommand } from "../daemon-command/start.daemon-command.js";
 import { statusDaemonCommand } from "../daemon-command/status.daemon-command.js";
 import { stopDaemonCommand } from "../daemon-command/stop.daemon-command.js";
-import { loadConfig } from "../utils/load-config.js";
+import { chdirToProjectRoot, loadConfig } from "../utils/load-config.js";
 
 export interface Daemon {
     scripts: Script[];
@@ -21,7 +21,7 @@ export interface Daemon {
 
 export const startDaemon = async (): Promise<void> => {
     const { config, sources } = await loadConfig();
-    process.chdir(dirname(sources[0]));
+    chdirToProjectRoot(sources[0]);
 
     const { scripts: scriptDefinitions } = config;
     const daemon: Daemon = {
