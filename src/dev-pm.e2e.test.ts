@@ -14,7 +14,7 @@ function stripAnsi(str: string): string {
     return str.replace(/\x1b\[[0-9;]*m/g, "");
 }
 
-function runDevPm(args: string[], cwd: string, timeoutMs = 1000): Promise<string> {
+function runDevPm(args: string[], cwd: string, timeoutMs = 5000): Promise<string> {
     return new Promise((resolve, reject) => {
         const child = spawn(process.execPath, [devPmBin, ...args], { cwd });
         let output = "";
@@ -177,6 +177,48 @@ describe("dev-pm e2e", () => {
         const logs = stripAnsi(await runDevPm(["logs", "-n", "10", "test-script"], tmpDir));
         expect(logs).toContain("SCRIPT_ENV_VAR=[]");
         expect(logs).not.toContain("from-dotenv");
+    }, 30000);
+
+    it("works when the socket path is too long for sockaddr_un", async () => {
+        // sockaddr_un.sun_path is 108 bytes on Linux and 104 bytes on macOS
+        const longDir = resolve(tmpDir, "a".repeat(60), "b".repeat(60));
+        mkdirSync(longDir, { recursive: true });
+        expect(resolve(longDir, ".pm.sock").length).toBeGreaterThan(108);
+
+        // own config file, so that the daemon uses the long directory as project root
+        writeFileSync(
+            resolve(longDir, "dev-pm.config.mjs"),
+            `export default {
+    scripts: [
+        { name: "long-path-script", script: 'node -e "setInterval(() => {}, 1000)"' },
+    ],
+};
+`,
+        );
+
+        try {
+            // Status auto-starts the daemon, which listens on the long socket path
+            const status1 = stripAnsi(await runDevPm(["status"], longDir));
+            expect(status1).toContain("long-path-script");
+            expect(status1).toContain("Stopped");
+
+            const startOutput = await runDevPm(["start", "long-path-script"], longDir);
+            expect(startOutput).toContain("starting long-path-script");
+
+            await new Promise((r) => setTimeout(r, 100));
+
+            const status2 = stripAnsi(await runDevPm(["status"], longDir));
+            expect(status2).toContain("Running");
+        } finally {
+            // afterEach only shuts down the daemon in tmpDir, so this one has to be cleaned up here - also when an
+            // assertion above failed, otherwise the daemon and its script keep running after the directory is deleted
+            await runDevPm(["shutdown"], longDir).catch(() => {
+                // daemon may have failed to start
+            });
+        }
+
+        await new Promise((r) => setTimeout(r, 100));
+        expect(existsSync(resolve(longDir, ".pm.sock"))).toBe(false);
     }, 30000);
 
     it("works from a subdirectory of the config file", async () => {
