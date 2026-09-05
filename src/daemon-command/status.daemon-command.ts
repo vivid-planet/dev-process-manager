@@ -4,21 +4,13 @@ import pidusage from "pidusage";
 import prettyBytes from "pretty-bytes";
 
 import type { Daemon } from "../commands/start-daemon.command.js";
-import type { ScriptStatus } from "./script.js";
+import type { ScriptStatusEntry } from "../shared-types.js";
 import { scriptsMatchingPattern, type ScriptsMatchingPatternOptions } from "./scripts-matching-pattern.js";
+
+export type { ScriptStatusEntry };
 
 export interface StatusCommandOptions extends ScriptsMatchingPatternOptions {
     interval: number | undefined;
-}
-
-export interface ScriptStatusEntry {
-    id: number;
-    name: string;
-    status: ScriptStatus;
-    cpu: string;
-    memory: string;
-    pid: number | undefined;
-    restarts: number;
 }
 
 async function pidusageRecursive(pid: number): Promise<{ cpu: number; memory: number }> {

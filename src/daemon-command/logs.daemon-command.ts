@@ -6,6 +6,7 @@ import { scriptsMatchingPattern, type ScriptsMatchingPatternOptions } from "./sc
 
 export interface LogsCommandOptions extends ScriptsMatchingPatternOptions {
     lines?: number;
+    hideLogPrefix?: boolean;
 }
 
 export function logsDaemonCommand(daemon: Daemon, socket: Socket, options: LogsCommandOptions): void {
@@ -20,7 +21,7 @@ export function logsDaemonCommand(daemon: Daemon, socket: Socket, options: LogsC
         for (const script of scriptsToProcess) {
             const lastLines = script.logBuffer.slice(-options.lines);
             for (const line of lastLines) {
-                socket.write(`${script.logPrefix}${line}\n`);
+                socket.write(`${options.hideLogPrefix ? "" : script.logPrefix}${line}\n`);
             }
         }
         socket.end();
@@ -29,9 +30,9 @@ export function logsDaemonCommand(daemon: Daemon, socket: Socket, options: LogsC
 
     for (const script of scriptsToProcess) {
         for (const line of script.logBuffer) {
-            socket.write(`${script.logPrefix}${line}\n`);
+            socket.write(`${options.hideLogPrefix ? "" : script.logPrefix}${line}\n`);
         }
-        script.addLogSocket(socket);
+        script.addLogSocket(socket, { hideLogPrefix: options.hideLogPrefix ?? false });
     }
 
     socket.on("close", () => {
