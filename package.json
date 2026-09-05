@@ -55,7 +55,7 @@
         "log-update": "^8.0.0",
         "pidtree": "^1.0.0",
         "pidusage": "^4.0.1",
-        "pretty-bytes": "^7.1.1",
+        "pretty-bytes": "^7.1.2",
         "unconfig": "^7.5.0",
         "wait-on": "^9.1.0"
     },
