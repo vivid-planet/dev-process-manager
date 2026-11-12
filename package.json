@@ -71,7 +71,7 @@
         "npm-run-all2": "^9.0.4",
         "prettier": "^3.9.10",
         "typescript": "^5.9.3",
-        "vitest": "^4.1.10"
+        "vitest": "^4.1.12"
     },
     "engines": {
         "node": ">=22"
