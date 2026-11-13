@@ -7,9 +7,11 @@ import path from "path";
 import waitOn from "wait-on";
 
 import type { ScriptDefinition } from "../script-definition.type.js";
+import type { ScriptStatus } from "../shared-types.js";
+
+export type { ScriptStatus };
 
 const KEEP_LOG_LINES = 100;
-export type ScriptStatus = "started" | "stopping" | "stopped" | "waiting" | "backoff";
 
 let expandedEnv: Record<string, string>;
 function loadExpandedEnv() {
@@ -28,7 +30,7 @@ export class Script {
     status: ScriptStatus = "stopped";
     process?: ChildProcess;
     logBuffer: string[] = [];
-    logSockets: Socket[] = [];
+    logSockets: { socket: Socket; hideLogPrefix: boolean }[] = [];
     logPrefix: string;
     restartCount = 0;
 
@@ -100,8 +102,8 @@ export class Script {
         }
     }
 
-    addLogSocket(socket: Socket): void {
-        this.logSockets.push(socket);
+    addLogSocket(socket: Socket, options: { hideLogPrefix: boolean }): void {
+        this.logSockets.push({ socket, ...options });
     }
 
     handleLogs(data: Buffer | string): void {
@@ -112,7 +114,7 @@ export class Script {
         for (const line of incomingLines) {
             console.log(`${this.logPrefix}${line}`);
             this.logSockets.forEach((socket) => {
-                socket.write(`${this.logPrefix}${line}\n`);
+                socket.socket.write(`${socket.hideLogPrefix ? "" : this.logPrefix}${line}\n`);
             });
         }
         const removeLines = incomingLines.length - (KEEP_LOG_LINES - this.logBuffer.length);

@@ -23,7 +23,7 @@ export async function restartDaemonCommand(daemon: Daemon, socket: Socket, optio
         script.startProcess(); //don't await
 
         if (options.follow) {
-            script.addLogSocket(socket);
+            script.addLogSocket(socket, { hideLogPrefix: false });
         }
     }
 
